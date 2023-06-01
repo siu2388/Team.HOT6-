@@ -1,0 +1,15 @@
+{
+  "name": "hot6",
+  "version": "0.0.1",
+  "description": "- 날이갈수록 심각해져만 가는 환경오염, 지구를 살릴 순 없을까요??\r - 환경 문제에 대한 심각성을 알아보고, 그룹별 랭킹전을 통해 재미있게 환경보호 활동에 동참하세요!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "eslint-config-prettier": "^8.8.0",
+    "prettier": "^2.8.8"
+  }
+}
