@@ -35,7 +35,7 @@ export default function GroupList() {
           <ListBox />
         </GroupLists>
         <PagenationBox>
-          <Pagination count={10} size="large" />
+          <Pagination count={5} size="large" />
         </PagenationBox>
       </GroupListContainer>
     </GroupListWrap>
