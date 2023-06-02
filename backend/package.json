@@ -7,7 +7,7 @@
     "test": "jest --setupFiles dotenv/config",
     "start": "nodemon index.js"
   },
-  "type": "commonjs",
+  "type": "module",
   "author": "",
   "license": "ISC",
   "dependencies": {
