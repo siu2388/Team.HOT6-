@@ -45,10 +45,12 @@ export default function Header() {
 
 const HeaderWrap = styled.div`
   width: 100%;
-  height: 96px;
+  height: 76px;
+  background-color: #fff;
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 9999;
 `;
 
 const HeaderContainer = styled.header`
