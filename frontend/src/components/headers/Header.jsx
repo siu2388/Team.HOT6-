@@ -15,10 +15,10 @@ export default function Header() {
           <Navigation>
             <NavMenu>
               <MenuList>
-                <Link to={'/'}>Ranking by Group</Link>
+                <Link to={'/groups'}>Group</Link>
               </MenuList>
               <MenuList>
-                <Link to={'/'}>환경 challenge</Link>
+                <Link to={'/'}>Challenge</Link>
               </MenuList>
               <MenuList>
                 <Link to={'/'}>Community</Link>
