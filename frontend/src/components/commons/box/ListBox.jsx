@@ -7,7 +7,7 @@ import AvatarGroup from '@mui/material/AvatarGroup';
 export default function ListBox() {
   return (
     <ListBoxWrap>
-      <Link to={`/groups/detail/${'groupId'}`}>
+      <Link to={`/groups/${'groupId'}`}>
         <ListBackImg img="/images/groups/lists/thumnail.png" />
         <ListContent>
           <TitleBox>
@@ -66,6 +66,8 @@ const ListBackImg = styled.div`
   padding-bottom: 64%;
   border-radius: 8px;
   background-image: ${({ img }) => `url(${img})`};
+  background-repeat: no-repeat;
+  background-size: cover;
 `;
 
 const ListContent = styled.div`
