@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import MainPage from '../../pages/mains/Main';
-import GroupList from '../../pages/groups/list';
+import GroupList from '../../pages/groups/List';
 
 export default function RouteComponents() {
   return (
