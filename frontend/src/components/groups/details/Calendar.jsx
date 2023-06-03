@@ -4,9 +4,15 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import MemberProfileBox from '../../commons/box/MemberProfileBox';
 import { getDate, getDayOfWeek } from '../../../commons/utils/getDate';
+import AddActiveModal from './AddActiveModal';
 
 export default function GroupCalendar() {
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [isOpen, setIsOpen] = useState(false);
+
+  const onClickToggleModal = () => {
+    setIsOpen(prev => !prev);
+  };
 
   const tileClassName = ({ date }) => {
     if (date.toISOString().slice(0, 10) === selectedDate.toISOString().slice(0, 10)) {
@@ -39,7 +45,7 @@ export default function GroupCalendar() {
             <TodayDate>{getDate(selectedDate)}</TodayDate>
             <TodayDw>{getDayOfWeek(selectedDate)}</TodayDw>
           </div>
-          <AddBtn>
+          <AddBtn onClick={onClickToggleModal}>
             <img src="/images/groups/details/addBtn.png" alt="" />
           </AddBtn>
         </TodayDateBox>
@@ -59,6 +65,7 @@ export default function GroupCalendar() {
           <MemberProfileBox />
         </MemberProfilies>
       </CalendarDetailBox>
+      {isOpen && <AddActiveModal onClickToggleModal={onClickToggleModal} />}
     </CalendarWrap>
   );
 }
@@ -173,5 +180,10 @@ const AddBtn = styled.button`
   width: 4.5rem;
   img {
     width: 100%;
+  }
+
+  &:hover > img {
+    transform: scale(1.1);
+    transition: all 0.3s;
   }
 `;
