@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { ROUTE } from '../../constants/routes/routeData';
 
 export default function Header() {
   return (
@@ -15,7 +16,7 @@ export default function Header() {
           <Navigation>
             <NavMenu>
               <MenuList>
-                <Link to={'/groups'}>Group</Link>
+                <Link to={ROUTE.GROUP_LIST.link}>Group</Link>
               </MenuList>
               <MenuList>
                 <Link to={'/'}>Challenge</Link>
