@@ -3,10 +3,11 @@ import { SectionsContainer, Section } from 'react-fullpage';
 import styled, { keyframes } from 'styled-components';
 import Slick from '../../components/mains/Slick';
 
+const options = {
+  anchors: ['sectionOne', 'sectionTwo', 'sectionThree'],
+};
+
 export default function MainPage() {
-  let options = {
-    anchors: ['sectionOne', 'sectionTwo', 'sectionThree'],
-  };
   return (
     <SectionsContainer {...options}>
       <Section>

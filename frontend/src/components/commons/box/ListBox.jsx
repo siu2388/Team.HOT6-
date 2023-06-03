@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
+import { ROUTE } from '../../../constants/routes/routeData';
 
 export default function ListBox() {
   return (
     <ListBoxWrap>
-      <Link to={`/groups/${'groupId'}`}>
+      <Link to={`${ROUTE.GROUP_DETAIL.link}/${'groupId'}`}>
         <ListBackImg img="/images/groups/lists/thumnail.png" />
         <ListContent>
           <TitleBox>
