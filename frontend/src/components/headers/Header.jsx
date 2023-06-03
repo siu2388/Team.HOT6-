@@ -102,6 +102,11 @@ const SubMenuBtn = styled.button`
   border-radius: 5px;
   background-color: ${({ btn }) => (btn === 'stroke' ? 'none' : '#01881c')};
   a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
     font-size: 1.6rem;
     font-weight: 600;
     color: ${({ btn }) => (btn === 'stroke' ? '#01881c' : '#fff')};
