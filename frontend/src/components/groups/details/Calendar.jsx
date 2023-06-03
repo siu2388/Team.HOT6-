@@ -21,6 +21,10 @@ export default function GroupCalendar() {
     return null;
   };
 
+  const titleSat = ({ date }) => {
+    return date.getDay() === 6 ? 'saturday' : null;
+  };
+
   const tileContent = () => {
     return <CalendarContent>하이</CalendarContent>;
   };
@@ -35,7 +39,7 @@ export default function GroupCalendar() {
         <Calendar
           value={selectedDate}
           onChange={handleDateChange}
-          tileClassName={tileClassName}
+          tileClassName={[tileClassName, titleSat]}
           tileContent={tileContent}
         />
       </CalendarBox>
@@ -65,7 +69,9 @@ export default function GroupCalendar() {
           <MemberProfileBox />
         </MemberProfilies>
       </CalendarDetailBox>
-      {isOpen && <AddActiveModal onClickToggleModal={onClickToggleModal} />}
+      {isOpen && (
+        <AddActiveModal onClickToggleModal={onClickToggleModal} selectedDate={selectedDate} />
+      )}
     </CalendarWrap>
   );
 }

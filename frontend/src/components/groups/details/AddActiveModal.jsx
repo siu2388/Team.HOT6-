@@ -9,8 +9,9 @@ import {
 } from '@mui/material';
 import React from 'react';
 import styled from 'styled-components';
+import { getDates } from '../../../commons/utils/getDate';
 
-export default function AddActiveModal({ onClickToggleModal }) {
+export default function AddActiveModal({ onClickToggleModal, selectedDate }) {
   return (
     <BackDrop>
       <Modal>
@@ -30,7 +31,7 @@ export default function AddActiveModal({ onClickToggleModal }) {
               id="filled-required"
               label="활동날짜"
               variant="standard"
-              value="2023-01-01"
+              value={getDates(selectedDate)}
               disabled
             />
           </InputBox>
