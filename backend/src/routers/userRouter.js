@@ -5,28 +5,32 @@ import { userAuthService } from '../services/userService.js';
 import { upload } from '../middlewares/imageUploadMiddleware.js';
 
 const userAuthRouter = Router();
+const imgupload = upload.single('image');
 
-userAuthRouter.post('/user/register', upload.single('image'), async (req, res, next) => {
+userAuthRouter.post('/user/register', imgupload, async (req, res, next) => {
   try {
     if (is.emptyObject(req.body)) {
-      throw new Error('headers의 Content-Type을 application/json으로 설정해주세요');
+      throw new Error('headers의 Content-Type을 "multipart/form-data"로 설정해주세요');
     }
 
     // req (request) 에서 데이터 가져오기
-    const name = req.body.name;
-    const email = req.body.email;
-    const password = req.body.password;
+    const { id, inputId, password, name, nickname, phone, address } = req.body;
 
     // 위 데이터를 유저 db에 추가하기
     const newUser = await userAuthService.addUser({
-      name,
-      email,
+      id,
+      inputId,
       password,
+      name,
+      nickname,
+      phone,
+      address,
+      // profileImage,
     });
 
-    if (newUser.errorMessage) {
-      throw new Error(newUser.errorMessage);
-    }
+    // if (newUser.errorMessage) {
+    //   throw new Error(newUser.errorMessage);
+    // }
 
     res.status(201).json(newUser);
   } catch (error) {
@@ -34,18 +38,18 @@ userAuthRouter.post('/user/register', upload.single('image'), async (req, res, n
   }
 });
 
-userAuthRouter.post('/user/login', async function (req, res, next) {
+//로그인
+userAuthRouter.post('/user/login', async (req, res, next) => {
   try {
     // req (request) 에서 데이터 가져오기
-    const inputId = req.body.inputId;
-    const password = req.body.password;
+    const { inputId, password } = req.body;
 
     // 위 데이터를 이용하여 유저 db에서 유저 찾기
     const user = await userAuthService.getUser({ inputId, password });
 
-    if (user.errorMessage) {
-      throw new Error(user.errorMessage);
-    }
+    // if (user.errorMessage) {
+    //   throw new Error(user.errorMessage);
+    // }
 
     res.status(200).send(user);
   } catch (error) {
