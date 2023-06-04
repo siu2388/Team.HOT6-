@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import FileUpload from '../../components/commons/FileUpload';
 import { Button, Slider, TextField } from '@mui/material';
@@ -15,6 +15,12 @@ const marks = [
 ];
 
 export default function GroupWritePage() {
+  const [sliderValue, setSliderValue] = useState(0);
+
+  const onChangeSliderValue = value => {
+    setSliderValue(value);
+  };
+
   return (
     <WriteWrap>
       <WriteContainer>
@@ -33,8 +39,9 @@ export default function GroupWritePage() {
               step={1}
               valueLabelDisplay="auto"
               marks={marks}
+              getAriaValueText={onChangeSliderValue}
             />
-            <p>30명</p>
+            <p>{sliderValue}명</p>
           </SliderBox>
           <InputBox>
             <TextField
@@ -86,6 +93,9 @@ const Form = styled.form`
         line-height: 1.3;
         overflow-y: auto;
       }
+    }
+    .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+      font-size: 1.4rem;
     }
   }
 
