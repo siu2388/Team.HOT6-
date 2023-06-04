@@ -9,7 +9,9 @@ export default function Header() {
       <HeaderContainer>
         <LogoBox>
           <Link to={'/'}>
-            <img src="/images/commons/logo.png" alt="사랑해 지구야 로고" />
+            <LogoImgBox>
+              <img src="/images/commons/logo.png" alt="사랑해 지구야 로고" />
+            </LogoImgBox>
           </Link>
         </LogoBox>
         <NavigationBox>
@@ -63,7 +65,7 @@ const HeaderContainer = styled.header`
   align-items: center;
 `;
 
-const LogoBox = styled.div``;
+const LogoImgBox = styled.div``;
 
 const NavigationBox = styled.div`
   display: flex;
@@ -94,6 +96,13 @@ const SubMenu = styled.ul`
 `;
 
 const SubMenuList = styled.li``;
+
+const LogoBox = styled.div`
+  width: 6rem;
+  img {
+    width: 100%;
+  }
+`;
 
 const SubMenuBtn = styled.button`
   width: 120px;
