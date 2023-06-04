@@ -3,6 +3,7 @@ import MainPage from '../../pages/mains/Main';
 import GroupList from '../../pages/groups/List';
 import GroupDetailPage from '../../pages/groups/Detail';
 import GroupWritePage from '../../pages/groups/Write';
+import LoginPage from '../../pages/logins/Login';
 
 export const ROUTE = {
   HOME: {
@@ -24,6 +25,11 @@ export const ROUTE = {
     path: '/groups/write',
     link: '/groups/write',
     element: <GroupWritePage />,
+  },
+  LOGIN: {
+    path: '/login',
+    link: '/login',
+    element: <LoginPage />,
   },
 };
 
