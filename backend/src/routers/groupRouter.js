@@ -19,7 +19,7 @@ groupRouter.post('/group/create', loginRequired, imgupload, async (req, res, nex
       title,
       memberCount,
       description,
-      thumbnail, // thumbnail도 이렇게 저장하는게 맞나?
+      //thumbnail,  thumbnail도 이렇게 저장하는게 맞나?
     });
 
     if (newGroup.errorMessage) {
