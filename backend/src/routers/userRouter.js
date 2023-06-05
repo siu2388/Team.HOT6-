@@ -2,30 +2,34 @@ import is from '@sindresorhus/is';
 import { Router } from 'express';
 import { loginRequired } from '../middlewares/loginRequired.js';
 import { userAuthService } from '../services/userService.js';
+import { upload } from '../middlewares/imageUploadMiddleware.js';
 
 const userAuthRouter = Router();
+const imgupload = upload.single('image');
 
-userAuthRouter.post('/user/register', async function (req, res, next) {
+userAuthRouter.post('/user/register', imgupload, async (req, res, next) => {
   try {
     if (is.emptyObject(req.body)) {
-      throw new Error('headers의 Content-Type을 application/json으로 설정해주세요');
+      throw new Error('headers의 Content-Type을 "multipart/form-data"로 설정해주세요');
     }
 
-    const { inputId, password, name, nickname, phone, address, profileImage } = req.body;
+    // req (request) 에서 데이터 가져오기
+    const { id, inputId, password, name, nickname, phone, address } = req.body;
 
     const newUser = await userAuthService.addUser({
+      id,
       inputId,
       password,
       name,
       nickname,
       phone,
       address,
-      profileImage,
+      // profileImage,
     });
 
-    if (newUser.errorMessage) {
-      throw new Error(newUser.errorMessage);
-    }
+    // if (newUser.errorMessage) {
+    //   throw new Error(newUser.errorMessage);
+    // }
 
     res.status(201).json(newUser);
   } catch (error) {
@@ -33,16 +37,18 @@ userAuthRouter.post('/user/register', async function (req, res, next) {
   }
 });
 
-userAuthRouter.post('/user/login', async function (req, res, next) {
+//로그인
+userAuthRouter.post('/user/login', async (req, res, next) => {
   try {
-    const inputId = req.body.inputId;
-    const password = req.body.password;
+    // req (request) 에서 데이터 가져오기
+    const { inputId, password } = req.body;
 
+    // 위 데이터를 이용하여 유저 db에서 유저 찾기
     const user = await userAuthService.getUser({ inputId, password });
 
-    if (user.errorMessage) {
-      throw new Error(user.errorMessage);
-    }
+    // if (user.errorMessage) {
+    //   throw new Error(user.errorMessage);
+    // }
 
     res.status(200).send(user);
   } catch (error) {
@@ -50,7 +56,7 @@ userAuthRouter.post('/user/login', async function (req, res, next) {
   }
 });
 
-userAuthRouter.get('/userlist', loginRequired, async function (req, res, next) {
+userAuthRouter.get('/userlist', loginRequired, async (req, res, next) => {
   try {
     const users = await userAuthService.getUsers();
     res.status(200).send(users);
@@ -59,11 +65,12 @@ userAuthRouter.get('/userlist', loginRequired, async function (req, res, next) {
   }
 });
 
-userAuthRouter.get('/user/current', loginRequired, async function (req, res, next) {
+userAuthRouter.get('/user/current', loginRequired, async (req, res, next) => {
   try {
-    const user_id = req.currentUserId;
+    // jwt토큰에서 추출된 사용자 id를 가지고 db에서 사용자 정보를 찾음.
+    const userId = req.currentUserId;
     const currentUserInfo = await userAuthService.getUserInfo({
-      user_id,
+      userId,
     });
 
     if (currentUserInfo.errorMessage) {
@@ -76,7 +83,7 @@ userAuthRouter.get('/user/current', loginRequired, async function (req, res, nex
   }
 });
 
-userAuthRouter.put('/users/:id', loginRequired, async function (req, res, next) {
+userAuthRouter.put('/users/:id', loginRequired, async (req, res, next) => {
   try {
     const userId = req.params.id;
     const inputId = req.body.inputId ?? null;
@@ -85,10 +92,11 @@ userAuthRouter.put('/users/:id', loginRequired, async function (req, res, next) 
     const nickname = req.body.nickname ?? null;
     const phone = req.body.phone ?? null;
     const address = req.body.address ?? null;
-    const profileImage = req.body.profileImage ?? null;
+    // const profileImage = req.body.profileImage ?? null;
 
-    const toUpdate = { inputId, password, name, nickname, phone, address, profileImage };
+    const toUpdate = { inputId, password, name, nickname, phone, address };
 
+    // 해당 사용자 아이디로 사용자 정보를 db에서 찾아 업데이트함. 업데이트 요소가 없을 시 생략함
     const updatedUser = await userAuthService.setUser({ userId, toUpdate });
 
     if (updatedUser.errorMessage) {
@@ -115,10 +123,5 @@ userAuthRouter.get('/users/:id', loginRequired, async function (req, res, next) 
     next(error);
   }
 });
-
-// // jwt 토큰 기능 확인용, 삭제해도 되는 라우터임.
-// userAuthRouter.get('/afterlogin', loginRequired, function (req, res, next) {
-//   res.status(200).send(`안녕하세요 ${req.currentUserId}님, jwt 웹 토큰 기능 정상 작동 중입니다.`);
-// });
 
 export { userAuthRouter };
