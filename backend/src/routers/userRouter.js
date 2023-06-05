@@ -109,7 +109,7 @@ userAuthRouter.put('/users/:id', loginRequired, async (req, res, next) => {
   }
 });
 
-userAuthRouter.get('/users/:id', loginRequired, async function (req, res, next) {
+userAuthRouter.get('/users/:id', loginRequired, async (req, res, next) => {
   try {
     const userId = req.params.id;
     const currentUserInfo = await userAuthService.getUserInfo({ userId });
