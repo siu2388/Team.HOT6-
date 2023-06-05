@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { ROUTE } from '../../constants/routes/routeData';
 
 export default function Header() {
   return (
@@ -8,14 +9,16 @@ export default function Header() {
       <HeaderContainer>
         <LogoBox>
           <Link to={'/'}>
-            <img src="/images/commons/logo.png" alt="사랑해 지구야 로고" />
+            <LogoImgBox>
+              <img src="/images/commons/logo.png" alt="사랑해 지구야 로고" />
+            </LogoImgBox>
           </Link>
         </LogoBox>
         <NavigationBox>
           <Navigation>
             <NavMenu>
               <MenuList>
-                <Link to={'/groups'}>Group</Link>
+                <Link to={ROUTE.GROUP_LIST.link}>Group</Link>
               </MenuList>
               <MenuList>
                 <Link to={'/'}>Challenge</Link>
@@ -34,6 +37,11 @@ export default function Header() {
             <SubMenuList>
               <SubMenuBtn>
                 <Link to={'/join'}>JOIN</Link>
+              </SubMenuBtn>
+            </SubMenuList>
+            <SubMenuList>
+              <SubMenuBtn>
+                <Link to={ROUTE.PAGE_GROUP.link}>MYPAGE</Link>
               </SubMenuBtn>
             </SubMenuList>
           </SubMenu>
@@ -62,7 +70,7 @@ const HeaderContainer = styled.header`
   align-items: center;
 `;
 
-const LogoBox = styled.div``;
+const LogoImgBox = styled.div``;
 
 const NavigationBox = styled.div`
   display: flex;
@@ -94,6 +102,13 @@ const SubMenu = styled.ul`
 
 const SubMenuList = styled.li``;
 
+const LogoBox = styled.div`
+  width: 6rem;
+  img {
+    width: 100%;
+  }
+`;
+
 const SubMenuBtn = styled.button`
   width: 120px;
   height: 48px;
@@ -101,8 +116,13 @@ const SubMenuBtn = styled.button`
   border-radius: 5px;
   background-color: ${({ btn }) => (btn === 'stroke' ? 'none' : '#01881c')};
   a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
     font-size: 1.6rem;
     font-weight: 600;
     color: ${({ btn }) => (btn === 'stroke' ? '#01881c' : '#fff')};
   }
-`;
+`; 
