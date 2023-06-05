@@ -14,7 +14,7 @@ class userAuthService {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const id = uuidv4();
-    const newUser = { id, inputId, password: hashedPassword, name, nickname, phone };
+    const newUser = { id, inputId, password: hashedPassword, name, nickname, phone, address };
 
     return User.create({ newUser });
   }

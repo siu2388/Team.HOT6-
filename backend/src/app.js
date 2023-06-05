@@ -1,9 +1,12 @@
+import cors from 'cors';
 import express from 'express';
 import { userAuthRouter } from './routers/userRouter.js';
 import { errorMiddleware } from './middlewares/errorMiddleware.js';
 import { groupRouter } from './routers/groupRouter.js';
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

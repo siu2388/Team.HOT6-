@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const UserSchema = new Schema(
+const userSchema = new Schema(
   {
     id: {
       type: String,
@@ -9,6 +9,7 @@ const UserSchema = new Schema(
     inputId: {
       type: String,
       required: true,
+      unique: true,
     },
     password: {
       type: String,
@@ -21,10 +22,12 @@ const UserSchema = new Schema(
     nickname: {
       type: String,
       required: true,
+      unique: true,
     },
     phone: {
       type: String,
       required: true,
+      unique: true,
     },
     address: {
       street: { type: String },
@@ -41,6 +44,6 @@ const UserSchema = new Schema(
   },
 );
 
-const UserModel = model('User', UserSchema);
+const UserModel = model('User', userSchema);
 
 export { UserModel };
