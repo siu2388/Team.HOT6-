@@ -20,6 +20,9 @@ return(
           </InfoItem>
         </InfoRow>
         <Separator />
+        <Credit>
+            <CreditNum>⭐️ 13</CreditNum>
+        </Credit>
         <EmojiRow>
           <EmojiItem>
             <Emoji>🥤</Emoji>
@@ -39,6 +42,7 @@ const ProfileBox = styled.p`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  padding: 1px;
 `;
 const UserName = styled.p`
   font-size: 2.3rem;
@@ -48,7 +52,7 @@ const UserName = styled.p`
   `;
 
 const Email = styled.p`
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: 400;
   color: #777;
   margin-top: 1.3rem;
@@ -90,7 +94,7 @@ const Separator = styled.div`
 const EmojiRow = styled.div`
   display: flex;
   flex-direction: row;
-  margin-top: 0.5rem;
+  margin-top: 1.5rem;
 `;
 
 const EmojiItem = styled.div`
@@ -100,10 +104,21 @@ const EmojiItem = styled.div`
 `;
 
 const Emoji = styled.span`
-  font-size: 2.8rem;
+  font-size: 1.8rem;
 `;
 
 const EmojiCount = styled.span`
+  font-size: 1.8rem;
+  margin-left: 0.2rem;
+  color: #777777
+`;
+
+const Credit = styled.div`
+  margin-right: 2rem;
+  margin-bottom: 1rem;
+`;
+const CreditNum = styled.p`
   font-size: 2.5rem;
-  margin-left: 0.5rem;
+  color: #E7C448;
+  font-weight: bold;
 `;

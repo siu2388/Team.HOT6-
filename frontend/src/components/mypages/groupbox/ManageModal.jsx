@@ -196,28 +196,27 @@ const ButtonContainer = styled.div`
   padding: 0 1rem;
   margin-top: 3rem;
 `;
+
 const JoinButton = styled.button`
   width: 9rem;
   height: 3rem;
   padding: 0.3rem;
   margin: 1.5rem;
   transition: background-color 0.3s;
-  &:hover {
-    background-color: #fff;
-    border-radius: 0.7rem;
-  }
+  background-color: ${(props) => (props.active ? '#fff' : '#9fdf9f')};
+  border-radius: 0.7rem;
 `;
+
 const ActButton = styled.button`
   width: 9rem;
   height: 3rem;
   padding: 0.3rem;
   margin: 1.5rem;
   transition: background-color 0.3s;
-  &:hover {
-    background-color: #fff;
-    border-radius: 0.7rem;
-  }
+  background-color: ${(props) => (props.active ? '#fff' : '#9fdf9f')};
+  border-radius: 0.7rem;
 `;
+
 
 const ManageButton = styled.div`
   display: flex;
