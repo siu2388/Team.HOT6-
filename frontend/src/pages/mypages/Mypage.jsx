@@ -9,6 +9,13 @@ export default function Mypage() {
   const openManageModal = () => {
     setIsManageModalOpen(true);
   };
+
+  const [activeMenuItem, setActiveMenuItem] = useState('나의그룹');
+
+  const handleMenuItemClick = (menuItem) => {
+    setActiveMenuItem(menuItem);
+  };
+
   return (
     <Container>
       <GroupMembers>
@@ -16,55 +23,81 @@ export default function Mypage() {
       </GroupMembers>
       <Card>
         <Menu>
-          <Menubox>
+          <Menubox
+            onClick={() => handleMenuItemClick('나의그룹')}
+            active={activeMenuItem === '나의그룹'}
+          >
             <MenuItem>나의그룹</MenuItem>
           </Menubox>
-          <Menubox>
+          <Menubox
+            onClick={() => handleMenuItemClick('그룹관리')}
+            active={activeMenuItem === '그룹관리'}
+          >
             <MenuItem>그룹관리</MenuItem>
           </Menubox>
-          <Menubox>
-            <MenuItem>적립조회</MenuItem>   
+          <Menubox
+            onClick={() => handleMenuItemClick('적립조회')}
+            active={activeMenuItem === '적립조회'}
+          >
+            <MenuItem>적립조회</MenuItem>
           </Menubox>
-          <Menubox>
+          <Menubox
+            onClick={() => handleMenuItemClick('내정보수정')}
+            active={activeMenuItem === '내정보수정'}
+          >
             <MenuItem>내정보수정</MenuItem>
           </Menubox>
         </Menu>
       </Card>
+
       <LargeBox>
-        <GroupInfo>
-          <GroupImage alt="그룹장 사진" src="/images/commons/kiki.JPG" />
-          <GroupDetails>
-            <GroupName>3학년 1반</GroupName>
-            <GroupRole>
-                <GroupRoleText>그룹장</GroupRoleText>
-                <GroupRoleName>유진이</GroupRoleName>
-            </GroupRole>
-            <GroupMembersCount>
-              <GroupMembersNum>인원</GroupMembersNum>
-              <GroupMembersImgBox>
-                <GroupMembersImage src="/images/commons/kkam.png" alt="멤버 이미지" />
-                <GroupMembersImage src="/images/commons/kkam.png" alt="멤버 이미지" />
-                <GroupMembersImage src="/images/commons/kkam.png" alt="멤버 이미지" />
-                <GroupMembersImage src="/images/commons/kkam.png" alt="멤버 이미지" />
-              </GroupMembersImgBox>
-              <GroupMembersCountText>4/15</GroupMembersCountText>
-            </GroupMembersCount>
-            <GroupCreation>
-              <GroupCreationText>생성일</GroupCreationText>
-              <GroupCreationDate>2020.01.01</GroupCreationDate>
-            </GroupCreation>
-            <GroupButton>
-                <GroupLeaveButton>그룹탈퇴</GroupLeaveButton>
-                <GroupManageButton onClick={openManageModal}>그룹관리</GroupManageButton>
-                <GroupMoveButton>이동</GroupMoveButton>
-            </GroupButton>
-          </GroupDetails>
-        </GroupInfo>
-        {isManageModalOpen && (
-          <ManageModal
-            setIsManageModalOpen={setIsManageModalOpen}
-          />
+        {activeMenuItem === '나의그룹' && (
+          <GroupInfo>
+            <GroupImage alt="그룹장 사진" src="/images/commons/kiki.JPG" />
+            <GroupDetails>
+              <GroupName>3학년 1반</GroupName>
+              <GroupRole>
+                  <GroupRoleText>그룹장</GroupRoleText>
+                  <GroupRoleName>유진이</GroupRoleName>
+              </GroupRole>
+              <GroupMembersCount>
+                <GroupMembersNum>인원</GroupMembersNum>
+                <GroupMembersImgBox>
+                  <GroupMembersImage src="/images/commons/kkam.png" alt="멤버 이미지" />
+                  <GroupMembersImage src="/images/commons/kkam.png" alt="멤버 이미지" />
+                  <GroupMembersImage src="/images/commons/kkam.png" alt="멤버 이미지" />
+                  <GroupMembersImage src="/images/commons/kkam.png" alt="멤버 이미지" />
+                </GroupMembersImgBox>
+                <GroupMembersCountText>4/15</GroupMembersCountText>
+              </GroupMembersCount>
+              <GroupCreation>
+                <GroupCreationText>생성일</GroupCreationText>
+                <GroupCreationDate>2020.01.01</GroupCreationDate>
+              </GroupCreation>
+              <GroupButton>
+                  <GroupLeaveButton>그룹탈퇴</GroupLeaveButton>
+                  <GroupManageButton onClick={openManageModal}>그룹관리</GroupManageButton>
+                  <GroupMoveButton>이동</GroupMoveButton>
+              </GroupButton>
+            </GroupDetails>
+          </GroupInfo>
         )}
+        {activeMenuItem === '그룹관리' && (
+          <GroupManagement>
+          </GroupManagement>
+        )}
+        {activeMenuItem === '적립조회' && (
+          <PointInquiry>
+          </PointInquiry>
+        )}
+        {activeMenuItem === '내정보수정' && (
+          <ProfileModification>
+          </ProfileModification>
+        )}
+        {isManageModalOpen && (
+          <ManageModal setIsManageModalOpen={setIsManageModalOpen} />
+        )}
+        
       </LargeBox>
     </Container>
   );
@@ -79,9 +112,9 @@ const Container = styled.div`
 
 const GroupMembers = styled.div`
   margin-top: 13rem;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
   width: 20%;
-  height: 31rem;
+  height: 35rem;
   background-color: #fff;
   border-radius: 0.8rem;
   padding: 1rem;
@@ -123,6 +156,12 @@ const Menubox = styled.button`
     background-color: #fff;
     border-radius: 0.7rem;
   }
+  ${({ active }) =>
+  active &&
+  `
+  background-color: #fff;
+  border-radius: 0.7rem;
+  `}
 `;
 
 const MenuItem = styled.li`
@@ -299,4 +338,8 @@ const GroupMoveButton = styled.button`
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `;
+const GroupManagement = styled.div``;
 
+const PointInquiry = styled.div``;
+
+const ProfileModification = styled.div``;
