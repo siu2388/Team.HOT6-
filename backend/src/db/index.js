@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import { User } from './models/User.js';
 import { Group } from './models/Group.js';
-import { ActCategory } from '../models/ActCategory.js';
-import { Activity } from '../models/Activity.js';
+import { ActCategory } from './models/ActCategory.js';
+import { Activity } from './models/Activity.js';
 
 const DB_URL =
   process.env.MONGODB_URL ||
@@ -17,4 +17,3 @@ db.on('error', error =>
 );
 
 export { User, Group, ActCategory, Activity };
-

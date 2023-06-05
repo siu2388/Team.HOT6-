@@ -1,4 +1,4 @@
-import { ActCategoryModel } from '../db/schemas/actCategory';
+import { ActCategoryModel } from '../schemas/actCategory.js';
 
 class ActCategory {
   static async create({ newActCategory }) {

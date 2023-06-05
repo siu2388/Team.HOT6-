@@ -1,4 +1,4 @@
-import { ActivityModel } from '../db/schemas/activity';
+import { ActivityModel } from '../schemas/activity.js';
 
 class Activity {
   static async create({ newActivity }) {

@@ -26,10 +26,6 @@ const ActivitySchema = new Schema(
       type: String,
       require: true,
     },
-    profileImg: {
-      type: Image,
-      require: true,
-    },
   },
   {
     timestamp: true,
