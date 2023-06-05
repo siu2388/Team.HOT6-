@@ -4,6 +4,8 @@ import GroupList from '../../pages/groups/List';
 import GroupDetailPage from '../../pages/groups/Detail';
 import GroupWritePage from '../../pages/groups/Write';
 import Mypage from '../../pages/mypages/Mypage';
+import LoginPage from '../../pages/logins/Login';
+import JoinPage from '../../pages/joins/Join';
 
 export const ROUTE = {
   HOME: {
@@ -31,6 +33,16 @@ export const ROUTE = {
     link: '/mypages',
     element: <Mypage />,
   },
+  LOGIN: {
+    path: '/login',
+    link: '/login',
+    element: <LoginPage />,
+  },
+  JOIN: {
+    path: '/join',
+    link: '/join',
+    element: <JoinPage />,
+  }
 };
 
 export const ROUTE_ARR = Object.values(ROUTE);

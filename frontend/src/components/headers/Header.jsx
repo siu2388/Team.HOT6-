@@ -9,7 +9,9 @@ export default function Header() {
       <HeaderContainer>
         <LogoBox>
           <Link to={'/'}>
-            <img src="/images/commons/logo.png" alt="사랑해 지구야 로고" />
+            <LogoImgBox>
+              <img src="/images/commons/logo.png" alt="사랑해 지구야 로고" />
+            </LogoImgBox>
           </Link>
         </LogoBox>
         <NavigationBox>
@@ -68,7 +70,7 @@ const HeaderContainer = styled.header`
   align-items: center;
 `;
 
-const LogoBox = styled.div``;
+const LogoImgBox = styled.div``;
 
 const NavigationBox = styled.div`
   display: flex;
@@ -100,6 +102,13 @@ const SubMenu = styled.ul`
 
 const SubMenuList = styled.li``;
 
+const LogoBox = styled.div`
+  width: 6rem;
+  img {
+    width: 100%;
+  }
+`;
+
 const SubMenuBtn = styled.button`
   width: 120px;
   height: 48px;
@@ -107,6 +116,11 @@ const SubMenuBtn = styled.button`
   border-radius: 5px;
   background-color: ${({ btn }) => (btn === 'stroke' ? 'none' : '#01881c')};
   a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
     font-size: 1.6rem;
     font-weight: 600;
     color: ${({ btn }) => (btn === 'stroke' ? '#01881c' : '#fff')};
