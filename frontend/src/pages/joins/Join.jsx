@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import FileUpload from '../../components/commons/FileUpload';
 import {
@@ -15,21 +15,24 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import SearchIcon from '@mui/icons-material/Search';
 import { Link } from 'react-router-dom';
 import Postcode from '../../components/commons/DaumPostCode';
+import { useRecoilState } from 'recoil';
+import { isPostcodeModalState, postcodeAddressState } from '../../stores';
 
 export default function JoinPage() {
-  const [address, setAddress] = useState('');
+  const [postcodeAddress, setPostcodeAddress] = useRecoilState(postcodeAddressState);
+  const [isPostcodeModal, setIsPostcodeModal] = useRecoilState(isPostcodeModalState);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
-  const [isPostcodeModal, setIsPostCodeModal] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      setPostcodeAddress('');
+    };
+  }, []);
 
   const onClicktoggleAddressModal = () => {
-    setIsPostCodeModal(prev => !prev);
-  };
-
-  const onCompletePostcode = value => {
-    onClicktoggleAddressModal();
-    setAddress(value);
+    setIsPostcodeModal(prev => !prev);
   };
 
   const handleClickShowPassword = () => setShowPassword(show => !show);
@@ -38,8 +41,6 @@ export default function JoinPage() {
   const handleMouseDownPassword = event => {
     event.preventDefault();
   };
-
-  console.log(address);
 
   return (
     <JoinWrap>
@@ -116,10 +117,10 @@ export default function JoinPage() {
           </InputBox>
           <InputBox>
             <TextField
-              label={address ? '' : '주소'}
+              label={postcodeAddress ? '' : '주소'}
               id="outlined-start-adornment"
               disabled
-              value={address}
+              value={postcodeAddress}
             />
             <SearchIconBox onClick={onClicktoggleAddressModal}>
               <SearchIcon />
@@ -136,7 +137,7 @@ export default function JoinPage() {
           </LoginLink>
         </Form>
       </JoinContainer>
-      {isPostcodeModal && <Postcode onCompletePostcode={onCompletePostcode} />}
+      {isPostcodeModal && <Postcode />}
     </JoinWrap>
   );
 }

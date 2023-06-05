@@ -2,8 +2,13 @@ import { Button } from '@mui/material';
 import React from 'react';
 import DaumPostcodeEmbed from 'react-daum-postcode';
 import styled from 'styled-components';
+import { isPostcodeModalState, postcodeAddressState } from '../../stores';
+import { useRecoilState } from 'recoil';
 
-const Postcode = ({ onCompletePostcode }) => {
+const Postcode = () => {
+  const [, setPostcodeAddress] = useRecoilState(postcodeAddressState);
+  const [, setIsPostcodeModal] = useRecoilState(isPostcodeModalState);
+
   const handleComplete = data => {
     let fullAddress = data.address;
     let extraAddress = '';
@@ -18,7 +23,12 @@ const Postcode = ({ onCompletePostcode }) => {
       fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
     }
 
-    onCompletePostcode(fullAddress);
+    setPostcodeAddress(fullAddress);
+    setIsPostcodeModal(false);
+  };
+
+  const onClickCloseModal = () => {
+    setIsPostcodeModal(false);
   };
 
   return (
@@ -26,7 +36,7 @@ const Postcode = ({ onCompletePostcode }) => {
       <PostContainer>
         <DaumPostcodeEmbed onComplete={handleComplete} />
         <div>
-          <Button variant="contained" color="success">
+          <Button variant="contained" color="success" onClick={onClickCloseModal}>
             닫기
           </Button>
         </div>
