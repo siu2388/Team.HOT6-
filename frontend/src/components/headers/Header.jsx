@@ -39,6 +39,11 @@ export default function Header() {
                 <Link to={'/join'}>JOIN</Link>
               </SubMenuBtn>
             </SubMenuList>
+            <SubMenuList>
+              <SubMenuBtn>
+                <Link to={ROUTE.PAGE_GROUP.link}>MYPAGE</Link>
+              </SubMenuBtn>
+            </SubMenuList>
           </SubMenu>
         </NavigationBox>
       </HeaderContainer>
@@ -120,4 +125,4 @@ const SubMenuBtn = styled.button`
     font-weight: 600;
     color: ${({ btn }) => (btn === 'stroke' ? '#01881c' : '#fff')};
   }
-`;
+`; 

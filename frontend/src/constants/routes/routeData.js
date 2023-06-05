@@ -3,6 +3,7 @@ import MainPage from '../../pages/mains/Main';
 import GroupList from '../../pages/groups/List';
 import GroupDetailPage from '../../pages/groups/Detail';
 import GroupWritePage from '../../pages/groups/Write';
+import Mypage from '../../pages/mypages/Mypage';
 import LoginPage from '../../pages/logins/Login';
 import JoinPage from '../../pages/joins/Join';
 
@@ -27,6 +28,11 @@ export const ROUTE = {
     link: '/groups/write',
     element: <GroupWritePage />,
   },
+  PAGE_GROUP: {
+    path: '/mypages',
+    link: '/mypages',
+    element: <Mypage />,
+  },
   LOGIN: {
     path: '/login',
     link: '/login',
@@ -36,7 +42,7 @@ export const ROUTE = {
     path: '/join',
     link: '/join',
     element: <JoinPage />,
-  },
+  }
 };
 
 export const ROUTE_ARR = Object.values(ROUTE);
