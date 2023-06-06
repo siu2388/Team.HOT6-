@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { ActCategoryModel } from '../db/schemas/actCategory';
+=======
+import { ActCategoryModel } from '../schemas/actCategory.js';
+>>>>>>> e46d3dcf0db3d9ceb70b80257fce54f1bba52ffb
 
 class ActCategory {
   static async create({ newActCategory }) {

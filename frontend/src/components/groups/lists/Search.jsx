@@ -7,7 +7,7 @@ export default function Search() {
     <SearchBox>
       <SearchInput type="text" placeholder="그룹명을 입력해주세요." />
       <Button variant="contained" color="success">
-        검색
+        <a>검색</a>
       </Button>
     </SearchBox>
   );

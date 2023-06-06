@@ -5,19 +5,19 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Link } from 'react-router-dom';
 
-export default function Slick() {
-  const settings = {
-    className: 'center',
-    centerMode: true,
-    infinite: true,
-    centerPadding: '60px',
-    slidesToShow: 2,
-    speed: 500,
-    autoplay: true,
-    autoplaySpeed: 2500,
-    cssEase: 'linear',
-  };
+const settings = {
+  className: 'center',
+  centerMode: true,
+  infinite: true,
+  centerPadding: '60px',
+  slidesToShow: 2,
+  speed: 500,
+  autoplay: true,
+  autoplaySpeed: 2500,
+  cssEase: 'linear',
+};
 
+export default function Slick() {
   return (
     <SlickContainer>
       <Slider {...settings}>

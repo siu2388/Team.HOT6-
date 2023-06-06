@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { ActivityModel } from '../db/schemas/activity';
+=======
+import { ActivityModel } from '../schemas/activity.js';
+>>>>>>> e46d3dcf0db3d9ceb70b80257fce54f1bba52ffb
 
 class Activity {
   static async create({ newActivity }) {
