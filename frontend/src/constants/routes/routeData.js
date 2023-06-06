@@ -29,8 +29,8 @@ export const ROUTE = {
     element: <GroupWritePage />,
   },
   PAGE_GROUP: {
-    path: '/mypages',
-    link: '/mypages',
+    path: '/mypage',
+    link: '/mypage',
     element: <Mypage />,
   },
   LOGIN: {
@@ -39,10 +39,10 @@ export const ROUTE = {
     element: <LoginPage />,
   },
   JOIN: {
-    path: '/join',
-    link: '/join',
+    path: '/register',
+    link: '/register',
     element: <JoinPage />,
-  }
+  },
 };
 
 export const ROUTE_ARR = Object.values(ROUTE);
