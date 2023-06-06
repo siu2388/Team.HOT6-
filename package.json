@@ -10,13 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "eslint-config-prettier": "^8.8.0",
-<<<<<<< HEAD
     "prettier": "^2.8.8",
     "yarn": "^1.22.19"
   }
-=======
-    "prettier": "^2.8.8"
-  },
-  "repository": "https://kdt-gitlab.elice.io/ai_track/class_07/data_project/team06/hot6.git"
->>>>>>> 4c4db20051cfe1da9fb0a59fe396cc495dc0081e
 }
