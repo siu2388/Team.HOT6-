@@ -5,6 +5,8 @@ import Search from '../../components/groups/lists/Search';
 import { Button, Pagination } from '@mui/material';
 import ListBox from '../../components/commons/box/ListBox';
 import SubTitle from '../../components/commons/title/SubTitle';
+import { Link } from 'react-router-dom';
+import { ROUTE } from '../../constants/routes/routeData';
 
 export default function GroupList() {
   return (
@@ -21,7 +23,9 @@ export default function GroupList() {
         <SubTitle title="GROUP" />
         <SearchContainer>
           <Search variant="contained" />
-          <Button variant="contained">그룹등록</Button>
+          <Button variant="contained">
+            <Link to={ROUTE.GROUP_WRITE.link}>그룹등록</Link>
+          </Button>
         </SearchContainer>
         <GroupLists>
           <ListBox />
@@ -84,6 +88,14 @@ const SearchContainer = styled.div`
   margin-bottom: 4.5rem;
   button {
     font-size: 1.5rem;
+    padding: 0;
+    a {
+      width: 100%;
+      height: 100%;
+      font-size: 1.5rem;
+      display: block;
+      padding: 6px 16px;
+    }
   }
 `;
 

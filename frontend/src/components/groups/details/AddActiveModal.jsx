@@ -10,6 +10,7 @@ import {
 import React from 'react';
 import styled from 'styled-components';
 import { getDates } from '../../../commons/utils/getDate';
+import FileUpload from '../../commons/FileUpload';
 
 export default function AddActiveModal({ onClickToggleModal, selectedDate }) {
   return (
@@ -48,10 +49,7 @@ export default function AddActiveModal({ onClickToggleModal, selectedDate }) {
           </FormControl>
           <FileBox>
             <FileTitle>활동 인증사진</FileTitle>
-            <FileInput type="file" id="file" />
-            <FileInputLabel htmlFor="file">
-              <img src="/images/groups/details/addBtn.png" alt="인증사진 추가버튼" />
-            </FileInputLabel>
+            <FileUpload />
           </FileBox>
           <BtnBox>
             <Button variant="contained" color="success">
@@ -137,29 +135,6 @@ const ActiveForm = styled.form`
 
 const FileBox = styled.div`
   margin: 2rem 0;
-`;
-
-const FileInput = styled.input`
-  display: none;
-`;
-
-const FileInputLabel = styled.label`
-  display: block;
-  width: 100%;
-  height: 25rem;
-  border: 1px solid #d9d9d9;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 2rem;
-  font-weight: 600;
-  color: #111;
-  background: #eee;
-  cursor: pointer;
-
-  img {
-    width: 5rem;
-  }
 `;
 
 const FileTitle = styled.h5`
