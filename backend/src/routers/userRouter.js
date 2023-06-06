@@ -7,29 +7,29 @@ import { upload } from '../middlewares/imageUploadMiddleware.js';
 const userAuthRouter = Router();
 const imgupload = upload.single('image');
 
-userAuthRouter.post('/user/register', imgupload, async (req, res, next) => {
+userAuthRouter.post('/users', imgupload, async (req, res, next) => {
   try {
     if (is.emptyObject(req.body)) {
       throw new Error('headers의 Content-Type을 "multipart/form-data"로 설정해주세요');
     }
 
     // req (request) 에서 데이터 가져오기
-    const { id, inputId, password, name, nickname, phone, address } = req.body;
+    const { userId, password, name, nickname, phone, address, addressDetail } = req.body;
 
     const newUser = await userAuthService.addUser({
-      id,
-      inputId,
+      userId,
       password,
       name,
       nickname,
       phone,
       address,
+      addressDetail,
       // profileImage,
     });
 
-    // if (newUser.errorMessage) {
-    //   throw new Error(newUser.errorMessage);
-    // }
+    if (newUser.errorMessage) {
+      throw new Error(newUser.errorMessage);
+    }
 
     res.status(201).json(newUser);
   } catch (error) {
@@ -38,17 +38,17 @@ userAuthRouter.post('/user/register', imgupload, async (req, res, next) => {
 });
 
 //로그인
-userAuthRouter.post('/user/login', async (req, res, next) => {
+userAuthRouter.post('/login', async (req, res, next) => {
   try {
     // req (request) 에서 데이터 가져오기
-    const { inputId, password } = req.body;
+    const { userId, password } = req.body;
 
     // 위 데이터를 이용하여 유저 db에서 유저 찾기
-    const user = await userAuthService.getUser({ inputId, password });
+    const user = await userAuthService.getUser({ userId, password });
 
-    // if (user.errorMessage) {
-    //   throw new Error(user.errorMessage);
-    // }
+    if (user.errorMessage) {
+      throw new Error(user.errorMessage);
+    }
 
     res.status(200).send(user);
   } catch (error) {
@@ -56,7 +56,7 @@ userAuthRouter.post('/user/login', async (req, res, next) => {
   }
 });
 
-userAuthRouter.get('/userlist', loginRequired, async (req, res, next) => {
+userAuthRouter.get('/users', loginRequired, async (req, res, next) => {
   try {
     const users = await userAuthService.getUsers();
     res.status(200).send(users);
@@ -65,39 +65,40 @@ userAuthRouter.get('/userlist', loginRequired, async (req, res, next) => {
   }
 });
 
-userAuthRouter.get('/user/current', loginRequired, async (req, res, next) => {
-  try {
-    // jwt토큰에서 추출된 사용자 id를 가지고 db에서 사용자 정보를 찾음.
-    const userId = req.currentUserId;
-    const currentUserInfo = await userAuthService.getUserInfo({
-      userId,
-    });
+// userAuthRouter.get('/user/current', loginRequired, async (req, res, next) => {
+//   try {
+//     // jwt토큰에서 추출된 사용자 id를 가지고 db에서 사용자 정보를 찾음.
+//     const userId = req.currentUserId;
+//     const currentUserInfo = await userAuthService.getUserInfo({
+//       userId,
+//     });
 
-    if (currentUserInfo.errorMessage) {
-      throw new Error(currentUserInfo.errorMessage);
-    }
+//     if (currentUserInfo.errorMessage) {
+//       throw new Error(currentUserInfo.errorMessage);
+//     }
 
-    res.status(200).send(currentUserInfo);
-  } catch (error) {
-    next(error);
-  }
-});
+//     res.status(200).send(currentUserInfo);
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
 userAuthRouter.put('/users/:id', loginRequired, async (req, res, next) => {
   try {
-    const userId = req.params.id;
-    const inputId = req.body.inputId ?? null;
+    const loginedId = req.params.id;
+    const userId = req.body.userId ?? null;
     const password = req.body.password ?? null;
     const name = req.body.name ?? null;
     const nickname = req.body.nickname ?? null;
     const phone = req.body.phone ?? null;
     const address = req.body.address ?? null;
+    const addressDetail = req.body.addressDetail ?? null;
     // const profileImage = req.body.profileImage ?? null;
 
-    const toUpdate = { inputId, password, name, nickname, phone, address };
+    const toUpdate = { userId, password, name, nickname, phone, address, addressDetail };
 
     // 해당 사용자 아이디로 사용자 정보를 db에서 찾아 업데이트함. 업데이트 요소가 없을 시 생략함
-    const updatedUser = await userAuthService.setUser({ userId, toUpdate });
+    const updatedUser = await userAuthService.setUser({ loginedId, toUpdate });
 
     if (updatedUser.errorMessage) {
       throw new Error(updatedUser.errorMessage);
@@ -111,8 +112,8 @@ userAuthRouter.put('/users/:id', loginRequired, async (req, res, next) => {
 
 userAuthRouter.get('/users/:id', loginRequired, async (req, res, next) => {
   try {
-    const userId = req.params.id;
-    const currentUserInfo = await userAuthService.getUserInfo({ userId });
+    const loginedId = req.params.id;
+    const currentUserInfo = await userAuthService.getUserInfo({ loginedId });
 
     if (currentUserInfo.errorMessage) {
       throw new Error(currentUserInfo.errorMessage);

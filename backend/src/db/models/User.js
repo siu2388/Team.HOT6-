@@ -6,13 +6,13 @@ class User {
     return createdNewUser;
   }
 
-  static async findByInputId({ inputId }) {
-    const user = await UserModel.findOne({ inputId });
+  static async findByUserId({ userId }) {
+    const user = await UserModel.findOne({ userId });
     return user;
   }
 
-  static async findById({ userId }) {
-    const user = await UserModel.findOne({ id: userId });
+  static async findById({ loginedId }) {
+    const user = await UserModel.findOne({ id: loginedId });
     return user;
   }
 
