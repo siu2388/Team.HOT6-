@@ -57,5 +57,7 @@
   "devDependencies": {
     "eslint": "^8.41.0",
     "eslint-plugin-react": "^7.32.2"
-  }
+  },
+  "main": "index.js",
+  "license": "MIT"
 }
