@@ -201,4 +201,7 @@ export const ChartBox = styled.div`
   height: 50rem;
   background-color: #fff;
   border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
