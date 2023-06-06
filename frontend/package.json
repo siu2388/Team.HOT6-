@@ -5,21 +5,26 @@
   "dependencies": {
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
+    "@fullpage/react-fullpage": "^0.1.40",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.3",
     "@mui/styled-engine-sc": "^5.12.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.4.0",
+    "chart.js": "^4.3.0",
     "eslint-config-airbnb": "^19.0.4",
     "react": "^18.2.0",
     "react-calendar": "^4.2.1",
+    "react-chartjs-2": "^5.2.0",
     "react-daum-postcode": "^3.1.1",
     "react-dom": "^18.2.0",
     "react-fullpage": "^0.1.19",
     "react-router-dom": "^6.11.2",
     "react-scripts": "5.0.1",
     "react-slick": "^0.29.0",
+    "recharts": "^2.6.2",
     "recoil": "^0.7.7",
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.3.11",
@@ -52,5 +57,7 @@
   "devDependencies": {
     "eslint": "^8.41.0",
     "eslint-plugin-react": "^7.32.2"
-  }
+  },
+  "main": "index.js",
+  "license": "MIT"
 }

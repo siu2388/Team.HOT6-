@@ -35,6 +35,9 @@ const userSchema = new Schema(
       state: { type: String },
       zipCode: { type: String },
     },
+    detailedAddress: {  
+      type: String,
+    },
     profileImage: {
       path: { type: String },
     },
