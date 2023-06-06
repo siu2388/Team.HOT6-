@@ -37,6 +37,7 @@ export default function GroupCalendar() {
     <CalendarWrap>
       <CalendarBox>
         <Calendar
+          calendarType="US"
           value={selectedDate}
           onChange={handleDateChange}
           tileClassName={[tileClassName, titleSat]}
