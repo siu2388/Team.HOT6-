@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@sindresorhus/is": "^5.4.0",
+    "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
