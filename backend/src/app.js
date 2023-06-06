@@ -25,6 +25,8 @@ app.get('/getdata', (req, res) => {
 });
 app.use(userAuthRouter);
 app.use(groupRouter);
+app.use(actCategoryRouter);
+app.use(activityRouter);
 
 app.use(errorMiddleware);
 
