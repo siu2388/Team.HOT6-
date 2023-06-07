@@ -19,7 +19,6 @@ import { useRecoilState } from 'recoil';
 import { isPostcodeModalState, postcodeAddressState } from '../../stores';
 import * as Api from '../../api';
 
-
 export default function JoinPage() {
   const [isPostcodeModal, setIsPostcodeModal] = useRecoilState(isPostcodeModalState);
   const [postcodeAddress, setPostcodeAddress] = useRecoilState(postcodeAddressState);
@@ -28,14 +27,13 @@ export default function JoinPage() {
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
   const [formData, setFormData] = useState({
-    id: '',
+    userId: '',
     password: '',
-    passwordConfirm: '',
     name: '',
     nickname: '',
     phone: '',
-    address: '',
-    detailedAddress: '',
+    address: postcodeAddress,
+    addressDetail: '',
   });
 
   useEffect(() => {
@@ -45,33 +43,32 @@ export default function JoinPage() {
   }, [setPostcodeAddress]); // Modified line
 
   const onClicktoggleAddressModal = () => {
-    setIsPostcodeModal((prev) => !prev);
+    setIsPostcodeModal(prev => !prev);
   };
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleClickShowPasswordConfirm = () => setShowPasswordConfirm((show) => !show);
+  const handleClickShowPassword = () => setShowPassword(show => !show);
+  const handleClickShowPasswordConfirm = () => setShowPasswordConfirm(show => !show);
 
   const handleMouseDownPassword = event => {
     event.preventDefault();
   };
-  
-  const handleInputChange = (e) => {
+
+  const handleInputChange = e => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     try {
-      const response = await Api.post('/user/register', formData); 
+      const response = await Api.post('/users', formData);
 
       if (!response.ok) {
         throw new Error('User registration failed.');
       }
     } catch (error) {
       console.log(error);
-
     }
   };
 
@@ -92,8 +89,8 @@ export default function JoinPage() {
             <TextField
               label="아이디"
               id="outlined-start-adornment"
-              name="id"
-              value={formData.id}
+              name="userId"
+              value={formData.userId}
               onChange={handleInputChange}
             />
           </InputBox>
@@ -190,8 +187,8 @@ export default function JoinPage() {
             <TextField
               label="상세주소"
               id="outlined-start-adornment"
-              name="detailedAddress"
-              value={formData.detailedAddress}
+              name="addressDetail"
+              value={formData.addressDetail}
               onChange={handleInputChange}
             />
           </InputBox>
