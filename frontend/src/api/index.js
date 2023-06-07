@@ -41,4 +41,4 @@ async function del(endpoint, params = '') {
   });
 }
 
-export { get, post, put, del as delete };
+export { serverUrl, get, post, put, del as delete };

@@ -5,9 +5,9 @@ import { userAuthService } from '../services/userService.js';
 import { upload } from '../middlewares/imageUploadMiddleware.js';
 
 const userAuthRouter = Router();
-const imgupload = upload.single('image');
+const imgUpload = upload.single('profileImg');
 
-userAuthRouter.post('/users', imgupload, async (req, res, next) => {
+userAuthRouter.post('/users', imgUpload, async (req, res, next) => {
   try {
     if (is.emptyObject(req.body)) {
       throw new Error('headers의 Content-Type을 "multipart/form-data"로 설정해주세요');
@@ -15,7 +15,6 @@ userAuthRouter.post('/users', imgupload, async (req, res, next) => {
 
     // req (request) 에서 데이터 가져오기
     const { userId, password, name, nickname, phone, address, addressDetail } = req.body;
-
     const newUser = await userAuthService.addUser({
       userId,
       password,
@@ -24,7 +23,7 @@ userAuthRouter.post('/users', imgupload, async (req, res, next) => {
       phone,
       address,
       addressDetail,
-      // profileImage,
+      profileImg: req.file ? req.file.filename : '',
     });
 
     if (newUser.errorMessage) {

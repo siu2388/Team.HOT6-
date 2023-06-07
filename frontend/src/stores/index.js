@@ -14,3 +14,8 @@ export const userTokenState = atom({
   key: 'userToken',
   default: '',
 });
+
+export const imgFileState = atom({
+  key: 'imgFile',
+  default: null,
+});
