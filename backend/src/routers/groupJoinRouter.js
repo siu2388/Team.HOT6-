@@ -1,15 +1,14 @@
 import { Router } from 'express';
-import { groupService } from '../services/groupService.js';
+import { groupJoinService } from '../services/groupJoinService.js';
 import { upload } from '../middlewares/imageUploadMiddleware.js';
 import { loginRequired } from '../middlewares/loginRequired.js';
 
-const groupRouter = Router();
-groupRouter.use(loginRequired);
+const groupJoinRouter = Router();
 
 const imgupload = upload.single('image');
 
 /** 유저의 그룹 생성 추가 ( 그룹장이 되는 유저 ) */
-groupRouter.post('/groups', loginRequired, imgupload, async (req, res, next) => {
+groupJoinRouter.post('/groups/:', loginRequired, imgupload, async (req, res, next) => {
   try {
     const groupOwner = req.currentUserId;
     const { title, memberCount, description } = req.body;
@@ -23,20 +22,20 @@ groupRouter.post('/groups', loginRequired, imgupload, async (req, res, next) => 
       //thumbnail,  thumbnail도 이렇게 저장하는게 맞나?
     });
 
-    if (newGroup.errorMessage) {
-      throw new Error(newGroup.errorMessage);
+    if (newGroupJoin.errorMessage) {
+      throw new Error(newGroupJoin.errorMessage);
     }
-    res.status(201).json({ newGroup });
+    res.status(201).json({ newGroupJoin });
     return;
   } catch (error) {
     next(error);
   }
 });
 
-groupRouter.get('/group', async (req, res) => {
+groupJoinRouter.get('/group', async (req, res) => {
   const result = await groupService.getGroups();
   res.status(200).json({ result });
   return;
 });
 
-export { groupRouter };
+export { groupJoinRouter };

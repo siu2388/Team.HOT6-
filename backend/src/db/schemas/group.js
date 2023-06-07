@@ -15,9 +15,9 @@ const GroupSchema = new Schema(
       type: String,
       required: true,
     },
-    members: {
-      type: String,
-      required: false,
+    totalNumOfMembers: {
+      type: Number,
+      required: true,
     },
     thumbnail: {
       path: { type: String },
