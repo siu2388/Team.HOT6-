@@ -6,6 +6,7 @@ import { groupRouter } from './routers/groupRouter.js';
 import { activityRouter } from './routers/activityRouter.js';
 import { actCategoryRouter } from './routers/actCategoryRouter.js';
 import path from 'path';
+import { dataRouter } from './routers/dataRouter.js';
 
 const app = express();
 
@@ -36,10 +37,12 @@ app.get('/uploads/:filename', (req, res) => {
   res.sendFile(filePath, options);
 });
 
+
 app.use(userAuthRouter);
 app.use(groupRouter);
 app.use(activityRouter);
 app.use(actCategoryRouter);
+app.use(dataRouter);
 
 app.use(errorMiddleware);
 
