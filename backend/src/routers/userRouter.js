@@ -68,9 +68,9 @@ userAuthRouter.get('/users', loginRequired, async (req, res, next) => {
 // userAuthRouter.get('/user/current', loginRequired, async (req, res, next) => {
 //   try {
 //     // jwt토큰에서 추출된 사용자 id를 가지고 db에서 사용자 정보를 찾음.
-//     const userId = req.currentUserId;
+//     const loginedId = req.currentUserId;
 //     const currentUserInfo = await userAuthService.getUserInfo({
-//       userId,
+//       loginedId,
 //     });
 
 //     if (currentUserInfo.errorMessage) {

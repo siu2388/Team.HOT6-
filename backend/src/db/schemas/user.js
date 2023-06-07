@@ -35,6 +35,9 @@ const userSchema = new Schema(
     addressDetail: {
       type: String,
     },
+    groupId: {
+      type: String,
+    },
     profileImage: {
       path: { type: String },
     },
