@@ -17,29 +17,62 @@ import { Link } from 'react-router-dom';
 import Postcode from '../../components/commons/DaumPostCode';
 import { useRecoilState } from 'recoil';
 import { isPostcodeModalState, postcodeAddressState } from '../../stores';
+import * as Api from '../../api';
+
 
 export default function JoinPage() {
-  const [postcodeAddress, setPostcodeAddress] = useRecoilState(postcodeAddressState);
   const [isPostcodeModal, setIsPostcodeModal] = useRecoilState(isPostcodeModalState);
+  const [postcodeAddress, setPostcodeAddress] = useRecoilState(postcodeAddressState);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
+  const [formData, setFormData] = useState({
+    id: '',
+    password: '',
+    passwordConfirm: '',
+    name: '',
+    nickname: '',
+    phone: '',
+    address: '',
+    detailedAddress: '',
+  });
+
   useEffect(() => {
     return () => {
-      setPostcodeAddress('');
+      setPostcodeAddress(''); // Modified line
     };
-  }, []);
+  }, [setPostcodeAddress]); // Modified line
 
   const onClicktoggleAddressModal = () => {
-    setIsPostcodeModal(prev => !prev);
+    setIsPostcodeModal((prev) => !prev);
   };
 
-  const handleClickShowPassword = () => setShowPassword(show => !show);
-  const handleClickShowPasswordConfirm = () => setShowPasswordConfirm(show => !show);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowPasswordConfirm = () => setShowPasswordConfirm((show) => !show);
 
   const handleMouseDownPassword = event => {
     event.preventDefault();
+  };
+  
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await Api.post('/user/register', formData); 
+
+      if (!response.ok) {
+        throw new Error('User registration failed.');
+      }
+    } catch (error) {
+      console.log(error);
+
+    }
   };
 
   return (
@@ -51,12 +84,18 @@ export default function JoinPage() {
           </JoinImgBox>
           <JoinTitle>회원가입</JoinTitle>
         </TitleBox>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <ProfileImgBox>
             <FileUpload />
           </ProfileImgBox>
           <InputBox>
-            <TextField label="아이디" id="outlined-start-adornment" />
+            <TextField
+              label="아이디"
+              id="outlined-start-adornment"
+              name="id"
+              value={formData.id}
+              onChange={handleInputChange}
+            />
           </InputBox>
           <InputBox>
             <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
@@ -64,6 +103,9 @@ export default function JoinPage() {
               <OutlinedInput
                 id="outlined-adornment-password"
                 type={showPassword ? 'text' : 'password'}
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -86,6 +128,9 @@ export default function JoinPage() {
               <OutlinedInput
                 id="outlined-adornment-password"
                 type={showPasswordConfirm ? 'text' : 'password'}
+                name="passwordConfirm"
+                value={formData.passwordConfirm}
+                onChange={handleInputChange}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -103,16 +148,31 @@ export default function JoinPage() {
             </FormControl>
           </InputBox>
           <InputBox>
-            <TextField label="이름" id="outlined-start-adornment" />
+            <TextField
+              label="이름"
+              id="outlined-start-adornment"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+            />
           </InputBox>
           <InputBox>
-            <TextField label="닉네임" id="outlined-start-adornment" />
+            <TextField
+              label="닉네임"
+              id="outlined-start-adornment"
+              name="nickname"
+              value={formData.nickname}
+              onChange={handleInputChange}
+            />
           </InputBox>
           <InputBox>
             <TextField
               label="핸드폰 번호"
               id="outlined-start-adornment"
               placeholder="Ex) 010-0000-0000"
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
             />
           </InputBox>
           <InputBox>
@@ -127,9 +187,15 @@ export default function JoinPage() {
             </SearchIconBox>
           </InputBox>
           <InputBox>
-            <TextField label="상세주소" id="outlined-start-adornment" />
+            <TextField
+              label="상세주소"
+              id="outlined-start-adornment"
+              name="detailedAddress"
+              value={formData.detailedAddress}
+              onChange={handleInputChange}
+            />
           </InputBox>
-          <Button variant="contained" color="success">
+          <Button type="submit" variant="contained" color="success">
             회원가입
           </Button>
           <LoginLink>
