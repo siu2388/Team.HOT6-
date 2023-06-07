@@ -9,3 +9,8 @@ export const postcodeAddressState = atom({
   key: 'postcodeAddress',
   default: '',
 });
+
+export const userTokenState = atom({
+  key: 'userToken',
+  default: '',
+});
