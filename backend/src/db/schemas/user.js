@@ -35,7 +35,7 @@ const userSchema = new Schema(
     addressDetail: {
       type: String,
     },
-    detailedAddress: {  
+    groupId: {
       type: String,
     },
     profileImage: {
