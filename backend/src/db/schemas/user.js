@@ -6,7 +6,7 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    inputId: {
+    userId: {
       type: String,
       required: true,
       unique: true,
@@ -30,12 +30,12 @@ const userSchema = new Schema(
       unique: true,
     },
     address: {
-      street: { type: String },
-      city: { type: String },
-      state: { type: String },
-      zipCode: { type: String },
+      type: String,
     },
-    detailedAddress: {  
+    addressDetail: {
+      type: String,
+    },
+    groupId: {
       type: String,
     },
     profileImage: {
