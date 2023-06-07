@@ -4,7 +4,6 @@ import { upload } from '../middlewares/imageUploadMiddleware.js';
 import { loginRequired } from '../middlewares/loginRequired.js';
 
 const groupRouter = Router();
-groupRouter.use(loginRequired);
 
 const imgupload = upload.single('image');
 
@@ -12,15 +11,15 @@ const imgupload = upload.single('image');
 groupRouter.post('/groups', loginRequired, imgupload, async (req, res, next) => {
   try {
     const groupOwner = req.currentUserId;
-    const { title, memberCount, description } = req.body;
-    const thumbnail = req.files;
+    const { title, totalNumOfMembers, description } = req.body;
+    const thumbnail = req.file;
 
     const newGroup = await groupService.addGroup({
       groupOwner,
       title,
-      memberCount,
+      totalNumOfMembers,
       description,
-      //thumbnail,  thumbnail도 이렇게 저장하는게 맞나?
+      thumbnail,
     });
 
     if (newGroup.errorMessage) {

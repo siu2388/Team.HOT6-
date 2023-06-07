@@ -7,19 +7,16 @@ const groupJoinRouter = Router();
 
 const imgupload = upload.single('image');
 
-/** 유저의 그룹 생성 추가 ( 그룹장이 되는 유저 ) */
-groupJoinRouter.post('/groups/:', loginRequired, imgupload, async (req, res, next) => {
+/** 유저의 그룹 가입 */
+groupJoinRouter.post('/groups/:', loginRequired, async (req, res, next) => {
   try {
-    const groupOwner = req.currentUserId;
-    const { title, memberCount, description } = req.body;
-    const thumbnail = req.files;
+    const loginedId = req.currentUserId;
+    const { groupId, state } = req.body;
 
-    const newGroup = await groupService.addGroup({
-      groupOwner,
-      title,
-      memberCount,
-      description,
-      //thumbnail,  thumbnail도 이렇게 저장하는게 맞나?
+    const newGroupJoin = await groupJoinService.addGroupJoin({
+      groupId,
+      loginedId,
+      state,
     });
 
     if (newGroupJoin.errorMessage) {
