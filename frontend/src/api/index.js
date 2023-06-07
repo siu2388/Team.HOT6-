@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const backendPort = '5001';
-const serverUrl = 'http://' + window.location.hostname + ':' + backendPort + '/';
+const serverUrl = 'http://' + window.location.hostname + ':' + backendPort;
 
 async function get(endpoint, params = '') {
   return axios.get(serverUrl + endpoint + '/' + params, {
@@ -41,4 +41,4 @@ async function del(endpoint, params = '') {
   });
 }
 
-export { get, post, put, del as delete };
+export { serverUrl, get, post, put, del as delete };
