@@ -4,9 +4,8 @@ import { User } from '../db/models/User.js';
 class groupService {
   // create/ post
   static async addGroup({ groupOwner, title, totalNumOfMembers, description, thumbnail }) {
-    const user = await User.findById({ loginedid: groupOwner });
     const newGroup = {
-      groupOwner: user.id,
+      groupOwner,
       title,
       totalNumOfMembers,
       description,
@@ -14,6 +13,11 @@ class groupService {
     };
     const createdGroup = await Group.create({ newGroup });
     return createdGroup;
+  }
+
+  static async getGroups() {
+    const Groups = await Group.findAll();
+    return Groups;
   }
 }
 

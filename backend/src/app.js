@@ -26,7 +26,6 @@ app.get('/getdata', (req, res) => {
   const jsonPath = path.join(__dirname, 'data', 'output.json');
 
   res.status(200).json(require(jsonPath));
-  console.log('1');
   return;
 });
 
@@ -34,11 +33,11 @@ app.get('/uploads/:filename', (req, res) => {
   const filename = req.params.filename;
   const filePath = `uploads/${filename}`;
   const options = {
-    root: path.join(__dirname, '../'),
+    root: path.join('../backend'),
   };
+  console.log('1');
   res.sendFile(filePath, options);
 });
-
 
 app.use(userAuthRouter);
 app.use(groupRouter);

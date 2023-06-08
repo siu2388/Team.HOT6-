@@ -22,6 +22,15 @@ async function post(endpoint, data) {
   });
 }
 
+async function formPost(endpoint, data) {
+  return axios.post(serverUrl + endpoint, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Authorization: `Bearer ${sessionStorage.getItem('userToken')}`,
+    },
+  });
+}
+
 async function put(endpoint, data) {
   const bodyData = JSON.stringify(data);
 
@@ -41,4 +50,4 @@ async function del(endpoint, params = '') {
   });
 }
 
-export { serverUrl, get, post, put, del as delete };
+export { get, post, formPost, put, del as delete };

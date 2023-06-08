@@ -5,14 +5,14 @@ import { loginRequired } from '../middlewares/loginRequired.js';
 
 const groupRouter = Router();
 
-const imgupload = upload.single('image');
+const imgupload = upload.single('thumbnail');
 
 /** 유저의 그룹 생성 추가 ( 그룹장이 되는 유저 ) */
 groupRouter.post('/groups', loginRequired, imgupload, async (req, res, next) => {
   try {
     const groupOwner = req.currentUserId;
     const { title, totalNumOfMembers, description } = req.body;
-    const thumbnail = req.file;
+    const thumbnail = req.file ? req.file.filename : null;
 
     const newGroup = await groupService.addGroup({
       groupOwner,
@@ -32,7 +32,7 @@ groupRouter.post('/groups', loginRequired, imgupload, async (req, res, next) => 
   }
 });
 
-groupRouter.get('/group', async (req, res) => {
+groupRouter.get('/groups', async (req, res) => {
   const result = await groupService.getGroups();
   res.status(200).json({ result });
   return;
