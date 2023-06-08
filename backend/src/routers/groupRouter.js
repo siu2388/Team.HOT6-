@@ -43,11 +43,15 @@ groupRouter.get('/groups', async (req, res) => {
 
 //그룹 상세 조회
 groupRouter.get('/groups/:groupId', async (req, res) => {
-  const myGroup = await groupService.getMyGroup();
-  console.log('1', myGroup);
-  res.status(200).json({ myGroup });
+  const groupId = req.params.groupId;
+  
+  const myGroup = await groupService.getMyGroup(groupId);
+  console.log('그룹상세조회', myGroup);
+  res.status(200).json(myGroup);
   return;
 });
+
+//그룹
 
 //그룹 삭제
 groupRouter.delete('/groups/:groupId', async (req, res) => {

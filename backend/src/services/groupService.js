@@ -17,15 +17,15 @@ class groupService {
     const createdGroup = await Group.create({ newGroup });
     return createdGroup;
   }
-
+//그룹의 목록 조회
   static async getGroups() {
     const Groups = await Group.findAll();
     return Groups;
   }
-
-  static async getMyGroup() {
-    const MyGroup = await Group.findOne();
-    return MyGroup;
+// 그룹의 상세페이지 조회
+  static async getMyGroup(groupId) {
+    const myGroup = await Group.findBygroupId(groupId);
+    return myGroup;
   }
 
   static async deleteGroup({ groupId }) {
