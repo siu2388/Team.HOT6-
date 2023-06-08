@@ -19,8 +19,24 @@ class groupService {
   }
 //그룹의 목록 조회
   static async getGroups() {
-    const Groups = await Group.findAll();
-    return Groups;
+    const groups = await Group.findAll();
+    return groups;
+  }
+
+  static async groupJoin({ groupId, userId, state }) {
+    const newGroupJoin = {
+      groupId,
+      userId,
+      state,
+    };
+
+    const groupJoins = await GroupJoin.create({ newGroupJoin });
+    return groupJoins;
+  }
+
+  static async getUserGroup({ userId }) {
+    const group = await GroupJoin.findByUserId({ userId });
+    return group;
   }
 // 그룹의 상세페이지 조회
   static async getMyGroup(groupId) {

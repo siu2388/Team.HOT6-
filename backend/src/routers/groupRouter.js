@@ -7,6 +7,28 @@ const groupRouter = Router();
 
 const imgupload = upload.single('thumbnail');
 
+groupRouter.post('/groups/:groupId/join', loginRequired, async (req, res, next) => {
+  try {
+    const groupId = req.params.groupId;
+    const userId = req.currentUserId;
+    const state = '대기';
+
+    const group = await groupService.getUserGroup({ userId });
+
+    if (group) {
+      res.status(401).json({ message: '가입한 그룹이 존재합니다.' });
+      return;
+    }
+
+    const result = await groupService.groupJoin({ groupId, userId, state });
+
+    res.json({ result, message: '등록 성공' });
+    return;
+  } catch (err) {
+    next(err);
+  }
+});
+
 /** 유저의 그룹 생성 추가 ( 그룹장이 되는 유저 ) */
 groupRouter.post('/groups', loginRequired, imgupload, async (req, res, next) => {
   try {
