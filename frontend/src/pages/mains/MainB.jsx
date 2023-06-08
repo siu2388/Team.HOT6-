@@ -27,39 +27,34 @@ const settings = {
   pauseOnHover: false,
 };
 
-// const data = [
-//   {
-//     name: 'Page A',
-//     uv: 4000,
-//     pv: 2400,
-//     amt: 2400,
-//   },
-//   {
-//     name: 'Page B',
-//     uv: 1500,
-//     pv: 1200,
-//     amt: 2400,
-//   },
-//   {
-//     name: 'Page C',
-//     uv: 7000,
-//     pv: 6500,
-//     amt: 3300,
-//   },
-// ];
-
 export default function MainA() {
   const [plasticData, setPlasticData] = useState([]);
+  const [wasteData, setWasteData] = useState([]);
 
   useEffect(() => {
-    const getPlasticData = async () => {
-      const result = await Api.get('/plasticData');
-      setPlasticData(JSON.parse(result.data.data));
+    const fetchData = async () => {
+      const plasticResult = await Api.get('/plasticData');
+      const parsedPlasticData = JSON.parse(plasticResult.data.data);
+      const recentPlasticData = parsedPlasticData.slice(-10);
+
+      setPlasticData(recentPlasticData);
+
+      const wasteResult = await Api.get('/wasteData');
+      const parsedWasteData = JSON.parse(wasteResult.data.data);
+
+      const transformedWasteData = Object.keys(parsedWasteData).map(year => ({
+        Year: year,
+        '재활용 가능자원 분리배출': parsedWasteData[year]['재활용 가능자원 분리배출'],
+        '종량제방식 등 혼합배출': parsedWasteData[year]['종량제방식 등 혼합배출'],
+      }));
+
+      setWasteData(transformedWasteData);
     };
-    getPlasticData();
+    fetchData();
   }, []);
 
   console.log(plasticData);
+  console.log(wasteData);
 
   return (
     <S.MainWrap02>
@@ -72,8 +67,8 @@ export default function MainA() {
           <Slider {...settings}>
             <div>
               <S.ChartInfo>
-                <h3>차트 제목</h3>
-                <p>차트 설명차트 설명차트 설명차트 설명차트 설명차트 설명차트 설명차트 설명차트</p>
+                <h3>플라스틱 생산량</h3>
+                <p>최근 10년간의 플라스틱 생산량 추이입니다.</p>
               </S.ChartInfo>
               <S.ChartBox>
                 <LineChart
@@ -85,10 +80,15 @@ export default function MainA() {
                     right: 20,
                   }}
                 >
-                  <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
-                  <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+                  <Line
+                    type="monotone"
+                    dataKey="Global plastics production (million tonnes)"
+                    stroke="#8884d8"
+                    activeDot={{ r: 8 }}
+                  />
+                  <Line type="monotone" dataKey="Year" stroke="#82ca9d" />
                   <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                  <XAxis dataKey="name" />
+                  <XAxis dataKey="Year" />
                   <YAxis />
                   <Tooltip />
                   <Legend />
@@ -108,16 +108,16 @@ export default function MainA() {
                 <BarChart
                   width={380}
                   height={300}
-                  data={plasticData}
+                  data={wasteData}
                   margin={{
                     top: 5,
                     right: 20,
                   }}
                 >
-                  <Bar type="monotone" dataKey="pv" stroke="#8884d8" />
-                  <Bar type="monotone" dataKey="uv" stroke="#82ca9d" />
+                  <Bar dataKey="재활용 가능자원 분리배출" fill="#8884d8" />
+                  <Bar dataKey="종량제방식 등 혼합배출" fill="#82ca9d" />
                   <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                  <XAxis dataKey="name" />
+                  <XAxis dataKey="Year" />
                   <YAxis />
                   <Legend />
                 </BarChart>
