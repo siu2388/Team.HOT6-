@@ -19,10 +19,14 @@ const GroupSchema = new Schema(
       type: Number,
       required: true,
     },
-    thumbnail: {
-      path: { type: String },
+    members: {
+      type: Schema.Types.ObjectId,
+      ref: 'groupJoin',
+      required:false,
     },
+    thumbnail: { type: String },
   },
+  { strictPopulate: false },
   {
     timestamps: true,
   },
