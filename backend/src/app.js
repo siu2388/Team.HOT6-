@@ -35,7 +35,6 @@ app.get('/uploads/:filename', (req, res) => {
   const options = {
     root: path.join('../backend'),
   };
-  console.log('1');
   res.sendFile(filePath, options);
 });
 
