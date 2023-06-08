@@ -10,7 +10,6 @@ fs.readFile('data/global-plastics-production.json', 'UTF-8', (err, data) => {
     return;
   }
 
-  console.log(data);
   dataRouter.get('/plasticData', (req, res, next) => {
     res.json({ data });
   });
