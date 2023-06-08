@@ -1,0 +1,74 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "extends": ["airbnb", "plugin:import/recommended", "plugin:@typescript-eslint/recommended", "prettier"],
+  "rules": {
+    "comma-dangle": "off",
+    "consistent-return": "off", 
+    "func-names": "off", 
+    "max-classes-per-file": "off", 
+    "max-len": [
+      "error",
+      {
+        "code": 120,
+        "ignoreComments": true, 
+        "ignoreStrings": true, 
+        "ignoreTemplateLiterals": true 
+      }
+    ],
+    "no-console": "warn",
+    "no-nested-ternary": "off", 
+    "no-param-reassign": ["error", { "props": false }], 
+    "no-plusplus": "off", 
+    "no-shadow": "off", 
+    "no-underscore-dangle": "off", 
+    "no-unused-expressions": [
+      "error",
+      {
+        "allowTernary": true, 
+        "allowShortCircuit": true, 
+        "allowTaggedTemplates": true 
+      }
+    ],
+    "no-unused-vars": ["off"], 
+    "no-use-before-define": "off", 
+    "prefer-arrow-callback": "error", 
+    "prefer-template": "off", 
+    "require-await": "error", 
+    "@typescript-eslint/no-var-requires": "off",
+    "import/extensions": "off", 
+    "import/no-extraneous-dependencies": "off", 
+    "import/prefer-default-export": "off", 
+    "jsx-a11y/click-events-have-key-events": ["off"], 
+    "jsx-a11y/control-has-associated-label": ["off"], 
+    "jsx-a11y/label-has-associated-control": ["off"], 
+    "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx", ".ts", ".tsx"] }], 
+    "react/jsx-no-useless-fragment": ["off"],
+    "react/react-in-jsx-scope": "off", 
+    "react/require-default-props": "off",
+    "react/prop-types": ["off"], 
+    "react/function-component-definition": [
+      {
+        "namedComponents": "arrow-function"
+      }
+    ]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  }
+}
