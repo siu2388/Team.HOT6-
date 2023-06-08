@@ -59,17 +59,17 @@ groupRouter.get('/groups', async (req, res) => {
   const result = await groupService.getGroups();
   console.log(result); // object
 
-  res.status(200).json(result);
+  res.status(200).json({ result });
   return;
 });
 
 //그룹 상세 조회
 groupRouter.get('/groups/:groupId', async (req, res) => {
   const groupId = req.params.groupId;
-  
+
   const myGroup = await groupService.getMyGroup(groupId);
   console.log('그룹상세조회', myGroup);
-  res.status(200).json(myGroup);
+  res.status(200).json({ myGroup });
   return;
 });
 
