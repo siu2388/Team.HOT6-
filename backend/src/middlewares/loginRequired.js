@@ -12,7 +12,8 @@ function loginRequired(req, res, next) {
   try {
     const secretKey = process.env.JWT_SECRET_KEY || 'secret-key';
     const jwtDecoded = jwt.verify(userToken, secretKey);
-    const userId = jwtDecoded.userId;
+    console.log('aa', jwtDecoded);
+    const userId = jwtDecoded.loginedId;
     req.currentUserId = userId;
     next();
   } catch (error) {

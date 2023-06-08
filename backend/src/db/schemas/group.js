@@ -3,8 +3,7 @@ import { Schema, model } from 'mongoose';
 const GroupSchema = new Schema(
   {
     groupOwner: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
+      type: String,
       required: true,
     },
     title: {
@@ -19,9 +18,7 @@ const GroupSchema = new Schema(
       type: Number,
       required: true,
     },
-    thumbnail: {
-      path: { type: String },
-    },
+    thumbnail: { type: String },
   },
   {
     timestamps: true,
