@@ -71,7 +71,7 @@ export default function MainA() {
                 <p>최근 10년간의 플라스틱 생산량 추이입니다.</p>
               </S.ChartInfo>
               <S.ChartBox>
-                <LineChart
+                <BarChart
                   width={380}
                   height={300}
                   data={plasticData}
@@ -80,32 +80,24 @@ export default function MainA() {
                     right: 20,
                   }}
                 >
-                  <Line
-                    type="monotone"
-                    dataKey="Global plastics production (million tonnes)"
-                    stroke="#8884d8"
-                    activeDot={{ r: 8 }}
-                  />
-                  <Line type="monotone" dataKey="Year" stroke="#82ca9d" />
+                  <Bar dataKey="전 세계 플라스틱 생산량(백만 톤)" fill="#FFD700" />
                   <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                   <XAxis dataKey="Year" />
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                </LineChart>
+                </BarChart>
               </S.ChartBox>
             </div>
             <div>
               <S.ChartInfo>
-                <h3>차트 제목2</h3>
+                <h3>웨스트 데이터</h3>
                 <p>
-                  차트 설명차트 설명차트 설명차트 설명차트 설명차트 설명차트 설명차트 설명차트
-                  설명차트 설명차트 설명차트 설명차트 설명차트 설명차트 설명차트 설명차트 설명차트
-                  설명차트 설명차트 설명차트 설명차트 설명차트 설명차트 설명차트 설명차트 설명
+                  웨스트 데이터의 설명입니다. 웨스트 데이터에 대한 설명을 작성하세요.
                 </p>
               </S.ChartInfo>
               <S.ChartBox>
-                <BarChart
+                <LineChart
                   width={380}
                   height={300}
                   data={wasteData}
@@ -114,13 +106,14 @@ export default function MainA() {
                     right: 20,
                   }}
                 >
-                  <Bar dataKey="재활용 가능자원 분리배출" fill="#8884d8" />
-                  <Bar dataKey="종량제방식 등 혼합배출" fill="#82ca9d" />
+                  <Line type="monotone" dataKey="재활용 가능자원 분리배출" stroke="#8884d8" activeDot={{ r: 8 }} />
+                  <Line type="monotone" dataKey="종량제방식 등 혼합배출" stroke="#82ca9d" />
                   <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                   <XAxis dataKey="Year" />
                   <YAxis />
+                  <Tooltip />
                   <Legend />
-                </BarChart>
+                </LineChart>
               </S.ChartBox>
             </div>
           </Slider>
