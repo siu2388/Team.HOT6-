@@ -30,10 +30,17 @@ class Group {
     return updatedGroup;
   }
 
-  static async delete(groupId) {
-    const deletedGroup = await GroupModel.deleteOne(groupId);
-    return deletedGroup;
+  // static async delete(groupId) {
+  //   const deletedGroup = await GroupModel.deleteOne(groupId);
+  //   return deletedGroup;
+  // }
+
+  static async deleteById({ groupId }) {
+    const deleteResult = await GroupModel.deleteOne({ id: groupId });
+    const isDataDeleted = deleteResult.deletedCount === 1;
+    return isDataDeleted;
   }
+
 }
 
 export { Group };
