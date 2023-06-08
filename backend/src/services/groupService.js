@@ -4,7 +4,7 @@ import { User } from '../db/models/User.js';
 class groupService {
   // create/ post
   static async addGroup({ groupOwner, title, totalNumOfMembers, description, thumbnail }) {
-    const user = await User.findById({ loginedid: groupOwner });
+    const user = await User.findById({ loginedId: groupOwner });
     const newGroup = {
       groupOwner: user.id,
       title,
