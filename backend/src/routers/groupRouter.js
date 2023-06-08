@@ -34,6 +34,7 @@ groupRouter.post('/groups', loginRequired, imgupload, async (req, res, next) => 
 
 groupRouter.get('/groups', async (req, res) => {
   const result = await groupService.getGroups();
+
   res.status(200).json({ result });
   return;
 });

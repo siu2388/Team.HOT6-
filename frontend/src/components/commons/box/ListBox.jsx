@@ -6,6 +6,7 @@ import AvatarGroup from '@mui/material/AvatarGroup';
 import { ROUTE } from '../../../constants/routes/routeData';
 
 export default function ListBox({ group }) {
+  console.log(group);
   return (
     <ListBoxWrap>
       <Link to={`${ROUTE.GROUP_DETAIL.link}/${group._id}`}>
