@@ -14,6 +14,11 @@ class groupService {
     const createdGroup = await Group.create({ newGroup });
     return createdGroup;
   }
+
+  static async getGroups() {
+    const Groups = await Group.findAll();
+    return Groups;
+  }
 }
 
 export { groupService };
