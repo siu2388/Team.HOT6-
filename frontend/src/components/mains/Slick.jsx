@@ -15,6 +15,17 @@ const settings = {
   autoplay: true,
   autoplaySpeed: 2500,
   cssEase: 'linear',
+
+  responsive: [
+    {
+      breakpoint: 800,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        infinite: true,
+      },
+    },
+  ],
 };
 
 export default function Slick() {
@@ -56,11 +67,29 @@ const SlickContainer = styled.div`
 
 const SlideBox = styled.div`
   width: 600px;
-  height: 300px;
+  padding-bottom: 50%;
   background: ${({ back }) => `url(${back})`};
   /* background: url('/images/main/slick01.png'); */
   border-radius: 4rem;
   position: relative;
+
+  @media (min-width: 1700px) {
+    width: 750px;
+  }
+
+  @media (max-width: 1350px) {
+    width: 500px;
+  }
+
+  @media (max-width: 1200px) {
+    width: 400px;
+  }
+  @media (max-width: 950px) {
+    width: 300px;
+  }
+  @media (max-width: 800px) {
+    width: 85%;
+  }
 
   &:hover {
     & > div {
@@ -70,8 +99,8 @@ const SlideBox = styled.div`
 `;
 
 const SlideHoverBox = styled.div`
-  width: 600px;
-  height: 300px;
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 4rem;
   position: absolute;

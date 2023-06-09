@@ -5,6 +5,7 @@ import MemberProfileBox from '../../components/commons/box/MemberProfileBox';
 import GroupCalendar from '../../components/groups/details/Calendar';
 import { useParams } from 'react-router-dom';
 import * as API from '../../api/index';
+import { res } from '../../styles/responsive';
 
 export default function GroupDetailPage() {
   const [groupData, setGroupData] = useState([]);
@@ -95,12 +96,16 @@ export default function GroupDetailPage() {
 const GroupDetailWrap = styled.div`
   width: 100%;
   padding-top: 16rem;
-  margin-bottom:15rem;
+  margin-bottom: 15rem;
 `;
 
 const GroupDetailContainer = styled.div`
   width: 1300px;
   margin: 0 auto;
+
+  @media ${res.tablet} {
+    width: 90%;
+  }
 `;
 
 const GroupTitle = styled.h2`
@@ -121,6 +126,11 @@ const DetailContent01 = styled.div`
 const DetailInfoBox = styled.div`
   display: flex;
   gap: 4rem;
+
+  @media (max-width: 1080px) {
+    width: 100%;
+    justify-content: center;
+  }
 `;
 
 const DetailThumbnail = styled.div`
@@ -129,6 +139,11 @@ const DetailThumbnail = styled.div`
   background-image: url('/images/main/main01.png');
   background-size: cover;
   border-radius: 0.8rem;
+
+  @media (max-width: 1080px) {
+    width: 40rem;
+    justify-content: center;
+  }
 `;
 
 const DetailInfo = styled.div`
@@ -173,7 +188,11 @@ const UserBox = styled.div`
   }
 `;
 
-const GroupMemberBox = styled.div``;
+const GroupMemberBox = styled.div`
+  @media (max-width: 1080px) {
+    display: none;
+  }
+`;
 
 const GroupMemberTitleBox = styled.div`
   width: 35rem;

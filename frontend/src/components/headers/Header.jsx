@@ -21,10 +21,11 @@ export default function Header() {
       const result = await API.get('/user');
       setUserInfo(result.data);
     };
-    getUserInfo();
-  }, []);
 
-  console.log(userInfo);
+    if (userToken) {
+      getUserInfo();
+    }
+  }, [userToken]);
 
   return (
     <HeaderWrap>
@@ -50,21 +51,23 @@ export default function Header() {
               </MenuList>
             </NavMenu>
           </Navigation>
-          <InfoMenu>
-            <UserName>{userInfo.nickname}</UserName>
-            <CountBox>
-              {/* <CountImgBox>
+          {userToken && (
+            <InfoMenu>
+              <UserName>{userInfo.nickname}</UserName>
+              <CountBox>
+                {/* <CountImgBox>
                 <img src="" alt="" />
               </CountImgBox>{' '} */}
-              <span>🥤: 9</span>
-            </CountBox>
-            <CountBox>
-              {/* <CountImgBox>
+                <span>🥤: 9</span>
+              </CountBox>
+              <CountBox>
+                {/* <CountImgBox>
                 <img src="" alt="" />
               </CountImgBox>{' '} */}
-              <span>♻️ : 9</span>
-            </CountBox>
-          </InfoMenu>
+                <span>♻️ : 9</span>
+              </CountBox>
+            </InfoMenu>
+          )}
           <SubMenu>
             {!userToken ? (
               <>
@@ -102,7 +105,7 @@ export default function Header() {
 
 const HeaderWrap = styled.div`
   width: 100%;
-  height: 76px;
+  height: 7.6rem;
   background-color: #fff;
   position: fixed;
   top: 0;
@@ -125,6 +128,9 @@ const NavigationBox = styled.div`
   display: flex;
   align-items: center;
   gap: 5rem;
+  @media (max-width: 1050px) {
+    display: none;
+  }
 `;
 
 const Navigation = styled.nav``;

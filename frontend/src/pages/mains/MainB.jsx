@@ -14,6 +14,7 @@ import {
   BarChart,
   Bar,
   Legend,
+  ResponsiveContainer,
 } from 'recharts';
 
 const settings = {
@@ -60,7 +61,7 @@ export default function MainA() {
     <S.MainWrap02>
       <S.MainContainer>
         <S.MainMent02>
-          심각한 환경문제 <br />
+          심각한 환경문제 <br className="br" />
           어떻게 생각하시나요?
         </S.MainMent02>
         <S.SlickContainer>
@@ -71,49 +72,56 @@ export default function MainA() {
                 <p>최근 10년간의 플라스틱 생산량 추이입니다.</p>
               </S.ChartInfo>
               <S.ChartBox>
-                <BarChart
-                  width={380}
-                  height={300}
-                  data={plasticData}
-                  margin={{
-                    top: 5,
-                    right: 20,
-                  }}
-                >
-                  <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                  <Bar dataKey="전 세계 플라스틱 생산량(백만 톤)" fill="#F3A478" />
-                  <XAxis dataKey="Year" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                </BarChart>
+                <ResponsiveContainer width="80%" height="60%">
+                  <BarChart
+                    width={380}
+                    height={300}
+                    data={plasticData}
+                    margin={{
+                      top: 5,
+                      right: 20,
+                    }}
+                  >
+                    <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                    <Bar dataKey="전 세계 플라스틱 생산량(백만 톤)" fill="#F3A478" />
+                    <XAxis dataKey="Year" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                  </BarChart>
+                </ResponsiveContainer>
               </S.ChartBox>
             </div>
             <div>
               <S.ChartInfo>
                 <h3>웨스트 데이터</h3>
-                <p>
-                  웨스트 데이터의 설명입니다. 웨스트 데이터에 대한 설명을 작성하세요.
-                </p>
+                <p>웨스트 데이터의 설명입니다. 웨스트 데이터에 대한 설명을 작성하세요.</p>
               </S.ChartInfo>
               <S.ChartBox>
-                <LineChart
-                  width={380}
-                  height={300}
-                  data={wasteData}
-                  margin={{
-                    top: 5,
-                    right: 20,
-                  }}
-                >
-                  <Line type="monotone" dataKey="재활용 가능자원 분리배출" stroke="#8884d8" activeDot={{ r: 8 }} />
-                  <Line type="monotone" dataKey="종량제방식 등 혼합배출" stroke="#82ca9d" />
-                  <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                  <XAxis dataKey="Year" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                </LineChart>
+                <ResponsiveContainer width="80%" height="60%">
+                  <LineChart
+                    width={380}
+                    height={300}
+                    data={wasteData}
+                    margin={{
+                      top: 5,
+                      right: 20,
+                    }}
+                  >
+                    <Line
+                      type="monotone"
+                      dataKey="재활용 가능자원 분리배출"
+                      stroke="#8884d8"
+                      activeDot={{ r: 8 }}
+                    />
+                    <Line type="monotone" dataKey="종량제방식 등 혼합배출" stroke="#82ca9d" />
+                    <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                    <XAxis dataKey="Year" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                  </LineChart>
+                </ResponsiveContainer>
               </S.ChartBox>
             </div>
           </Slider>

@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import { res } from './responsive';
 
 const GlobalStyle = createGlobalStyle`
     a{
@@ -15,6 +16,10 @@ const GlobalStyle = createGlobalStyle`
         border: 0;
         font-size: 10px;
         vertical-align: baseline;
+
+        @media ${res.mobile} {
+            font-size: 6px;
+        }
 
     }
     body{

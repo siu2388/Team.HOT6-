@@ -10,10 +10,10 @@ export default function MainA() {
             <S.MentText>
               사
               <S.PositionBox>
-                랑<S.PositionImg01 src="/images/main/main_sub03.png" alt="지구 이미지" />
+                랑<S.PositionImg01 src="/images/main/main_sub03.png" alt="새싹 이미지" />
               </S.PositionBox>
               <S.PositionBox>
-                해<S.PositionImg02 src="/images/main/main_sub02.png" alt="새싹 이미지" />
+                해<S.PositionImg02 src="/images/main/main_sub02.png" alt="지구 이미지" />
               </S.PositionBox>
               <br />
               지구야
