@@ -126,7 +126,7 @@ const LoginWrap = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 9.6rem;
+  padding-top: 8.8rem;
   background-color: #b6ce8a;
 `;
 

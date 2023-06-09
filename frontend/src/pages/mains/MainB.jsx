@@ -80,8 +80,8 @@ export default function MainA() {
                     right: 20,
                   }}
                 >
-                  <Bar dataKey="전 세계 플라스틱 생산량(백만 톤)" fill="#FFD700" />
                   <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                  <Bar dataKey="전 세계 플라스틱 생산량(백만 톤)" fill="#F3A478" />
                   <XAxis dataKey="Year" />
                   <YAxis />
                   <Tooltip />

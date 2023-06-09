@@ -53,7 +53,8 @@ export default function GroupList() {
 
 const GroupListWrap = styled.div`
   width: 100%;
-  padding-top: 96px;
+  padding-top: 70px;
+  margin-bottom:10rem;
 `;
 
 const RankingBox = styled.div`
@@ -81,7 +82,7 @@ const RankProfileContainer = styled.div`
 const GroupListContainer = styled.div`
   width: 1300px;
   margin: 0 auto;
-  padding-top: 10rem;
+  padding-top: 8rem;
 `;
 
 const SearchContainer = styled.div`
@@ -109,7 +110,7 @@ const GroupLists = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 3rem 2%;
-  margin-bottom: 5rem;
+  margin-bottom: 8rem;
 `;
 
 const PagenationBox = styled.div`

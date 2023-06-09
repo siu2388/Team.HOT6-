@@ -242,10 +242,11 @@ export default function JoinPage() {
 
 const JoinWrap = styled.div`
   width: 100%;
-  padding-top: 9.6rem;
+  padding-top: 12rem;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom:15rem;
 `;
 
 const JoinContainer = styled.div`

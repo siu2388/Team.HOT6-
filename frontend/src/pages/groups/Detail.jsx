@@ -95,6 +95,7 @@ export default function GroupDetailPage() {
 const GroupDetailWrap = styled.div`
   width: 100%;
   padding-top: 16rem;
+  margin-bottom:15rem;
 `;
 
 const GroupDetailContainer = styled.div`
