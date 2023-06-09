@@ -112,7 +112,7 @@ export default function LoginPage() {
             로그인
           </Button>
           <JoinLink>
-            <Link>앗! 아직 아이디가 없으신가요? 가입하러가기</Link>
+            <Link to="/register">앗! 아직 아이디가 없으신가요? 가입하러가기</Link>
           </JoinLink>
         </LoginForm>
       </LoginContainer>

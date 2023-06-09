@@ -231,7 +231,7 @@ export default function JoinPage() {
             회원가입
           </Button>
           <LoginLink>
-            <Link>이미 가입하셨다면? 로그인 하러가기</Link>
+            <Link to="/login">이미 가입하셨다면? 로그인 하러가기</Link>
           </LoginLink>
         </Form>
       </JoinContainer>
