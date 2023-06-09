@@ -5,6 +5,7 @@ import 'react-calendar/dist/Calendar.css';
 import MemberProfileBox from '../../commons/box/MemberProfileBox';
 import { getDate, getDayOfWeek } from '../../../commons/utils/getDate';
 import AddActiveModal from './AddActiveModal';
+import { res } from '../../../styles/responsive';
 
 export default function GroupCalendar() {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -82,11 +83,21 @@ const CalendarWrap = styled.div`
   height: 677px;
   display: flex;
   justify-content: space-between;
+  gap: 3rem;
+
+  @media ${res.mobile} {
+    height: auto;
+    flex-direction: column;
+  }
 `;
 
 const CalendarBox = styled.div`
   width: 840px;
   height: 100%;
+
+  @media ${res.mobile} {
+    width: 100%;
+  }
 
   .react-calendar {
     width: 100%;
@@ -104,6 +115,7 @@ const CalendarBox = styled.div`
       top: 1rem;
       left: 50%;
       transform: translateX(-50%);
+      font-size: 1.5rem;
     }
   }
 
@@ -145,6 +157,10 @@ const CalendarDetailBox = styled.div`
   padding: 3rem 1.5rem;
   border-radius: 1rem;
   border: 1px solid #999;
+
+  @media ${res.mobile} {
+    width: 100%;
+  }
 `;
 
 const TodayDateBox = styled.div`
