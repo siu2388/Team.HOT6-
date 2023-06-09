@@ -24,7 +24,7 @@ export default function GroupDetailPage() {
 
   const handleGroupJoin = async () => {
     try {
-      // await API.post(`/groups/${groupId}/join`);
+      await API.post(`/groups/${groupId}/join`);
       alert('성공');
     } catch (err) {
       alert(err);
