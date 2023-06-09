@@ -29,7 +29,7 @@ return(
             <EmojiCount>3</EmojiCount>
           </EmojiItem>
           <EmojiItem>
-            <Emoji>♻️</Emoji>
+            <Emoji>🫙</Emoji>
             <EmojiCount>10</EmojiCount>
           </EmojiItem>
         </EmojiRow>

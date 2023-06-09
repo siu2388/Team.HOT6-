@@ -30,6 +30,17 @@ export default function GroupDetailPage() {
     }
   };
 
+  // Calculate the width of the progress bars
+  const tumblerUsage = 81;
+  const tumblerTotal = 1000;
+  const tumblerWidth = (tumblerUsage / tumblerTotal) * 100;
+
+  const containerUsage = 210;
+  const containerTotal = 1000;
+  const containerWidth = (containerUsage / containerTotal) * 100;
+
+  const totalUsage = tumblerUsage + containerUsage;
+
   return (
     <GroupDetailWrap>
       <GroupDetailContainer>
@@ -88,10 +99,44 @@ export default function GroupDetailPage() {
         </DetailContent01>
         <GroupCalendar />
       </GroupDetailContainer>
+      <AdditionalBox>
+          <ProgressContainer>
+            <ProgressTitle>
+              <IconContainer>
+              🥤텀블러
+              </IconContainer>
+              <ProgressBar>
+                <FilledProgressBar width={tumblerWidth} />
+              </ProgressBar>
+              <ProgressValue>{tumblerUsage}</ProgressValue>
+            </ProgressTitle>
+            <ProgressTitle>
+              <IconContainer>
+              🫙다회용기
+              </IconContainer>
+              <ProgressBar>
+                <FilledProgressBar width={containerWidth} />
+              </ProgressBar>
+              <ProgressValue>{containerUsage}</ProgressValue>
+            </ProgressTitle>
+          </ProgressContainer>
+          <EarthBox>
+            <LogoImage>
+              <img src="/images/commons/logo.png" alt="사랑해 지구야 로고" />
+            </LogoImage>
+            <StatusMessage>
+              <SpeechBubble>
+                <SpeechText>Good!</SpeechText>
+                <Desc>3학년 1반 그룹의 총 텀블러 사용 횟수는 {tumblerUsage}회,</Desc>
+                <Desc>다회용기 사용 횟수는 {containerUsage}회야!</Desc>
+                <SpeechHighlight>우리는 ⭐️{totalUsage}회⭐️ 지구를 지켰어!</SpeechHighlight>
+              </SpeechBubble>
+            </StatusMessage>
+          </EarthBox>
+        </AdditionalBox>
     </GroupDetailWrap>
   );
 }
-
 const GroupDetailWrap = styled.div`
   width: 100%;
   padding-top: 16rem;
@@ -216,4 +261,118 @@ const GroupDescription = styled.p`
   font-weight: 400;
   color: #999;
   line-height: 1.2;
+`;
+
+const AdditionalBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  margin-bottom: 4rem;
+  margin-top: 10rem;
+  justify-content:center;
+  justify-content: space-around;
+`;
+
+const ProgressContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  flex-direction: column;
+`;
+
+const ProgressTitle = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+`;
+
+const IconContainer = styled.div`
+  margin-top: 3rem;
+  width: 10rem;
+  height: 5rem;
+  font-size: 2rem;
+`;
+
+const ProgressBar = styled.div`
+  width: 25rem;
+  height: 1.2rem;
+  background-color: #e0e0e0;
+  border-radius: 0.6rem;
+`;
+
+const FilledProgressBar = styled.div`
+  width: ${(props) => props.width}%;
+  height: 100%;
+  background-color: #7ed321;
+  border-radius: 0.6rem;
+`;
+
+const ProgressValue = styled.span`
+  font-size: 2.2rem;
+  font-weight: 500;
+  color: #111;
+`;
+const EarthBox = styled.div`
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+`;
+const StatusMessage = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 3rem;
+  font-weight: 400;
+  color: #111;
+  line-height: 1.5;
+  margin-top: -3rem;
+`;
+
+const SpeechBubble = styled.div`
+  position: relative;
+  background-color: #ffffff;;
+  border-radius: 2rem;
+  padding: 3rem;
+  margin-left: 7rem;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 1.4rem;
+    left: -2rem;
+    border: 1.8rem solid transparent;
+    border-bottom-color: #ffffff;
+    border-right-color: #ffffff;
+    transform: rotate(-120deg);
+  }
+`;
+const SpeechText = styled.p`
+  font-size: 4rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #98AF47;
+  font-family: "Comic Sans MS", cursive;
+`;
+
+const Desc = styled.p`
+  font-size:1.7rem;
+  font-family: "Comic Sans MS", cursive;
+`;
+
+const SpeechHighlight = styled.h1`
+  font-size: 2.2rem;
+  font-weight: 500;
+  margin-top: 1rem;
+  font-family: "Comic Sans MS", cursive;
+`;
+
+const LogoImage = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    margin-top: -5rem;
+    width: 300px; 
+  }
 `;

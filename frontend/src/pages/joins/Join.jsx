@@ -127,7 +127,7 @@ export default function JoinPage() {
       <JoinContainer>
         <TitleBox>
           <JoinImgBox>
-            <img src="http://localhost:5001/uploads/1686151270838.jpeg" alt="" />
+            <img src="/images/commons/logo.png" alt="사랑해 지구야 로고" />
           </JoinImgBox>
           <JoinTitle>회원가입</JoinTitle>
         </TitleBox>
@@ -262,6 +262,7 @@ const TitleBox = styled.div`
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  padding-right:5rem;
 `;
 
 const JoinTitle = styled.h3`
@@ -272,8 +273,9 @@ const JoinTitle = styled.h3`
 
 const JoinImgBox = styled.div`
   width: 6rem;
+  margin-right:1rem;
   img {
-    width: 100%;
+    width: 120%;
   }
 `;
 

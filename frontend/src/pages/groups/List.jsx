@@ -23,7 +23,12 @@ export default function GroupList() {
   return (
     <GroupListWrap>
       <RankingBox>
-        <RankTitle>그룹 TOP 3</RankTitle>
+        <Ranking>
+          <Rankimage>
+            <img src="/images/commons/earth.png" alt="사랑해 지구야 로고" />
+          </Rankimage>
+          <RankTitle>그룹 TOP 3</RankTitle>
+        </Ranking>
         <RankProfileContainer>
           <RankProfile />
           <RankProfile />
@@ -122,5 +127,20 @@ const PagenationBox = styled.div`
   }
   svg {
     width: 3rem;
+  }
+`;
+
+const Ranking = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  padding-right:7rem;
+`;
+
+const Rankimage = styled.div`
+  img {
+    padding-bottom:4rem;
+    width: 120px; 
   }
 `;

@@ -30,10 +30,10 @@ export default function Mypage() {
             <MenuItem>나의그룹</MenuItem>
           </Menubox>
           <Menubox
-            onClick={() => handleMenuItemClick('그룹관리')}
-            active={activeMenuItem === '그룹관리'}
+            onClick={() => handleMenuItemClick('나의챌린지')}
+            active={activeMenuItem === '나의챌린지'}
           >
-            <MenuItem>그룹관리</MenuItem>
+            <MenuItem>나의챌린지</MenuItem>
           </Menubox>
           <Menubox
             onClick={() => handleMenuItemClick('적립조회')}
