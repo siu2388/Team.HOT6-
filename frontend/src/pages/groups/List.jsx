@@ -8,6 +8,7 @@ import SubTitle from '../../components/commons/title/SubTitle';
 import { Link } from 'react-router-dom';
 import { ROUTE } from '../../constants/routes/routeData';
 import * as Api from '../../api/index';
+import { res } from '../../styles/responsive';
 
 export default function GroupList() {
   const [groupList, setGroupList] = useState([]);
@@ -59,7 +60,7 @@ export default function GroupList() {
 const GroupListWrap = styled.div`
   width: 100%;
   padding-top: 70px;
-  margin-bottom:10rem;
+  margin-bottom: 10rem;
 `;
 
 const RankingBox = styled.div`
@@ -69,7 +70,7 @@ const RankingBox = styled.div`
 `;
 
 const RankTitle = styled.h2`
-  font-size: 36px;
+  font-size: 3.6rem;
   font-weight: 500;
   color: #fff;
   text-align: center;
@@ -82,12 +83,23 @@ const RankProfileContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 0 auto;
+
+  @media ${res.tablet} {
+    width: 90%;
+  }
+  @media ${res.mobile} {
+    flex-direction: column;
+    gap: 2rem;
+  }
 `;
 
 const GroupListContainer = styled.div`
   width: 1300px;
   margin: 0 auto;
   padding-top: 8rem;
+  @media ${res.tablet} {
+    width: 90%;
+  }
 `;
 
 const SearchContainer = styled.div`
