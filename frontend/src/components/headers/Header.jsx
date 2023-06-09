@@ -3,16 +3,28 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { ROUTE } from '../../constants/routes/routeData';
 import { useRecoilState } from 'recoil';
-import { userTokenState } from '../../stores';
+import { userInfoState, userTokenState } from '../../stores';
+import * as API from '../../api/index';
 
 export default function Header() {
   const [userToken, setUserToken] = useRecoilState(userTokenState);
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
 
   useEffect(() => {
     if (sessionStorage.getItem('userToken')) {
       setUserToken(sessionStorage.getItem('userToken'));
     }
-  });
+  }, []);
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const result = await API.get('/user');
+      setUserInfo(result.data);
+    };
+    getUserInfo();
+  }, []);
+
+  console.log(userInfo);
 
   return (
     <HeaderWrap>
@@ -38,6 +50,21 @@ export default function Header() {
               </MenuList>
             </NavMenu>
           </Navigation>
+          <InfoMenu>
+            <UserName>{userInfo.nickname}</UserName>
+            <CountBox>
+              {/* <CountImgBox>
+                <img src="" alt="" />
+              </CountImgBox>{' '} */}
+              <span>🥤: 9</span>
+            </CountBox>
+            <CountBox>
+              {/* <CountImgBox>
+                <img src="" alt="" />
+              </CountImgBox>{' '} */}
+              <span>♻️ : 9</span>
+            </CountBox>
+          </InfoMenu>
           <SubMenu>
             {!userToken ? (
               <>
@@ -148,3 +175,29 @@ const SubMenuBtn = styled.button`
     color: ${({ btn }) => (btn === 'stroke' ? '#01881c' : '#fff')};
   }
 `;
+
+const InfoMenu = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;
+
+const UserName = styled.p`
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #01881c;
+`;
+
+const CountBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  span {
+    font-size: 1.7rem;
+    font-weight: 500;
+  }
+`;
+
+// const CountImgBox = styled.div`
+//   width: 2rem;
+// `;

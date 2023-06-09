@@ -3,23 +3,30 @@ import styled from 'styled-components';
 import ManageModal from '../../components/mypages/groupbox/ManageModal';
 import MyProfile from '../../components/mypages/profilebox/MyProfile';
 import RewardPoints from '../../components/mypages/largebox/RewardPoints';
+import { userInfoState } from '../../stores';
+import { useRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
+import { ROUTE } from '../../constants/routes/routeData';
 export default function Mypage() {
+  const [userInfo] = useRecoilState(userInfoState);
 
   const [isManageModalOpen, setIsManageModalOpen] = useState(false);
+  const [activeMenuItem, setActiveMenuItem] = useState('나의그룹');
+
+  const navigate = useNavigate();
+
   const openManageModal = () => {
     setIsManageModalOpen(true);
   };
 
-  const [activeMenuItem, setActiveMenuItem] = useState('나의그룹');
-
-  const handleMenuItemClick = (menuItem) => {
+  const handleMenuItemClick = menuItem => {
     setActiveMenuItem(menuItem);
   };
 
   return (
     <Container>
       <GroupMembers>
-        <MyProfile />
+        <MyProfile userInfo={userInfo} />
       </GroupMembers>
       <Card>
         <Menu>
@@ -33,7 +40,7 @@ export default function Mypage() {
             onClick={() => handleMenuItemClick('그룹관리')}
             active={activeMenuItem === '그룹관리'}
           >
-            <MenuItem>그룹관리</MenuItem>
+            <MenuItem>나의 챌린지</MenuItem>
           </Menubox>
           <Menubox
             onClick={() => handleMenuItemClick('적립조회')}
@@ -41,10 +48,7 @@ export default function Mypage() {
           >
             <MenuItem>적립조회</MenuItem>
           </Menubox>
-          <Menubox
-            onClick={() => handleMenuItemClick('내정보수정')}
-            active={activeMenuItem === '내정보수정'}
-          >
+          <Menubox onClick={() => navigate(ROUTE.CHANGEINFO.link)}>
             <MenuItem>내정보수정</MenuItem>
           </Menubox>
         </Menu>
@@ -52,54 +56,46 @@ export default function Mypage() {
       <MenuContainer>
         {activeMenuItem === '나의그룹' && (
           <LargeBox>
-          <GroupInfo>
-            <GroupImage alt="그룹장 사진" src="/images/commons/kiki.JPG" />
-            <GroupDetails>
-              <GroupName>3학년 1반</GroupName>
-              <GroupRole>
+            <GroupInfo>
+              <GroupImage alt="그룹장 사진" src="/images/commons/kiki.JPG" />
+              <GroupDetails>
+                <GroupName>3학년 1반</GroupName>
+                <GroupRole>
                   <GroupRoleText>그룹장</GroupRoleText>
                   <GroupRoleName>유진이</GroupRoleName>
-              </GroupRole>
-              <GroupMembersCount>
-                <GroupMembersNum>인원</GroupMembersNum>
-                <GroupMembersImgBox>
-                  <GroupMembersImage src="/images/commons/kkam.png" alt="멤버 이미지" />
-                  <GroupMembersImage src="/images/commons/kkam.png" alt="멤버 이미지" />
-                  <GroupMembersImage src="/images/commons/kkam.png" alt="멤버 이미지" />
-                  <GroupMembersImage src="/images/commons/kkam.png" alt="멤버 이미지" />
-                </GroupMembersImgBox>
-                <GroupMembersCountText>4/15</GroupMembersCountText>
-              </GroupMembersCount>
-              <GroupCreation>
-                <GroupCreationText>생성일</GroupCreationText>
-                <GroupCreationDate>2020.01.01</GroupCreationDate>
-              </GroupCreation>
-              <GroupButton>
+                </GroupRole>
+                <GroupMembersCount>
+                  <GroupMembersNum>인원</GroupMembersNum>
+                  <GroupMembersImgBox>
+                    <GroupMembersImage src="/images/commons/kkam.png" alt="멤버 이미지" />
+                    <GroupMembersImage src="/images/commons/kkam.png" alt="멤버 이미지" />
+                    <GroupMembersImage src="/images/commons/kkam.png" alt="멤버 이미지" />
+                    <GroupMembersImage src="/images/commons/kkam.png" alt="멤버 이미지" />
+                  </GroupMembersImgBox>
+                  <GroupMembersCountText>4/15</GroupMembersCountText>
+                </GroupMembersCount>
+                <GroupCreation>
+                  <GroupCreationText>생성일</GroupCreationText>
+                  <GroupCreationDate>2020.01.01</GroupCreationDate>
+                </GroupCreation>
+                <GroupButton>
                   <GroupLeaveButton>그룹탈퇴</GroupLeaveButton>
                   <GroupManageButton onClick={openManageModal}>그룹관리</GroupManageButton>
                   <GroupMoveButton>이동</GroupMoveButton>
-              </GroupButton>
-            </GroupDetails>
-          </GroupInfo>
+                </GroupButton>
+              </GroupDetails>
+            </GroupInfo>
           </LargeBox>
         )}
-        {activeMenuItem === '그룹관리' && (
-          <GroupManagement>
-          </GroupManagement>
-        )}
+        {activeMenuItem === '그룹관리' && <GroupManagement></GroupManagement>}
         {activeMenuItem === '적립조회' && (
           <PointInquiry>
             <RewardPoints />
           </PointInquiry>
         )}
-        {activeMenuItem === '내정보수정' && (
-          <ProfileModification>
-          </ProfileModification>
-        )}
-        {isManageModalOpen && (
-          <ManageModal setIsManageModalOpen={setIsManageModalOpen} />
-        )}
-    </MenuContainer>
+        {activeMenuItem === '내정보수정' && <ProfileModification></ProfileModification>}
+        {isManageModalOpen && <ManageModal setIsManageModalOpen={setIsManageModalOpen} />}
+      </MenuContainer>
     </Container>
   );
 }
@@ -130,7 +126,7 @@ const GroupMembers = styled.div`
 
 const MenuContainer = styled.div`
   width: 100rem;
-  display:flex;
+  display: flex;
   justify-content: center;
   align-items: center;
 `;
@@ -164,8 +160,8 @@ const Menubox = styled.button`
     border-radius: 0.7rem;
   }
   ${({ active }) =>
-  active &&
-  `
+    active &&
+    `
   background-color: #fff;
   border-radius: 0.7rem;
   `}
@@ -190,7 +186,6 @@ const LargeBox = styled.div`
   margin-top: 3rem;
   position: relative;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-
 `;
 
 const GroupInfo = styled.div`
@@ -209,9 +204,8 @@ const GroupImage = styled.img`
 const GroupDetails = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top:1.8rem;
-  margin-bottom:2rem;
-
+  margin-top: 1.8rem;
+  margin-bottom: 2rem;
 `;
 
 const GroupName = styled.p`
@@ -235,10 +229,10 @@ const GroupRoleText = styled.p`
 `;
 
 const GroupRoleName = styled.p`
-    font-size: 1.8rem;
-    font-weight: 400;
-    color: #777;
-    margin-top: 1rem;
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: #777;
+  margin-top: 1rem;
 `;
 
 const GroupMembersNum = styled.p`
@@ -255,7 +249,7 @@ const GroupMembersCount = styled.div`
 `;
 
 const GroupMembersImgBox = styled.div`
-  margin-left:2rem;
+  margin-left: 2rem;
 `;
 
 const GroupMembersImage = styled.img`
@@ -273,20 +267,19 @@ const GroupMembersCountText = styled.p`
   font-weight: 600;
   color: #777;
   margin-top: 1rem;
-
 `;
 const GroupCreation = styled.p`
-  display:flex;
+  display: flex;
   flex-direction: row;
   align-items: center;
 `;
 
 const GroupCreationText = styled.p`
-    font-size: 2rem;
-    font-weight: 400;
-    color: #777;
-    margin-top: 2rem;
-    margin-right: 4rem;
+  font-size: 2rem;
+  font-weight: 400;
+  color: #777;
+  margin-top: 2rem;
+  margin-right: 4rem;
 `;
 
 const GroupCreationDate = styled.p`
@@ -299,59 +292,59 @@ const GroupCreationDate = styled.p`
 const GroupButton = styled.button``;
 
 const GroupLeaveButton = styled.button`
-    position: absolute;
-    right: 20rem;
-    bottom: 3rem;
-    width: 8rem;
-    height: 3rem;
-    background-color: #949494;
-    border: none;
-    border-radius: 4px;
-    color: #fff;
-    font-size: 1.2rem;
-    font-weight: 500;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  right: 20rem;
+  bottom: 3rem;
+  width: 8rem;
+  height: 3rem;
+  background-color: #949494;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `;
 
 const GroupManageButton = styled.button`
-    position: absolute;
-    right: 11.5rem;
-    bottom: 3rem;
-    width: 8rem;
-    height: 3rem;
-    background-color: #478a77;
-    border: none;
-    border-radius: 4px;
-    color: #fff;
-    font-size: 1.2rem;
-    font-weight: 500;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  right: 11.5rem;
+  bottom: 3rem;
+  width: 8rem;
+  height: 3rem;
+  background-color: #478a77;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `;
 
 const GroupMoveButton = styled.button`
-    position: absolute;
-    right: 3rem;
-    bottom: 3rem;
-    width: 8rem;
-    height: 3rem;
-    background-color: #478a77;
-    border: none;
-    border-radius: 4px;
-    color: #fff;
-    font-size: 1.2rem;
-    font-weight: 500;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  right: 3rem;
+  bottom: 3rem;
+  width: 8rem;
+  height: 3rem;
+  background-color: #478a77;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `;
 const GroupManagement = styled.div``;
 
 const PointInquiry = styled.div`
-    width:90%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ProfileModification = styled.div``;

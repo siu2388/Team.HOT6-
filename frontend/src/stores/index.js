@@ -19,3 +19,8 @@ export const imgFileState = atom({
   key: 'imgFile',
   default: null,
 });
+
+export const userInfoState = atom({
+  key: 'userInfo',
+  default: [],
+});
