@@ -15,7 +15,7 @@ groupJoinRouter.post('/mygroups/:groupId', loginRequired, async (req, res, next)
     const state = '대기';
 
     const group = await groupJoinService.getUserGroup({ loginedId });
-    //다른 그룹 종복 가입 방지 
+    //다른 그룹 종복 가입 방지
     if (group) {
       res.status(401).json({ message: '가입한 그룹이 존재합니다.' });
       return;
@@ -30,10 +30,17 @@ groupJoinRouter.post('/mygroups/:groupId', loginRequired, async (req, res, next)
   }
 });
 
-
 groupJoinRouter.get('/mygroups', async (req, res) => {
   const result = await groupJoinService.getGroups();
   res.status(200).json({ result });
+  return;
+});
+
+groupJoinRouter.patch('/mygroups/:loginedId', async (req, res) => {
+  const loginedId = req.params.loginedId;
+  const result = await groupJoinService.setJoinedGroup({ loginedId });
+  console.log('result:', result);
+  res.status(200).json({ result , message:'가입승인' });
   return;
 });
 
@@ -44,6 +51,6 @@ groupJoinRouter.delete('/mygroups/:loginedId', async (req, res) => {
   console.log('1', result);
   res.status(200).send(result);
   return;
-})
+});
 
 export { groupJoinRouter };

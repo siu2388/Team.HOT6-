@@ -11,13 +11,19 @@ class groupJoinService {
       state,
     };
 
-    const groupJoins = await GroupJoin.create({ newGroupJoin });
-    return groupJoins;
+    const groupJoin = await GroupJoin.create({ newGroupJoin });
+    return groupJoin;
   }
 
   static async getUserGroup({ loginedId }) {
     const group = await GroupJoin.findByUserId({ loginedId });
     return group;
+  }
+
+  // 유저 가입 대기 -> 승인으로 관리자 승인에 의한 상태 변경
+  static async setJoinedGroup({ loginedId }) {
+    const updatedGroup = await GroupJoin.update({ loginedId });
+    return updatedGroup;
   }
 
   // 유저의 그룹 탈퇴

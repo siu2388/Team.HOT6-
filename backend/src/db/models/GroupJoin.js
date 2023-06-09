@@ -21,14 +21,16 @@ class GroupJoin {
     return groupAllInfo;
   }
 
-  static async update({ groupId, fieldToUpdate, newValue }) {
-    const filter = { id: groupId };
-    const update = { [fieldToUpdate]: newValue };
+  static async update({ loginedId }) {
+    const filter = { loginedId };
+    const update = { state:'승인' };
     const option = { returnOriginal: false };
 
     const updatedGroup = await GroupJoinModel.findOneAndUpdate(filter, update, option);
     return updatedGroup;
   }
+
+  
 
   static async deleteByLoginedId({ loginedId }) {
     const deletedGroup = await GroupJoinModel.deleteOne({ id: loginedId });
