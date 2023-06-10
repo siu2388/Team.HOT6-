@@ -17,6 +17,12 @@ class GroupJoin {
     const group = await GroupJoinModel.findOne({ userId });
     return group;
   }
+  //유저가 나의 그룹 조회
+  static async findMyGroup() {
+    const group = await GroupJoinModel.find({}).populate('userId').populate('groupId');
+    console.log('group내그룹조회', group);
+    return group;
+  }
 
   static async findAll() {
     const groupAllInfo = await GroupJoinModel.find({});
@@ -32,8 +38,8 @@ class GroupJoin {
     return updatedGroup;
   }
 
-  static async deleteByLoginedId({ loginedId }) {
-    const deletedGroup = await GroupJoinModel.deleteOne({ id: loginedId });
+  static async deleteByUserId({ userId }) {
+    const deletedGroup = await GroupJoinModel.deleteOne({ id: userId });
     const isDataDeleted = deletedGroup.deletedCount === 1;
     return isDataDeleted;
   }

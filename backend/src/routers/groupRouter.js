@@ -35,15 +35,13 @@ groupRouter.post('/groups', loginRequired, imgupload, async (req, res, next) => 
 //그룹 목록 조회 - 완
 groupRouter.get('/groups', async (req, res) => {
   const result = await groupService.getGroups();
-
   res.status(200).json({ result });
   return;
 });
 
-//그룹 상세 조회
+//그룹 상세 조회 - 완
 groupRouter.get('/groups/:groupId', async (req, res) => {
   const groupId = req.params.groupId;
-
   const myGroup = await groupService.getMyGroup(groupId);
   console.log('그룹상세조회', myGroup);
   res.status(200).json({ myGroup });

@@ -12,9 +12,9 @@ class Group {
   }
   //유저의 그룹 가입
   static async findById({ groupId }) {
-    console.log('1', groupId);
+    console.log('groupId', groupId);
     const group = await GroupModel.findOne({ id: groupId });
-    console.log('111', group);
+    console.log('1group:', group);
 
     return group;
   }
