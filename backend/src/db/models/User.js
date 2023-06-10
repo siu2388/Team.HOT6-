@@ -10,9 +10,9 @@ class User {
     const user = await UserModel.findOne({ userId });
     return user;
   }
-
-  static async findById({ loginedId }) {
-    const user = await UserModel.findById(loginedId);
+  //유저의 그룹 가입
+  static async findById({ id }) {
+    const user = await UserModel.findById(id);
     return user;
   }
 

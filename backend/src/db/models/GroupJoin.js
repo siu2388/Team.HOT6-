@@ -17,6 +17,12 @@ class GroupJoin {
     const group = await GroupJoinModel.findOne({ userId });
     return group;
   }
+  //유저가 나의 그룹 조회
+  static async findMyGroup() {
+    const group = await GroupJoinModel.find({}).populate('userId').populate('groupId');
+    console.log('group내그룹조회', group);
+    return group;
+  }
 
   static async findAll() {
     const groupAllInfo = await GroupJoinModel.find({});

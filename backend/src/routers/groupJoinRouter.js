@@ -7,21 +7,22 @@ const groupJoinRouter = Router();
 
 const imgupload = upload.single('image');
 
-//유저의 그룹 가입
+//유저의 그룹 가입 - userId 뭘로 할지 아직 미정
 groupJoinRouter.post('/mygroups/:groupId', loginRequired, async (req, res, next) => {
   try {
-    const groupId = req.params.groupId;
-    const loginedId = req.currentUserId;
+    //const userId = req.currentUserId;
+    const { groupId, userId } = req.body;
     const state = '대기';
-    
-    const group = await groupJoinService.getUserGroup( loginedId );
+    console.log('req.body', req.body);
+    const group = await groupJoinService.getUserGroup({ userId });
+
     //다른 그룹 종복 가입 방지
     if (group) {
       res.status(401).json({ message: '가입한 그룹이 존재합니다.' });
       return;
     }
 
-    const result = await groupJoinService.groupJoin({ groupId, loginedId, state });
+    const result = await groupJoinService.groupJoin({ groupId, userId, state });
 
     res.json({ result, message: '등록 성공' });
     return;
@@ -29,19 +30,20 @@ groupJoinRouter.post('/mygroups/:groupId', loginRequired, async (req, res, next)
     next(err);
   }
 });
-
-groupJoinRouter.get('/mygroups', async (req, res) => {
-  const result = await groupJoinService.getGroups();
+//유저가 가입한 그룹 조회
+groupJoinRouter.get('/mygroups/:userId', async (req, res) => {
+  const result = await groupJoinService.getMyGroup();
+  //console.log('내그룹조회', result);
   res.status(200).json({ result });
   return;
 });
 
-//이거 필요가 없는듯 
+//이거 필요가 없는듯
 groupJoinRouter.patch('/mygroups/:loginedId', async (req, res) => {
   const loginedId = req.params.loginedId;
   const result = await groupJoinService.setJoinedGroup({ loginedId });
   console.log('result:', result);
-  res.status(200).json({ result , message:'가입승인' });
+  res.status(200).json({ result, message: '가입승인' });
   return;
 });
 
