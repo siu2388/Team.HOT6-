@@ -11,6 +11,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { getDates } from '../../../commons/utils/getDate';
 import FileUpload from '../../commons/FileUpload';
+import { res } from '../../../styles/responsive';
 
 export default function AddActiveModal({ onClickToggleModal, selectedDate }) {
   return (
@@ -86,6 +87,10 @@ const Modal = styled.div`
   transform: translate(-50%, -50%);
   background-color: #fff;
   border-radius: 1rem;
+
+  @media ${res.mobile} {
+    width: 90%;
+  }
 `;
 
 const ModalTitle = styled.h3`

@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import Avatar from '@mui/material/Avatar';
+import { res } from '../../../styles/responsive';
 
 export default function RankProfile() {
   return (
     <ProfileBox>
       <ProfileContainer>
-        <Avatar src="/images/commons/logo.png" sx={{ width: 68, height: 68 }} />
+        <Avatar src="/images/commons/logo.png" sx={{ width: '6.8rem', height: '6.8rem' }} />
         <ProfileInfoBox>
           <ProfileName>깜장이</ProfileName>
           <ProfileId>cjt3591</ProfileId>
@@ -25,6 +26,10 @@ const ProfileBox = styled.div`
   background-color: #fff;
   border-radius: 1rem;
   position: relative;
+
+  @media ${res.mobile} {
+    width: 100%;
+  }
 `;
 
 const ProfileContainer = styled.div`

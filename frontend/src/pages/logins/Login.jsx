@@ -70,7 +70,8 @@ export default function LoginPage() {
     <LoginWrap>
       <LoginContainer>
         <LoginLogoBox>
-          <img src="/images/login/login-img.png" alt="" />
+        <img src="/images/commons/textlogo.png" alt="사랑해 지구야 로고" />
+        <img src="/images/commons/mainearth.png" alt="사랑해 지구야 로고" />
         </LoginLogoBox>
         <LoginForm>
           <InputBox>
@@ -112,7 +113,7 @@ export default function LoginPage() {
             로그인
           </Button>
           <JoinLink>
-            <Link>앗! 아직 아이디가 없으신가요? 가입하러가기</Link>
+            <Link to="/register">앗! 아직 아이디가 없으신가요? 가입하러가기</Link>
           </JoinLink>
         </LoginForm>
       </LoginContainer>
@@ -126,7 +127,7 @@ const LoginWrap = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 9.6rem;
+  padding-top: 8.8rem;
   background-color: #b6ce8a;
 `;
 
@@ -136,8 +137,14 @@ const LoginContainer = styled.div`
 `;
 
 const LoginLogoBox = styled.div`
-  width: 100%;
+  width: 45%;
+  height: 16vh;
   margin-bottom: 3rem;
+  margin-left:11rem;
+  display:flex;
+  gap:2rem;
+  justify-content:center;
+  flex-direction:row;
   img {
     width: 100%;
   }

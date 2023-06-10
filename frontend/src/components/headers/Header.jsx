@@ -3,24 +3,43 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { ROUTE } from '../../constants/routes/routeData';
 import { useRecoilState } from 'recoil';
-import { userTokenState } from '../../stores';
+import { updateState, userInfoState, userTokenState } from '../../stores';
+import * as API from '../../api/index';
 
 export default function Header() {
   const [userToken, setUserToken] = useRecoilState(userTokenState);
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const [update] = useRecoilState(updateState);
 
   useEffect(() => {
     if (sessionStorage.getItem('userToken')) {
       setUserToken(sessionStorage.getItem('userToken'));
     }
-  });
+  }, []);
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const result = await API.get('/user');
+      setUserInfo(result.data);
+    };
+
+    if (userToken) {
+      getUserInfo();
+    }
+  }, [userToken, update]);
+
+  console.log(userInfo);
 
   return (
     <HeaderWrap>
       <HeaderContainer>
         <LogoBox>
           <Link to={'/'}>
-            <LogoImgBox>
+            {/* <LogoImgBox>
               <img src="/images/commons/logo.png" alt="사랑해 지구야 로고" />
+            </LogoImgBox> */}
+            <LogoImgBox>
+              <img src="/images/commons/textlogo.png" alt="사랑해 지구야 로고" />
             </LogoImgBox>
           </Link>
         </LogoBox>
@@ -38,6 +57,23 @@ export default function Header() {
               </MenuList>
             </NavMenu>
           </Navigation>
+          {userToken && (
+            <InfoMenu>
+              <UserName>{userInfo.nickname}</UserName>
+              <CountBox>
+                {/* <CountImgBox>
+                <img src="" alt="" />
+              </CountImgBox>{' '} */}
+                <span>🥤: 9</span>
+              </CountBox>
+              <CountBox>
+                {/* <CountImgBox>
+                <img src="" alt="" />
+              </CountImgBox>{' '} */}
+                <span>♻️ : 9</span>
+              </CountBox>
+            </InfoMenu>
+          )}
           <SubMenu>
             {!userToken ? (
               <>
@@ -75,7 +111,7 @@ export default function Header() {
 
 const HeaderWrap = styled.div`
   width: 100%;
-  height: 76px;
+  height: 7.6rem;
   background-color: #fff;
   position: fixed;
   top: 0;
@@ -92,12 +128,16 @@ const HeaderContainer = styled.header`
   align-items: center;
 `;
 
-const LogoImgBox = styled.div``;
+const LogoImgBox = styled.div`
+`;
 
 const NavigationBox = styled.div`
   display: flex;
   align-items: center;
   gap: 5rem;
+  @media (max-width: 1050px) {
+    display: none;
+  }
 `;
 
 const Navigation = styled.nav``;
@@ -125,10 +165,14 @@ const SubMenu = styled.ul`
 const SubMenuList = styled.li``;
 
 const LogoBox = styled.div`
-  width: 6rem;
+  width: 8rem;
+  margin-left:-3rem;
   img {
     width: 100%;
   }
+  display: flex;
+  flex-direction: row;
+  gap:5rem;
 `;
 
 const SubMenuBtn = styled.button`
@@ -148,3 +192,29 @@ const SubMenuBtn = styled.button`
     color: ${({ btn }) => (btn === 'stroke' ? '#01881c' : '#fff')};
   }
 `;
+
+const InfoMenu = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;
+
+const UserName = styled.p`
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #01881c;
+`;
+
+const CountBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  span {
+    font-size: 1.7rem;
+    font-weight: 500;
+  }
+`;
+
+// const CountImgBox = styled.div`
+//   width: 2rem;
+// `;

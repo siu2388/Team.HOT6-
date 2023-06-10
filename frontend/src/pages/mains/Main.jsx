@@ -22,6 +22,7 @@ const Wrapper = styled.main`
   overflow-y: scroll;
   scrollbar-width: none;
   -ms-overflow-style: none;
+
   ::-webkit-scrollbar {
     width: 0;
     background-color: transparent;

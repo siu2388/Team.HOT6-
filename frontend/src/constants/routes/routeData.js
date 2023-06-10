@@ -41,7 +41,12 @@ export const ROUTE = {
   JOIN: {
     path: '/register',
     link: '/register',
-    element: <JoinPage />,
+    element: <JoinPage page="join" />,
+  },
+  CHANGEINFO: {
+    path: '/changeinfo',
+    link: '/changeinfo',
+    element: <JoinPage page="changeInfo" />,
   },
 };
 

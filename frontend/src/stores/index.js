@@ -19,3 +19,13 @@ export const imgFileState = atom({
   key: 'imgFile',
   default: null,
 });
+
+export const userInfoState = atom({
+  key: 'userInfo',
+  default: [],
+});
+
+export const updateState = atom({
+  key: 'update',
+  default: 0,
+});

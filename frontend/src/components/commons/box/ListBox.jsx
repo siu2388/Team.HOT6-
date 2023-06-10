@@ -4,12 +4,12 @@ import styled from 'styled-components';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import { ROUTE } from '../../../constants/routes/routeData';
+import { res } from '../../../styles/responsive';
 
 export default function ListBox({ group }) {
-  console.log(group);
   return (
     <ListBoxWrap>
-      <Link to={`${ROUTE.GROUP_DETAIL.link}/${group._id}`}>
+      <Link to={`${ROUTE.GROUP_DETAIL.link}/${group.id}`}>
         <ListBackImg img={`http://localhost:5001/uploads/${group.thumbnail}`} />
         <ListContent>
           <TitleBox>
@@ -21,32 +21,7 @@ export default function ListBox({ group }) {
               <Avatar
                 alt="Remy Sharp"
                 src="/images/commons/logo.png"
-                sx={{ width: 30, height: 30 }}
-              />
-              <Avatar
-                alt="Remy Sharp"
-                src="/images/commons/logo.png"
-                sx={{ width: 30, height: 30 }}
-              />
-              <Avatar
-                alt="Remy Sharp"
-                src="/images/commons/logo.png"
-                sx={{ width: 30, height: 30 }}
-              />
-              <Avatar
-                alt="Remy Sharp"
-                src="/images/commons/logo.png"
-                sx={{ width: 30, height: 30 }}
-              />
-              <Avatar
-                alt="Remy Sharp"
-                src="/images/commons/logo.png"
-                sx={{ width: 30, height: 30 }}
-              />
-              <Avatar
-                alt="Remy Sharp"
-                src="/images/commons/logo.png"
-                sx={{ width: 30, height: 30 }}
+                sx={{ width: '3rem', height: '3rem' }}
               />
             </AvatarGroup>
             <MemberNum>모집인원 13 / {group.totalNumOfMembers}</MemberNum>
@@ -61,6 +36,13 @@ const ListBoxWrap = styled.div`
   width: 32%;
   border-radius: 8px;
   background-color: #fff;
+
+  @media ${res.tablet} {
+    width: 48%;
+  }
+  @media ${res.mobile} {
+    width: 100%;
+  }
 `;
 
 const ListBackImg = styled.div`
@@ -102,8 +84,13 @@ const ListMemberBox = styled.div`
   align-items: center;
   gap: 1rem;
   .css-1ytufz-MuiAvatarGroup-root .MuiAvatar-root {
-    width: 35px;
-    height: 35px;
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  @media ${res.mobile} {
+    flex-direction: column;
+    align-items: flex-start;
   }
 `;
 
