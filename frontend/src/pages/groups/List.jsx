@@ -16,7 +16,7 @@ export default function GroupList() {
   useEffect(() => {
     const getGroups = async () => {
       const result = await Api.get('/groups');
-      setGroupList(result.data.result);
+      setGroupList(result.data.result.reverse());
     };
     getGroups();
   }, []);
@@ -147,12 +147,12 @@ const Ranking = styled.div`
   justify-content: center;
   flex-direction: row;
   align-items: center;
-  padding-right:7rem;
+  padding-right: 7rem;
 `;
 
 const Rankimage = styled.div`
   img {
-    padding-bottom:4rem;
-    width: 120px; 
+    padding-bottom: 4rem;
+    width: 120px;
   }
 `;

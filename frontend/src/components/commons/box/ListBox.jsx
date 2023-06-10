@@ -7,10 +7,9 @@ import { ROUTE } from '../../../constants/routes/routeData';
 import { res } from '../../../styles/responsive';
 
 export default function ListBox({ group }) {
-  console.log(group);
   return (
     <ListBoxWrap>
-      <Link to={`${ROUTE.GROUP_DETAIL.link}/${group._id}`}>
+      <Link to={`${ROUTE.GROUP_DETAIL.link}/${group.id}`}>
         <ListBackImg img={`http://localhost:5001/uploads/${group.thumbnail}`} />
         <ListContent>
           <TitleBox>

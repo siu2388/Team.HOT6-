@@ -17,7 +17,7 @@ export default function GroupDetailPage() {
   useEffect(() => {
     const getGroupData = async () => {
       const result = await API.get(`/groups/${groupId}`);
-      setGroupData(result.data);
+      setGroupData(result.data.myGroup);
     };
     getGroupData();
   }, []);
@@ -47,7 +47,7 @@ export default function GroupDetailPage() {
   return (
     <GroupDetailWrap>
       <GroupDetailContainer>
-        <GroupTitle>3학년 1반 그룹</GroupTitle>
+        <GroupTitle>{groupData.title}</GroupTitle>
         <DetailContent01>
           <DetailInfoBox>
             <DetailThumbnail />
@@ -67,9 +67,9 @@ export default function GroupDetailPage() {
                 </UserBox>
                 <UserBox>
                   <span>모집인원</span>
-                  <span>15명</span>
+                  <span>{groupData.totalNumOfMembers}명</span>
                 </UserBox>
-                <GroupDescription>내용이 들어갑니다... 내용이 들어갑니다......</GroupDescription>
+                <GroupDescription>{groupData.description}</GroupDescription>
               </div>
               <div>
  
@@ -326,7 +326,7 @@ const ProgressBar = styled.div`
 `;
 
 const FilledProgressBar = styled.div`
-  width: ${(props) => props.width}%;
+  width: ${props => props.width}%;
   height: 100%;
   background-color: #7ed321;
   border-radius: 0.6rem;
@@ -338,7 +338,7 @@ const ProgressValue = styled.span`
   color: #111;
 `;
 const EarthBox = styled.div`
-  display:flex;
+  display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
@@ -355,13 +355,13 @@ const StatusMessage = styled.div`
 
 const SpeechBubble = styled.div`
   position: relative;
-  background-color: #ffffff;;
+  background-color: #ffffff;
   border-radius: 2rem;
   padding: 3rem;
   margin-left: 7rem;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 1.4rem;
     left: -2rem;
@@ -375,20 +375,20 @@ const SpeechText = styled.p`
   font-size: 4rem;
   font-weight: bold;
   margin-bottom: 1rem;
-  color: #98AF47;
-  font-family: "Comic Sans MS", cursive;
+  color: #98af47;
+  font-family: 'Comic Sans MS', cursive;
 `;
 
 const Desc = styled.p`
-  font-size:1.7rem;
-  font-family: "Comic Sans MS", cursive;
+  font-size: 1.7rem;
+  font-family: 'Comic Sans MS', cursive;
 `;
 
 const SpeechHighlight = styled.h1`
   font-size: 2.2rem;
   font-weight: 500;
   margin-top: 1rem;
-  font-family: "Comic Sans MS", cursive;
+  font-family: 'Comic Sans MS', cursive;
 `;
 
 const LogoImage = styled.div`
