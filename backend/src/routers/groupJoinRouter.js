@@ -38,6 +38,17 @@ groupJoinRouter.get('/mygroups/:userId', async (req, res) => {
   return;
 });
 
+// 그룹 가입 대기자 리스트 - 관리자용 - 완
+groupJoinRouter.get('/mygroups/:groupId/waiting', async (req, res) => {
+  const groupId = req.params.groupId;
+  console.log('groupId', groupId);
+
+  const result = await groupJoinService.getWaitingList({ groupId });
+  console.log('result', result);
+  res.status(200).json({ result });
+  return;
+});
+
 //이거 필요가 없는듯
 groupJoinRouter.patch('/mygroups/:loginedId', async (req, res) => {
   const loginedId = req.params.loginedId;
@@ -47,6 +58,7 @@ groupJoinRouter.patch('/mygroups/:loginedId', async (req, res) => {
   return;
 });
 
+// 유저가 가입한 그룹 탈퇴 - 완
 groupJoinRouter.delete('/mygroups/:userId', async (req, res) => {
   //const userId = req.currentUserId;
   //console.log(userId);

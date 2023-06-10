@@ -49,14 +49,14 @@ groupRouter.get('/groups/:groupId', async (req, res) => {
 });
 
 //그룹 가입 대기자 조회
-groupRouter.get('/groups/:groupId/waiting', async (req, res) => {
-  const groupId = req.params.groupId;
-  console.log('gorupId', groupId);
-  const waitingList = await groupService.getWaiting(groupId);
-  console.log('그룹가입 대기자조회', waitingList);
-  res.status(200).json({ waitingList });
-  return;
-});
+// groupRouter.get('/groups/:groupId/waiting', async (req, res) => {
+//   const groupId = req.params.groupId;
+//   console.log('gorupId', groupId);
+//   const waitingList = await groupService.getWaiting(groupId);
+//   console.log('그룹가입 대기자조회', waitingList);
+//   res.status(200).json({ waitingList });
+//   return;
+// });
 
 // 그룹 가입 승인 patch
 groupRouter.patch('/groups/:groupId/accept', async (req, res) => {

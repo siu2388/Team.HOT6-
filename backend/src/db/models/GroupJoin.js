@@ -5,7 +5,7 @@ class GroupJoin {
     const createdNewGroupJoin = await GroupJoinModel.create(newGroupJoin);
     return createdNewGroupJoin;
   }
-
+  //코치님과 했던 코드
   static async findById({ id }) {
     console.log('1', id);
     const group = await GroupJoinModel.findOne({ id });
@@ -22,6 +22,12 @@ class GroupJoin {
     const group = await GroupJoinModel.find({}).populate('userId').populate('groupId');
     console.log('group내그룹조회', group);
     return group;
+  }
+
+  static async findByGroupId({ groupId }) {
+    const waitingList = await GroupJoinModel.find({ groupId: groupId, state: '대기' }).populate('userId','name nickname profileImg');
+    console.log('Waiting list', waitingList);
+    return waitingList;
   }
 
   static async findAll() {
