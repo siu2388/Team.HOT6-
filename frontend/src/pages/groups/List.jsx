@@ -26,7 +26,7 @@ export default function GroupList() {
       <RankingBox>
         <Ranking>
           <Rankimage>
-            <img src="/images/commons/earth.png" alt="사랑해 지구야 로고" />
+            <img src="/images/commons/rankearth.png" alt="사랑해 지구야 로고" />
           </Rankimage>
           <RankTitle>그룹 TOP 3</RankTitle>
         </Ranking>

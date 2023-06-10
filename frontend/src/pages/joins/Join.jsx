@@ -156,7 +156,7 @@ export default function JoinPage({ page }) {
       <JoinContainer>
         <TitleBox>
           <JoinImgBox>
-            <img src="/images/commons/logo.png" alt="사랑해 지구야 로고" />
+            <img src="/images/commons/mainearth.png" alt="사랑해 지구야 로고" />
           </JoinImgBox>
           <JoinTitle>{page === 'join' ? '회원가입' : '내 정보 수정'}</JoinTitle>
         </TitleBox>

@@ -70,7 +70,8 @@ export default function LoginPage() {
     <LoginWrap>
       <LoginContainer>
         <LoginLogoBox>
-          <img src="/images/login/login-img.png" alt="" />
+        <img src="/images/commons/textlogo.png" alt="사랑해 지구야 로고" />
+        <img src="/images/commons/mainearth.png" alt="사랑해 지구야 로고" />
         </LoginLogoBox>
         <LoginForm>
           <InputBox>
@@ -136,8 +137,14 @@ const LoginContainer = styled.div`
 `;
 
 const LoginLogoBox = styled.div`
-  width: 100%;
+  width: 45%;
+  height: 16vh;
   margin-bottom: 3rem;
+  margin-left:11rem;
+  display:flex;
+  gap:2rem;
+  justify-content:center;
+  flex-direction:row;
   img {
     width: 100%;
   }

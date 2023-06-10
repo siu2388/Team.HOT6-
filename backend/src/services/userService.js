@@ -57,7 +57,7 @@ class userAuthService {
     const secretKey = process.env.JWT_SECRET_KEY || 'jwt-secret-key';
     const token = jwt.sign({ loginedId: user.id }, secretKey);
 
-    const { id, name, nickname, phone, address, addressDetail, profileImage } = user;
+    const { id, name, nickname, phone, address, addressDetail, profileImg } = user;
 
     const loginUser = {
       token,
@@ -68,7 +68,7 @@ class userAuthService {
       phone,
       address,
       addressDetail,
-      profileImage,
+      profileImg,
       errorMessage: null,
     };
     return loginUser;

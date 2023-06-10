@@ -6,11 +6,13 @@ import GroupCalendar from '../../components/groups/details/Calendar';
 import { useParams } from 'react-router-dom';
 import * as API from '../../api/index';
 import { res } from '../../styles/responsive';
+import Modal from '../../components/commons/modal/Modal';
 
 export default function GroupDetailPage() {
   const [groupData, setGroupData] = useState([]);
 
   const groupId = useParams().id;
+
 
   useEffect(() => {
     const getGroupData = async () => {
@@ -24,14 +26,14 @@ export default function GroupDetailPage() {
 
   const handleGroupJoin = async () => {
     try {
-      await API.post(`/mygroups/${groupId}`);
-      alert('성공');
+      await API.post(`/groups/${groupId}/join`);
+      
+
     } catch (err) {
-      alert(err);
+      console.log(err);
     }
   };
-
-  // Calculate the width of the progress bars
+  
   const tumblerUsage = 81;
   const tumblerTotal = 1000;
   const tumblerWidth = (tumblerUsage / tumblerTotal) * 100;
@@ -69,14 +71,18 @@ export default function GroupDetailPage() {
                 </UserBox>
                 <GroupDescription>{groupData.description}</GroupDescription>
               </div>
-              <Button
-                style={{ width: '180px', height: '40px', fontSize: '2.2rem' }}
-                variant="contained"
-                color="success"
-                onClick={handleGroupJoin}
-              >
-                그룹신청
+              <div>
+ 
+                <Modal/>
+                <Button
+                  style={{ width: '180px', height: '40px', fontSize: '2.2rem' }}
+                  variant="contained"
+                  color="success"
+                  onClick={handleGroupJoin}
+                >
+                  그룹신청
               </Button>
+              </div>
             </DetailInfo>
           </DetailInfoBox>
           <GroupMemberBox>
@@ -101,36 +107,40 @@ export default function GroupDetailPage() {
         <GroupCalendar />
       </GroupDetailContainer>
       <AdditionalBox>
-        <ProgressContainer>
-          <ProgressTitle>
-            <IconContainer>🥤텀블러</IconContainer>
-            <ProgressBar>
-              <FilledProgressBar width={tumblerWidth} />
-            </ProgressBar>
-            <ProgressValue>{tumblerUsage}</ProgressValue>
-          </ProgressTitle>
-          <ProgressTitle>
-            <IconContainer>🫙다회용기</IconContainer>
-            <ProgressBar>
-              <FilledProgressBar width={containerWidth} />
-            </ProgressBar>
-            <ProgressValue>{containerUsage}</ProgressValue>
-          </ProgressTitle>
-        </ProgressContainer>
-        <EarthBox>
-          <LogoImage>
-            <img src="/images/commons/logo.png" alt="사랑해 지구야 로고" />
-          </LogoImage>
-          <StatusMessage>
-            <SpeechBubble>
-              <SpeechText>Good!</SpeechText>
-              <Desc>3학년 1반 그룹의 총 텀블러 사용 횟수는 {tumblerUsage}회,</Desc>
-              <Desc>다회용기 사용 횟수는 {containerUsage}회야!</Desc>
-              <SpeechHighlight>우리는 ⭐️{totalUsage}회⭐️ 지구를 지켰어!</SpeechHighlight>
-            </SpeechBubble>
-          </StatusMessage>
-        </EarthBox>
-      </AdditionalBox>
+          <ProgressContainer>
+            <ProgressTitle>
+              <IconContainer>
+              🥤텀블러
+              </IconContainer>
+              <ProgressBar>
+                <FilledProgressBar width={tumblerWidth} />
+              </ProgressBar>
+              <ProgressValue>{tumblerUsage}</ProgressValue>
+            </ProgressTitle>
+            <ProgressTitle>
+              <IconContainer>
+              🫙다회용기
+              </IconContainer>
+              <ProgressBar>
+                <FilledProgressBar width={containerWidth} />
+              </ProgressBar>
+              <ProgressValue>{containerUsage}</ProgressValue>
+            </ProgressTitle>
+          </ProgressContainer>
+          <EarthBox>
+            <LogoImage>
+              <img src="/images/commons/coinearth.png" alt="사랑해 지구야 로고" />
+            </LogoImage>
+            <StatusMessage>
+              <SpeechBubble>
+                <SpeechText>Good!</SpeechText>
+                <Desc>3학년 1반 그룹의 총 텀블러 사용 횟수는 {tumblerUsage}회,</Desc>
+                <Desc>다회용기 사용 횟수는 {containerUsage}회야!</Desc>
+                <SpeechHighlight>우리는 ⭐️{totalUsage}회⭐️ 지구를 지켰어!</SpeechHighlight>
+              </SpeechBubble>
+            </StatusMessage>
+          </EarthBox>
+        </AdditionalBox>
     </GroupDetailWrap>
   );
 }
@@ -283,8 +293,8 @@ const AdditionalBox = styled.div`
   align-items: center;
   gap: 4rem;
   margin-bottom: 4rem;
-  margin-top: 10rem;
-  justify-content: center;
+  margin-top: 20rem;
+  justify-content:center;
   justify-content: space-around;
 `;
 
@@ -387,7 +397,7 @@ const LogoImage = styled.div`
   align-items: center;
 
   img {
-    margin-top: -5rem;
-    width: 300px;
+    margin-top: -1rem;
+    width: 300px; 
   }
 `;
