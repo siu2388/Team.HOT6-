@@ -1,4 +1,5 @@
 import { Group } from '../db/models/Group.js';
+import { User } from '../db/models/User.js';
 import { GroupJoin } from '../db/models/GroupJoin.js';
 import { v4 as uuidv4 } from 'uuid';
 

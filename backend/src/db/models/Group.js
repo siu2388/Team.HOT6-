@@ -1,11 +1,12 @@
 import { GroupModel } from '../schemas/group.js';
 import { GroupJoinModel } from '../schemas/groupJoin.js';
+import { UserModel } from '../schemas/user.js';
 
 class Group {
   //그룹생성
   static async create({ newGroup }) {
     const createdNewGroup = await GroupModel.create(newGroup);
-    console.log(createdNewGroup);
+    console.log('생성된그룹',createdNewGroup);
     return createdNewGroup;
   }
 //유저의 그룹 가입
@@ -18,7 +19,8 @@ class Group {
   }
   //그룹 상세조회
   static async findBygroupId(id) {
-    const mygroup = await GroupModel.findOne({ id }).populate('members');
+    const groupOwner = await UserModel.findOwnerById()
+    const mygroup = await GroupModel.findOne({ id }).populate('groupOwnerInfo');
     console.log('그룹상세',mygroup);
     return mygroup;
   }

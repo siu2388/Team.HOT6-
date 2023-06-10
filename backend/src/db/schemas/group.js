@@ -22,10 +22,10 @@ const GroupSchema = new Schema(
       type: Number,
       required: true,
     },
-    members: [
+    groupOwnerInfo: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'GroupJoin',
+        ref: 'User',
         required: false,
       },
     ],
