@@ -1,6 +1,7 @@
 import { User } from '../db/index.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { ActivityModel } from '../db/schemas/activity.js';
 
 class userAuthService {
   static async addUser({
@@ -133,6 +134,16 @@ class userAuthService {
     return user;
   }
 
+  static async getUserActivityCount(userId, category) {
+    const count = await ActivityModel.countDocuments({
+      userId: userId,
+      state: '승인',
+      category: category,
+    });
+
+    return count;
+  }
+
   static async getUserInfo({ loginedId }) {
     const user = await User.findById({ loginedId });
 
@@ -142,7 +153,18 @@ class userAuthService {
       return { errorMessage };
     }
 
-    return user;
+    const tumblerCount = await userAuthService.getUserActivityCount(loginedId, 'tumbler');
+    const multipleContainersCount = await userAuthService.getUserActivityCount(
+      loginedId,
+      'multipleContainers',
+    );
+
+    const totalCount = tumblerCount + multipleContainersCount;
+
+    return { user, tumblerCount, multipleContainersCount, totalCount };
+  }
+  catch(error) {
+    throw new Error('Failed to get user info.');
   }
 }
 
