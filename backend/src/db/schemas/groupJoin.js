@@ -16,10 +16,6 @@ const GroupJoinSchema = new Schema(
       type: String,
       required: true,
     },
-    groupOwnerId: {
-      type: String,
-      required: true,
-    },
   },
   { strictPopulate: false },
   {
