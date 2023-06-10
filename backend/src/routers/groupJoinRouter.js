@@ -47,10 +47,10 @@ groupJoinRouter.patch('/mygroups/:loginedId', async (req, res) => {
   return;
 });
 
-groupJoinRouter.delete('/mygroups/:loginedId', async (req, res) => {
-  const loginedId = req.currentUserId;
-  console.log(loginedId);
-  const result = await groupJoinService.deleteJoinedGroup({ loginedId });
+groupJoinRouter.delete('/mygroups/:userId', async (req, res) => {
+  //const userId = req.currentUserId;
+  //console.log(userId);
+  const result = await groupJoinService.deleteMyGroup({ userId });
   console.log('1', result);
   res.status(200).send(result);
   return;

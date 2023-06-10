@@ -38,8 +38,8 @@ class GroupJoin {
     return updatedGroup;
   }
 
-  static async deleteByLoginedId({ loginedId }) {
-    const deletedGroup = await GroupJoinModel.deleteOne({ id: loginedId });
+  static async deleteByUserId({ userId }) {
+    const deletedGroup = await GroupJoinModel.deleteOne({ id: userId });
     const isDataDeleted = deletedGroup.deletedCount === 1;
     return isDataDeleted;
   }

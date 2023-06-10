@@ -37,8 +37,8 @@ class groupJoinService {
   // }
 
   // 유저의 그룹 탈퇴
-  static async deleteJoinedGroup({ loginedId }) {
-    const isDataDeleted = await GroupJoin.deleteByLoginedId({ loginedId });
+  static async deleteMyGroup({ userId }) {
+    const isDataDeleted = await GroupJoin.deleteByUserId({ userId });
 
     if (!isDataDeleted) {
       const errorMessage = 'Group 탈퇴: 해당 id를 가진 그룹이 없습니다. 다시 한 번 확인해 주세요.';
