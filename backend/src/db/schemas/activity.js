@@ -6,7 +6,7 @@ const ActivitySchema = new Schema(
       type: String,
       require: true,
     },
-    userId: {
+    loginedId: {
       type: String,
       require: true,
     },
@@ -22,14 +22,13 @@ const ActivitySchema = new Schema(
       type: String,
       require: true,
     },
-    actCategoryId: {
+    category: {
       type: String,
       require: true,
+      enum: ['tumbler', 'multipleContainers'],
     },
-
-    profileImg: {
+    proofImg: {
       type: String,
-      require: true,
     },
   },
   {
