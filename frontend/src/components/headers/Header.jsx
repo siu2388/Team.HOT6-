@@ -59,7 +59,7 @@ export default function Header() {
           </Navigation>
           {userToken && (
             <InfoMenu>
-              <UserName>{userInfo.nickname}</UserName>
+              <UserName>{userInfo?.user?.nickname}</UserName>
               <CountBox>
                 {/* <CountImgBox>
                 <img src="" alt="" />
@@ -128,8 +128,7 @@ const HeaderContainer = styled.header`
   align-items: center;
 `;
 
-const LogoImgBox = styled.div`
-`;
+const LogoImgBox = styled.div``;
 
 const NavigationBox = styled.div`
   display: flex;
@@ -166,13 +165,13 @@ const SubMenuList = styled.li``;
 
 const LogoBox = styled.div`
   width: 8rem;
-  margin-left:-3rem;
+  margin-left: -3rem;
   img {
     width: 100%;
   }
   display: flex;
   flex-direction: row;
-  gap:5rem;
+  gap: 5rem;
 `;
 
 const SubMenuBtn = styled.button`

@@ -33,7 +33,7 @@ export default function AddActiveModal({ onClickToggleModal, selectedDate }) {
   const handleAddActivity = async () => {
     const formData = new FormData();
 
-    formData.append('name', userInfo.name);
+    formData.append('name', userInfo.user.name);
     formData.append('groupId', groupId);
     formData.append('usedDate', selectedDate);
     formData.append('category', activity);
@@ -43,6 +43,7 @@ export default function AddActiveModal({ onClickToggleModal, selectedDate }) {
       const result = await API.formPost('/activities', formData);
       console.log(result);
       alert('성공');
+      onClickToggleModal();
     } catch (err) {
       console.log(err);
     }

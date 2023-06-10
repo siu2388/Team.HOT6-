@@ -11,8 +11,8 @@ class User {
     return user;
   }
   //유저의 그룹 가입
-  static async findById({ id }) {
-    const user = await UserModel.findById(id);
+  static async findById({ loginedId }) {
+    const user = await UserModel.findById(loginedId);
     return user;
   }
 
@@ -22,7 +22,7 @@ class User {
   }
 
   static async update({ loginedId, fieldToUpdate, newValue }) {
-    const filter = { id: loginedId };
+    const filter = { _id: loginedId };
     const update = { [fieldToUpdate]: newValue };
     const option = { returnOriginal: false };
 
