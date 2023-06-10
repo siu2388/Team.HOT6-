@@ -10,8 +10,8 @@ const imgupload = upload.single('image');
 //유저의 그룹 가입 - userId 뭘로 할지 아직 미정
 groupJoinRouter.post('/mygroups/:groupId', loginRequired, async (req, res, next) => {
   try {
-    //const userId = req.currentUserId;
-    const { groupId, userId } = req.body;
+    const userId = req.currentUserId;
+    const groupId = req.params.groupId;
     const state = '대기';
     console.log('req.body', req.body);
     const group = await groupJoinService.getUserGroup({ userId });

@@ -27,13 +27,13 @@ export default function JoinPage({ page }) {
   const navigate = useNavigate();
 
   const [formDatas, setFormData] = useState({
-    userId: userInfo.userId || '',
+    userId: userInfo?.user?.userId || '',
     password: '',
     passwordConfirm: '',
-    name: userInfo.name || '',
-    nickname: userInfo.nickname || '',
-    phone: userInfo.phone || '',
-    addressDetail: userInfo.addressDetail || '',
+    name: userInfo?.user?.name || '',
+    nickname: userInfo?.user?.nickname || '',
+    phone: userInfo?.user?.phone || '',
+    addressDetail: userInfo?.user?.addressDetail || '',
   });
 
   const [formError, setFormError] = useState({
@@ -132,12 +132,16 @@ export default function JoinPage({ page }) {
           throw new Error('User registration failed.');
         }
       } else {
-        const response = await axios.put(`http://localhost:5001/users/${userInfo.id}`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${sessionStorage.getItem('userToken')}`,
+        const response = await axios.put(
+          `http://localhost:5001/users/${userInfo?.user?._id}`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${sessionStorage.getItem('userToken')}`,
+            },
           },
-        });
+        );
 
         setUpdate(prev => prev + 1);
         navigate(ROUTE.PAGE_GROUP.link);
@@ -162,7 +166,7 @@ export default function JoinPage({ page }) {
         </TitleBox>
         <Form onSubmit={handleSubmit}>
           <ProfileImgBox>
-            <FileUpload img={userInfo.profile} />
+            <FileUpload img={userInfo?.user?.profile} />
           </ProfileImgBox>
           <InputBox>
             <TextField
@@ -243,7 +247,7 @@ export default function JoinPage({ page }) {
               label={postcodeAddress ? '' : '주소'}
               id="outlined-start-adornment"
               disabled
-              value={userInfo.address || postcodeAddress}
+              value={userInfo?.user?.address || postcodeAddress}
             />
             <SearchIconBox onClick={onClicktoggleAddressModal}>
               <SearchIcon />

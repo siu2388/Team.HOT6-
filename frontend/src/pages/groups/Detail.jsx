@@ -24,6 +24,7 @@ export default function GroupDetailPage() {
   const handleGroupJoin = async () => {
     try {
       await API.post(`/mygroups/${groupId}`);
+      alert(`${groupData.title}그룹에 신청하였습니다.`);
     } catch (err) {
       console.log(err);
     }

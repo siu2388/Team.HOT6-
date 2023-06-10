@@ -33,7 +33,7 @@ export default function AddActiveModal({ onClickToggleModal, selectedDate }) {
   const handleAddActivity = async () => {
     const formData = new FormData();
 
-    formData.append('name', userInfo.name);
+    formData.append('name', userInfo.user.name);
     formData.append('groupId', groupId);
     formData.append('usedDate', selectedDate);
     formData.append('category', activity);
