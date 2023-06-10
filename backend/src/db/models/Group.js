@@ -1,34 +1,58 @@
 import { GroupModel } from '../schemas/group.js';
+import { GroupJoinModel } from '../schemas/groupJoin.js';
 
 class Group {
+  //그룹생성
   static async create({ newGroup }) {
     const createdNewGroup = await GroupModel.create(newGroup);
+    console.log(createdNewGroup);
     return createdNewGroup;
   }
-
+//유저의 그룹 가입
   static async findById({ groupId }) {
+    console.log('1', groupId);
     const group = await GroupModel.findOne({ id: groupId });
+    console.log('111', group);
+
     return group;
   }
   //그룹 상세조회
   static async findBygroupId(id) {
-    const mygroup = await GroupModel.findOne({ id }).populate('groupJoin');
+    const mygroup = await GroupModel.findOne({ id }).populate('members');
+    console.log('그룹상세',mygroup);
     return mygroup;
   }
-
-  static async findAll() {
+//그룹 목록 조회
+  static async findGroupList() {
     const groupAllInfo = await GroupModel.find({});
     return groupAllInfo;
   }
+  //대기자조회
+  static async findBygroupIdAndState({ groupId, state }) {
+    const groupJoinready = await GroupModel.find({
+      groupId: groupId,
+      state: '대기',
+      // $and: [{ id }, { state: '대기' }],
+    });
+    return groupJoinready;
+  }
 
-  static async update({ groupId, fieldToUpdate, newValue }) {
-    const filter = { id: groupId };
-    const update = { [fieldToUpdate]: newValue };
+  static async update({ groupId }) {
+    const filter = { groupId };
+    const update = { state: '승인' };
     const option = { returnOriginal: false };
 
     const updatedGroup = await GroupModel.findOneAndUpdate(filter, update, option);
     return updatedGroup;
   }
+  // static async update({ groupId, fieldToUpdate, newValue }) {
+  //   const filter = { id: groupId };
+  //   const update = { [fieldToUpdate]: newValue };
+  //   const option = { returnOriginal: false };
+
+  //   const updatedGroup = await GroupModel.findOneAndUpdate(filter, update, option);
+  //   return updatedGroup;
+  // }
 
   static async deleteById({ id }) {
     const deleteResult = await GroupModel.deleteOne({ id });

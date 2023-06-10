@@ -6,7 +6,7 @@ const GroupSchema = new Schema(
       type: String,
       required: true,
     },
-    groupOwner: {
+    groupOwnerId: {
       type: String,
       required: true,
     },
@@ -22,11 +22,13 @@ const GroupSchema = new Schema(
       type: Number,
       required: true,
     },
-    members: {
-      type: Schema.Types.ObjectId,
-      ref: 'groupJoin',
-      required: false,
-    },
+    members: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'GroupJoin',
+        required: false,
+      },
+    ],
     thumbnail: { type: String },
   },
   { strictPopulate: false },

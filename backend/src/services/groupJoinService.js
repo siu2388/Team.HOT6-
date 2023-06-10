@@ -4,14 +4,18 @@ import { Group } from '../db/models/Group.js';
 
 class groupJoinService {
   // 유저의 그룹 가입
-  static async groupJoin({ groupId, loginedId, state }) {
+  static async groupJoin({ groupId, loginedId, groupOwnerId, state }) {
+    const group = await Group.findById({ groupId });
     const newGroupJoin = {
       groupId,
       loginedId,
+      groupOwnerId: group.groupOwnerId,
       state,
     };
 
-    const groupJoin = await GroupJoin.create({ newGroupJoin });
+    //console.log('444', newGroupJoin);
+    const groupJoin = await GroupJoin.create(newGroupJoin);
+    //console.log('234', groupJoin);
     return groupJoin;
   }
 
@@ -20,11 +24,12 @@ class groupJoinService {
     return group;
   }
 
+  // 이거 잘못된게. 승인으로 변경해주는 건 관리자만 할 수 있음
   // 유저 가입 대기 -> 승인으로 관리자 승인에 의한 상태 변경
-  static async setJoinedGroup({ loginedId }) {
-    const updatedGroup = await GroupJoin.update({ loginedId });
-    return updatedGroup;
-  }
+  // static async setJoinedGroup({ loginedId }) {
+  //   const updatedGroup = await GroupJoin.update({ loginedId });
+  //   return updatedGroup;
+  // }
 
   // 유저의 그룹 탈퇴
   static async deleteJoinedGroup({ loginedId }) {

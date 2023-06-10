@@ -14,6 +14,12 @@ const GroupJoinSchema = new Schema(
       type: String,
       required: true,
     },
+    groupOwnerId: {
+      type: String,
+      //type: Schema.Types.ObjectId,
+      //ref: 'group',
+      required: true,
+    },
   },
   { strictPopulate: false },
   {

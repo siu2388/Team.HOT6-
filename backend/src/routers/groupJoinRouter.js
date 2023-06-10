@@ -13,8 +13,8 @@ groupJoinRouter.post('/mygroups/:groupId', loginRequired, async (req, res, next)
     const groupId = req.params.groupId;
     const loginedId = req.currentUserId;
     const state = '대기';
-
-    const group = await groupJoinService.getUserGroup({ loginedId });
+    
+    const group = await groupJoinService.getUserGroup( loginedId );
     //다른 그룹 종복 가입 방지
     if (group) {
       res.status(401).json({ message: '가입한 그룹이 존재합니다.' });
@@ -36,6 +36,7 @@ groupJoinRouter.get('/mygroups', async (req, res) => {
   return;
 });
 
+//이거 필요가 없는듯 
 groupJoinRouter.patch('/mygroups/:loginedId', async (req, res) => {
   const loginedId = req.params.loginedId;
   const result = await groupJoinService.setJoinedGroup({ loginedId });
