@@ -287,6 +287,10 @@ const AdditionalBox = styled.div`
   margin-top: 20rem;
   justify-content: center;
   justify-content: space-around;
+  @media (max-width: 1080px) {
+    flex-direction: column;
+    justify-content: center;
+  }
 `;
 
 const ProgressContainer = styled.div`
@@ -389,6 +393,6 @@ const LogoImage = styled.div`
 
   img {
     margin-top: -1rem;
-    width: 300px;
+    width: 30rem; 
   }
 `;

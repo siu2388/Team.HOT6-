@@ -7,6 +7,7 @@ export default function MainA() {
       <S.MainContainer>
         <S.MainContent01>
           <S.MentBox>
+          <img src="/images/commons/mainearth.png" alt="사랑해 지구야 로고" />
             <S.MentText>
               사
               <S.PositionBox>
@@ -19,7 +20,7 @@ export default function MainA() {
               지구야
             </S.MentText>
             {/* <img src="/images/main/main_sub01.png" alt="" /> */}
-            <img src="/images/commons/mainearth.png" alt="사랑해 지구야 로고" />
+            {/* <img src="/images/commons/mainearth.png" alt="사랑해 지구야 로고" /> */}
           </S.MentBox>
         </S.MainContent01>
         <S.MainContent02>
