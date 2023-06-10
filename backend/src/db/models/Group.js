@@ -1,15 +1,16 @@
 import { GroupModel } from '../schemas/group.js';
-import { GroupJoinModel } from '../schemas/groupJoin.js';
-import { UserModel } from '../schemas/user.js';
+import { ObjectId } from 'mongodb';
+// import { GroupJoinModel } from '../schemas/groupJoin.js';
+// import { UserModel } from '../schemas/user.js';
 
 class Group {
   //그룹생성
   static async create({ newGroup }) {
     const createdNewGroup = await GroupModel.create(newGroup);
-    console.log('생성된그룹',createdNewGroup);
+    console.log('생성된그룹', createdNewGroup);
     return createdNewGroup;
   }
-//유저의 그룹 가입
+  //유저의 그룹 가입
   static async findById({ groupId }) {
     console.log('1', groupId);
     const group = await GroupModel.findOne({ id: groupId });
@@ -20,11 +21,11 @@ class Group {
   //그룹 상세조회
   static async findBygroupId(id) {
     //const groupOwner = await UserModel.findOwnerById()
-    const mygroup = await GroupModel.findOne({ id }).populate('groupOwnerId');
-    console.log('그룹상세',mygroup);
+    const mygroup = await GroupModel.findById(id).populate('groupOwnerId');
+    console.log('그룹상세', mygroup);
     return mygroup;
   }
-//그룹 목록 조회
+  //그룹 목록 조회
   static async findGroupList() {
     const groupAllInfo = await GroupModel.find({});
     return groupAllInfo;
@@ -40,7 +41,7 @@ class Group {
   }
 
   static async update({ groupId }) {
-    const filter = { groupId };
+    const filter = { _id: new ObjectId(groupId) };
     const update = { state: '승인' };
     const option = { returnOriginal: false };
 
@@ -56,8 +57,8 @@ class Group {
   //   return updatedGroup;
   // }
 
-  static async deleteById({ id }) {
-    const deleteResult = await GroupModel.deleteOne({ id });
+  static async deleteById({ groupId }) {
+    const deleteResult = await GroupModel.deleteOne({ _id: new ObjectId(groupId) });
     const isDataDeleted = deleteResult.deletedCount === 1;
     return isDataDeleted;
   }

@@ -1,6 +1,5 @@
 import { User } from '../db/index.js';
 import bcrypt from 'bcrypt';
-import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 
 class userAuthService {
@@ -22,9 +21,7 @@ class userAuthService {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const id = uuidv4();
     const newUser = {
-      id,
       userId,
       password: hashedPassword,
       name,
@@ -55,7 +52,7 @@ class userAuthService {
     }
 
     const secretKey = process.env.JWT_SECRET_KEY || 'jwt-secret-key';
-    const token = jwt.sign({ loginedId: user.id }, secretKey);
+    const token = jwt.sign({ id: user._id }, secretKey);
 
     const { id, name, nickname, phone, address, addressDetail, profileImg } = user;
 

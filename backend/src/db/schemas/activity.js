@@ -3,12 +3,14 @@ import { Schema, model } from 'mongoose';
 const ActivitySchema = new Schema(
   {
     groupId: {
-      type: String,
-      require: true,
+      type: Schema.Types.ObjectId,
+      ref: 'Group',
+      required: true,
     },
-    loginedId: {
-      type: String,
-      require: true,
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
     },
     name: {
       type: String,

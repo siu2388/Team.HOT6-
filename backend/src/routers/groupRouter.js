@@ -7,12 +7,11 @@ const groupRouter = Router();
 
 const imgupload = upload.single('thumbnail');
 
-//그룹 생성  ( 그룹장이 되는 유저 ) -완 
+//그룹 생성  ( 그룹장이 되는 유저 ) -완
 groupRouter.post('/groups', loginRequired, imgupload, async (req, res, next) => {
   try {
     //const groupOwnerId = req.currentUserId;
     const { groupOwnerId, title, totalNumOfMembers, description } = req.body;
-    console.log('req.body',req.body);
     const thumbnail = req.file ? req.file.filename : null;
 
     const newGroup = await groupService.addGroup({

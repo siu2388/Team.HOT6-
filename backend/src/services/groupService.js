@@ -1,7 +1,4 @@
 import { Group } from '../db/models/Group.js';
-import { User } from '../db/models/User.js';
-import { GroupJoin } from '../db/models/GroupJoin.js';
-import { v4 as uuidv4 } from 'uuid';
 
 class groupService {
   // 그룹의 생성
@@ -13,9 +10,7 @@ class groupService {
     description,
     thumbnail,
   }) {
-    const id = uuidv4();
     const newGroup = {
-      id,
       groupOwnerId,
       title,
       totalNumOfMembers,
@@ -23,10 +18,10 @@ class groupService {
       members,
       thumbnail,
     };
-    console.log('11122333',newGroup.groupOwnerId);
     const createdGroup = await Group.create({ newGroup });
     return createdGroup;
   }
+
   //그룹의 목록 조회
   static async getGroups() {
     const groups = await Group.findGroupList();
@@ -53,7 +48,7 @@ class groupService {
 
   //그룹 삭제
   static async deleteGroup({ groupId }) {
-    const isDataDeleted = await Group.deleteById({ id: groupId });
+    const isDataDeleted = await Group.deleteById({ groupId });
 
     if (!isDataDeleted) {
       const errorMessage = 'Group 삭제: 해당 id를 가진 그룹이 없습니다. 다시 한 번 확인해 주세요.';

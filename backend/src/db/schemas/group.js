@@ -2,10 +2,6 @@ import { Schema, model } from 'mongoose';
 
 const GroupSchema = new Schema(
   {
-    id: {
-      type: String,
-      required: true,
-    },
     groupOwnerId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
