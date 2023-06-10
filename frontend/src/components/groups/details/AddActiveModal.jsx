@@ -43,6 +43,7 @@ export default function AddActiveModal({ onClickToggleModal, selectedDate }) {
       const result = await API.formPost('/activities', formData);
       console.log(result);
       alert('성공');
+      onClickToggleModal();
     } catch (err) {
       console.log(err);
     }

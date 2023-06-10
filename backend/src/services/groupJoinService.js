@@ -6,6 +6,7 @@ class groupJoinService {
   // 유저의 그룹 가입
   static async groupJoin({ groupId, loginedId, groupOwnerId, state }) {
     const group = await Group.findById({ groupId });
+    console.log('asd', group);
     const newGroupJoin = {
       groupId,
       loginedId,
