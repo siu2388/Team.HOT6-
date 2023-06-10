@@ -18,7 +18,8 @@ export default function MainA() {
               <br />
               지구야
             </S.MentText>
-            <img src="/images/main/main_sub01.png" alt="" />
+            {/* <img src="/images/main/main_sub01.png" alt="" /> */}
+            <img src="/images/commons/mainearth.png" alt="사랑해 지구야 로고" />
           </S.MentBox>
         </S.MainContent01>
         <S.MainContent02>

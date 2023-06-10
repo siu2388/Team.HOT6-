@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { ROUTE } from '../../constants/routes/routeData';
 import { useRecoilState } from 'recoil';
-import { userInfoState, userTokenState } from '../../stores';
+import { updateState, userInfoState, userTokenState } from '../../stores';
 import * as API from '../../api/index';
 
 export default function Header() {
   const [userToken, setUserToken] = useRecoilState(userTokenState);
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const [update] = useRecoilState(updateState);
 
   useEffect(() => {
     if (sessionStorage.getItem('userToken')) {
@@ -25,15 +26,20 @@ export default function Header() {
     if (userToken) {
       getUserInfo();
     }
-  }, [userToken]);
+  }, [userToken, update]);
+
+  console.log(userInfo);
 
   return (
     <HeaderWrap>
       <HeaderContainer>
         <LogoBox>
           <Link to={'/'}>
-            <LogoImgBox>
+            {/* <LogoImgBox>
               <img src="/images/commons/logo.png" alt="사랑해 지구야 로고" />
+            </LogoImgBox> */}
+            <LogoImgBox>
+              <img src="/images/commons/textlogo.png" alt="사랑해 지구야 로고" />
             </LogoImgBox>
           </Link>
         </LogoBox>
@@ -122,7 +128,8 @@ const HeaderContainer = styled.header`
   align-items: center;
 `;
 
-const LogoImgBox = styled.div``;
+const LogoImgBox = styled.div`
+`;
 
 const NavigationBox = styled.div`
   display: flex;
@@ -158,10 +165,14 @@ const SubMenu = styled.ul`
 const SubMenuList = styled.li``;
 
 const LogoBox = styled.div`
-  width: 6rem;
+  width: 8rem;
+  margin-left:-3rem;
   img {
     width: 100%;
   }
+  display: flex;
+  flex-direction: row;
+  gap:5rem;
 `;
 
 const SubMenuBtn = styled.button`
