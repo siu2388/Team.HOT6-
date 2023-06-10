@@ -27,6 +27,8 @@ export default function Header() {
     }
   }, [userToken]);
 
+  console.log(userInfo);
+
   return (
     <HeaderWrap>
       <HeaderContainer>

@@ -54,9 +54,6 @@ export default function MainA() {
     fetchData();
   }, []);
 
-  console.log(plasticData);
-  console.log(wasteData);
-
   return (
     <S.MainWrap02>
       <S.MainContainer>

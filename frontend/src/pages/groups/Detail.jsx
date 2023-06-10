@@ -15,7 +15,7 @@ export default function GroupDetailPage() {
   useEffect(() => {
     const getGroupData = async () => {
       const result = await API.get(`/groups/${groupId}`);
-      setGroupData(result.data);
+      setGroupData(result.data.myGroup);
     };
     getGroupData();
   }, []);
@@ -24,7 +24,7 @@ export default function GroupDetailPage() {
 
   const handleGroupJoin = async () => {
     try {
-      await API.post(`/groups/${groupId}/join`);
+      await API.post(`/mygroups/${groupId}`);
       alert('성공');
     } catch (err) {
       alert(err);
@@ -45,7 +45,7 @@ export default function GroupDetailPage() {
   return (
     <GroupDetailWrap>
       <GroupDetailContainer>
-        <GroupTitle>3학년 1반 그룹</GroupTitle>
+        <GroupTitle>{groupData.title}</GroupTitle>
         <DetailContent01>
           <DetailInfoBox>
             <DetailThumbnail />
@@ -65,9 +65,9 @@ export default function GroupDetailPage() {
                 </UserBox>
                 <UserBox>
                   <span>모집인원</span>
-                  <span>15명</span>
+                  <span>{groupData.totalNumOfMembers}명</span>
                 </UserBox>
-                <GroupDescription>내용이 들어갑니다... 내용이 들어갑니다......</GroupDescription>
+                <GroupDescription>{groupData.description}</GroupDescription>
               </div>
               <Button
                 style={{ width: '180px', height: '40px', fontSize: '2.2rem' }}
@@ -101,40 +101,36 @@ export default function GroupDetailPage() {
         <GroupCalendar />
       </GroupDetailContainer>
       <AdditionalBox>
-          <ProgressContainer>
-            <ProgressTitle>
-              <IconContainer>
-              🥤텀블러
-              </IconContainer>
-              <ProgressBar>
-                <FilledProgressBar width={tumblerWidth} />
-              </ProgressBar>
-              <ProgressValue>{tumblerUsage}</ProgressValue>
-            </ProgressTitle>
-            <ProgressTitle>
-              <IconContainer>
-              🫙다회용기
-              </IconContainer>
-              <ProgressBar>
-                <FilledProgressBar width={containerWidth} />
-              </ProgressBar>
-              <ProgressValue>{containerUsage}</ProgressValue>
-            </ProgressTitle>
-          </ProgressContainer>
-          <EarthBox>
-            <LogoImage>
-              <img src="/images/commons/logo.png" alt="사랑해 지구야 로고" />
-            </LogoImage>
-            <StatusMessage>
-              <SpeechBubble>
-                <SpeechText>Good!</SpeechText>
-                <Desc>3학년 1반 그룹의 총 텀블러 사용 횟수는 {tumblerUsage}회,</Desc>
-                <Desc>다회용기 사용 횟수는 {containerUsage}회야!</Desc>
-                <SpeechHighlight>우리는 ⭐️{totalUsage}회⭐️ 지구를 지켰어!</SpeechHighlight>
-              </SpeechBubble>
-            </StatusMessage>
-          </EarthBox>
-        </AdditionalBox>
+        <ProgressContainer>
+          <ProgressTitle>
+            <IconContainer>🥤텀블러</IconContainer>
+            <ProgressBar>
+              <FilledProgressBar width={tumblerWidth} />
+            </ProgressBar>
+            <ProgressValue>{tumblerUsage}</ProgressValue>
+          </ProgressTitle>
+          <ProgressTitle>
+            <IconContainer>🫙다회용기</IconContainer>
+            <ProgressBar>
+              <FilledProgressBar width={containerWidth} />
+            </ProgressBar>
+            <ProgressValue>{containerUsage}</ProgressValue>
+          </ProgressTitle>
+        </ProgressContainer>
+        <EarthBox>
+          <LogoImage>
+            <img src="/images/commons/logo.png" alt="사랑해 지구야 로고" />
+          </LogoImage>
+          <StatusMessage>
+            <SpeechBubble>
+              <SpeechText>Good!</SpeechText>
+              <Desc>3학년 1반 그룹의 총 텀블러 사용 횟수는 {tumblerUsage}회,</Desc>
+              <Desc>다회용기 사용 횟수는 {containerUsage}회야!</Desc>
+              <SpeechHighlight>우리는 ⭐️{totalUsage}회⭐️ 지구를 지켰어!</SpeechHighlight>
+            </SpeechBubble>
+          </StatusMessage>
+        </EarthBox>
+      </AdditionalBox>
     </GroupDetailWrap>
   );
 }
@@ -288,7 +284,7 @@ const AdditionalBox = styled.div`
   gap: 4rem;
   margin-bottom: 4rem;
   margin-top: 10rem;
-  justify-content:center;
+  justify-content: center;
   justify-content: space-around;
 `;
 
@@ -320,7 +316,7 @@ const ProgressBar = styled.div`
 `;
 
 const FilledProgressBar = styled.div`
-  width: ${(props) => props.width}%;
+  width: ${props => props.width}%;
   height: 100%;
   background-color: #7ed321;
   border-radius: 0.6rem;
@@ -332,7 +328,7 @@ const ProgressValue = styled.span`
   color: #111;
 `;
 const EarthBox = styled.div`
-  display:flex;
+  display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
@@ -349,13 +345,13 @@ const StatusMessage = styled.div`
 
 const SpeechBubble = styled.div`
   position: relative;
-  background-color: #ffffff;;
+  background-color: #ffffff;
   border-radius: 2rem;
   padding: 3rem;
   margin-left: 7rem;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 1.4rem;
     left: -2rem;
@@ -369,20 +365,20 @@ const SpeechText = styled.p`
   font-size: 4rem;
   font-weight: bold;
   margin-bottom: 1rem;
-  color: #98AF47;
-  font-family: "Comic Sans MS", cursive;
+  color: #98af47;
+  font-family: 'Comic Sans MS', cursive;
 `;
 
 const Desc = styled.p`
-  font-size:1.7rem;
-  font-family: "Comic Sans MS", cursive;
+  font-size: 1.7rem;
+  font-family: 'Comic Sans MS', cursive;
 `;
 
 const SpeechHighlight = styled.h1`
   font-size: 2.2rem;
   font-weight: 500;
   margin-top: 1rem;
-  font-family: "Comic Sans MS", cursive;
+  font-family: 'Comic Sans MS', cursive;
 `;
 
 const LogoImage = styled.div`
@@ -392,6 +388,6 @@ const LogoImage = styled.div`
 
   img {
     margin-top: -5rem;
-    width: 300px; 
+    width: 300px;
   }
 `;
