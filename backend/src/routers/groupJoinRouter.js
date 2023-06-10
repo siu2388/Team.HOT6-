@@ -49,12 +49,20 @@ groupJoinRouter.get('/mygroups/:groupId/waiting', async (req, res) => {
   return;
 });
 
-//이거 필요가 없는듯
-groupJoinRouter.patch('/mygroups/:loginedId', async (req, res) => {
-  const loginedId = req.params.loginedId;
-  const result = await groupJoinService.setJoinedGroup({ loginedId });
+/// 유저 가입 대기 -> 승인으로 관리자 승인에 의한 상태 변경 - 관리자용
+groupJoinRouter.put('/mygroups/:groupId/:userId/approval', async (req, res) => {
+  const groupId = req.params.groupId;
+  const userId = req.params.userId;
+
+  const result = await groupJoinService.setJoinedGroup({ groupId , userId});
   console.log('result:', result);
-  res.status(200).json({ result, message: '가입승인' });
+
+  if (result) {
+    res.status(200).json({ result, message: '가입승인' });
+  }
+  else {
+    res.status(400).json({message: '대기 중인 대기자를 찾을 수 없습니다.'});
+  }
   return;
 });
 

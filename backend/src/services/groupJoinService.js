@@ -35,12 +35,18 @@ class groupJoinService {
     return waitingList;
   }
 
+    // 유저 가입 대기 -> 승인으로 관리자 승인에 의한 상태 변경
+    static async setJoinedGroup({ groupId, userId }) {
+      const approvalList = await GroupJoin.update({ groupId, userId });
+      return approvalList;
+    }
+  
 
   // 이거 잘못된게. 승인으로 변경해주는 건 관리자만 할 수 있음
   // 유저 가입 대기 -> 승인으로 관리자 승인에 의한 상태 변경
-  // static async setJoinedGroup({ loginedId }) {
-  //   const updatedGroup = await GroupJoin.update({ loginedId });
-  //   return updatedGroup;
+  // static async setJoinedGroup({ groupId }) {
+  //   const approvalList = await GroupJoin.update({ groupId });
+  //   return approvalList;
   // }
 
   // 유저의 그룹 탈퇴 - 완
