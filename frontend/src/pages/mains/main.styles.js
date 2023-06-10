@@ -47,7 +47,7 @@ export const MentBox = styled.div`
   align-items: center;
   gap: 5rem;
   & > img {
-    width: 22rem;
+    width: 30rem;
     animation: ${rotate} 3s linear infinite alternate;
     @media ${res.mobile} {
       display: none;

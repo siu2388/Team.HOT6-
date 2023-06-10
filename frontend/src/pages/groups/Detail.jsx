@@ -6,11 +6,13 @@ import GroupCalendar from '../../components/groups/details/Calendar';
 import { useParams } from 'react-router-dom';
 import * as API from '../../api/index';
 import { res } from '../../styles/responsive';
+import Modal from '../../components/commons/modal/Modal';
 
 export default function GroupDetailPage() {
   const [groupData, setGroupData] = useState([]);
 
   const groupId = useParams().id;
+
 
   useEffect(() => {
     const getGroupData = async () => {
@@ -25,13 +27,13 @@ export default function GroupDetailPage() {
   const handleGroupJoin = async () => {
     try {
       await API.post(`/groups/${groupId}/join`);
-      alert('성공');
+      
+
     } catch (err) {
-      alert(err);
+      console.log(err);
     }
   };
-
-  // Calculate the width of the progress bars
+  
   const tumblerUsage = 81;
   const tumblerTotal = 1000;
   const tumblerWidth = (tumblerUsage / tumblerTotal) * 100;
@@ -69,14 +71,18 @@ export default function GroupDetailPage() {
                 </UserBox>
                 <GroupDescription>내용이 들어갑니다... 내용이 들어갑니다......</GroupDescription>
               </div>
-              <Button
-                style={{ width: '180px', height: '40px', fontSize: '2.2rem' }}
-                variant="contained"
-                color="success"
-                onClick={handleGroupJoin}
-              >
-                그룹신청
+              <div>
+ 
+                <Modal/>
+                <Button
+                  style={{ width: '180px', height: '40px', fontSize: '2.2rem' }}
+                  variant="contained"
+                  color="success"
+                  onClick={handleGroupJoin}
+                >
+                  그룹신청
               </Button>
+              </div>
             </DetailInfo>
           </DetailInfoBox>
           <GroupMemberBox>
@@ -123,7 +129,7 @@ export default function GroupDetailPage() {
           </ProgressContainer>
           <EarthBox>
             <LogoImage>
-              <img src="/images/commons/logo.png" alt="사랑해 지구야 로고" />
+              <img src="/images/commons/coinearth.png" alt="사랑해 지구야 로고" />
             </LogoImage>
             <StatusMessage>
               <SpeechBubble>
@@ -287,7 +293,7 @@ const AdditionalBox = styled.div`
   align-items: center;
   gap: 4rem;
   margin-bottom: 4rem;
-  margin-top: 10rem;
+  margin-top: 20rem;
   justify-content:center;
   justify-content: space-around;
 `;
@@ -391,7 +397,7 @@ const LogoImage = styled.div`
   align-items: center;
 
   img {
-    margin-top: -5rem;
+    margin-top: -1rem;
     width: 300px; 
   }
 `;
