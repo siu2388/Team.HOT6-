@@ -19,8 +19,8 @@ class Group {
   }
   //그룹 상세조회
   static async findBygroupId(id) {
-    const groupOwner = await UserModel.findOwnerById()
-    const mygroup = await GroupModel.findOne({ id }).populate('groupOwnerInfo');
+    //const groupOwner = await UserModel.findOwnerById()
+    const mygroup = await GroupModel.findOne({ id }).populate('groupOwnerId');
     console.log('그룹상세',mygroup);
     return mygroup;
   }

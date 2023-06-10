@@ -23,6 +23,7 @@ class groupService {
       members,
       thumbnail,
     };
+    console.log('11122333',newGroup.groupOwnerId);
     const createdGroup = await Group.create({ newGroup });
     return createdGroup;
   }

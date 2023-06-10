@@ -7,7 +7,8 @@ const GroupSchema = new Schema(
       required: true,
     },
     groupOwnerId: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'User',
       required: true,
     },
     title: {
@@ -22,13 +23,6 @@ const GroupSchema = new Schema(
       type: Number,
       required: true,
     },
-    groupOwnerInfo: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: false,
-      },
-    ],
     thumbnail: { type: String },
   },
   { strictPopulate: false },
