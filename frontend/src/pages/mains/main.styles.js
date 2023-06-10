@@ -5,7 +5,7 @@ export const MainWrap01 = styled.div`
   width: 100%;
   height: 100vh;
   background: url('/images/main/main01.png');
-  padding-top: 9.7rem;
+  padding-top: 15.7rem;
   overflow: hidden;
   position: relative;
 
@@ -46,6 +46,7 @@ export const MentBox = styled.div`
   display: flex;
   align-items: center;
   gap: 5rem;
+  margin-right:3rem;
   & > img {
     width: 30rem;
     animation: ${rotate} 3s linear infinite alternate;

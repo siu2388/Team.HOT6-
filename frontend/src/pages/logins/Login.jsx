@@ -69,10 +69,14 @@ export default function LoginPage() {
   return (
     <LoginWrap>
       <LoginContainer>
-        <LoginLogoBox>
-        <img src="/images/commons/textlogo.png" alt="사랑해 지구야 로고" />
-        <img src="/images/commons/mainearth.png" alt="사랑해 지구야 로고" />
-        </LoginLogoBox>
+        <LoginLogoboxes>
+          <LoginLogoimgBox>
+            <img src="/images/commons/textlogo.png" alt="사랑해 지구야 로고" />
+          </LoginLogoimgBox>
+          <LoginLogoBox>
+            <img src="/images/commons/mainearth.png" alt="사랑해 지구야 로고" />
+          </LoginLogoBox>
+        </LoginLogoboxes>
         <LoginForm>
           <InputBox>
             <TextField
@@ -120,7 +124,6 @@ export default function LoginPage() {
     </LoginWrap>
   );
 }
-
 const LoginWrap = styled.div`
   width: 100%;
   height: 100vh;
@@ -136,17 +139,40 @@ const LoginContainer = styled.div`
   margin: 0 auto;
 `;
 
+const LoginLogoboxes = styled.div`
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  @media (max-width: 767px) {
+    flex-direction:column;
+  }
+`;
 const LoginLogoBox = styled.div`
-  width: 45%;
-  height: 16vh;
+  width: 23rem;
+  height: auto;
   margin-bottom: 3rem;
-  margin-left:11rem;
   display:flex;
   gap:2rem;
   justify-content:center;
   flex-direction:row;
   img {
     width: 100%;
+  }
+`;
+
+const LoginLogoimgBox = styled.div`
+  width: 23rem;
+  height: 13rem;
+  display:flex;
+  gap:2rem;
+  margin-right:2rem;
+  justify-content:center;
+  flex-direction:row;
+  img {
+    width: 100%;
+  }
+  @media (max-width: 767px) {
+    height:16rem;
   }
 `;
 

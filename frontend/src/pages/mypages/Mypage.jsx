@@ -7,6 +7,7 @@ import { userInfoState } from '../../stores';
 import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { ROUTE } from '../../constants/routes/routeData';
+import { res } from '../../styles/responsive';
 export default function Mypage() {
   const [userInfo] = useRecoilState(userInfoState);
 
@@ -78,13 +79,13 @@ export default function Mypage() {
                   <GroupCreationText>생성일</GroupCreationText>
                   <GroupCreationDate>2020.01.01</GroupCreationDate>
                 </GroupCreation>
+              </GroupDetails>
+              </GroupInfo>
                 <GroupButton>
                   <GroupLeaveButton>그룹탈퇴</GroupLeaveButton>
                   <GroupManageButton onClick={openManageModal}>그룹관리</GroupManageButton>
                   <GroupMoveButton>이동</GroupMoveButton>
                 </GroupButton>
-              </GroupDetails>
-            </GroupInfo>
           </LargeBox>
         )}
         {activeMenuItem === '그룹관리' && <GroupManagement></GroupManagement>}
@@ -111,7 +112,7 @@ const Container = styled.div`
 const GroupMembers = styled.div`
   margin-top: 13rem;
   margin-bottom: 4rem;
-  width: 20%;
+  width: 30rem;
   height: 35rem;
   background-color: #fff;
   border-radius: 0.8rem;
@@ -129,6 +130,12 @@ const MenuContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  @media ${res.tablet} {
+    width: 90%;
+  }
+  @media ${res.mobile} {
+    flex-direction: column;
+    gap: 2rem;
 `;
 const Card = styled.div`
   width: 52rem;
@@ -174,7 +181,7 @@ const MenuItem = styled.li`
 `;
 
 const LargeBox = styled.div`
-  width: 90%;
+  width: 85rem;
   height: 30rem;
   background-color: #ffff;
   border: 1px solid #d9d9d9;
@@ -186,11 +193,30 @@ const LargeBox = styled.div`
   margin-top: 3rem;
   position: relative;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  
+  @media ${res.tablet} {
+    justify-content:center;
+    width:75rem;
+  }
+  @media ${res.mobile} {
+    flex-direction: column;
+    width:65rem;
+    gap: 2rem;
+  }
 `;
 
 const GroupInfo = styled.div`
   display: flex;
   align-items: center;
+  @media ${res.tablet} {
+    justify-content:left;
+    width:75rem;
+  }
+  @media ${res.mobile} {
+    width:65rem;
+    gap: 2rem;
+    justify-content: left;
+  }
 `;
 
 const GroupImage = styled.img`
@@ -199,6 +225,7 @@ const GroupImage = styled.img`
   margin-left: 3rem;
   margin-right: 3rem;
   margin-top: -1rem;
+  
 `;
 
 const GroupDetails = styled.div`
