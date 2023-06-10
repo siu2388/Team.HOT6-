@@ -8,11 +8,11 @@ const imgupload = upload.single('proofImage');
 
 activityRouter.post('/activities', loginRequired, imgupload, async (req, res, next) => {
   try {
-    const loginedId = req.currentUserId;
+    const userId = req.currentUserId;
     const { groupId, state, name, usedDate, category, proofImg } = req.body;
 
     const newActivity = await activityService.addActivity({
-      loginedId,
+      userId,
       groupId,
       state,
       name,
