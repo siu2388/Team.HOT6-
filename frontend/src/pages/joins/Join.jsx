@@ -9,7 +9,9 @@ import Postcode from '../../components/commons/DaumPostCode';
 import { useRecoilState } from 'recoil';
 import {
   imgFileState,
+  isErrorModalState,
   isPostcodeModalState,
+  isSuccessModalState,
   postcodeAddressState,
   updateState,
   userInfoState,
@@ -23,6 +25,8 @@ export default function JoinPage({ page }) {
   const [imgFile] = useRecoilState(imgFileState);
   const [userInfo] = useRecoilState(userInfoState);
   const [, setUpdate] = useRecoilState(updateState);
+  const [, setIsScucessModal] = useRecoilState(isSuccessModalState);
+  const [, setIsErrorModal] = useRecoilState(isErrorModalState);
 
   const navigate = useNavigate();
 
@@ -120,38 +124,38 @@ export default function JoinPage({ page }) {
 
     try {
       if (page === 'join') {
-        const response = await axios.post('http://localhost:5001/users', formData, {
+        await axios.post('http://localhost:5001/users', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
 
-        navigate('/');
+        setIsScucessModal({
+          state: true,
+          message: '회원가입에 성공하였습니다.',
+        });
 
-        if (!response.ok) {
-          throw new Error('User registration failed.');
-        }
+        navigate(ROUTE.HOME.link);
       } else {
-        const response = await axios.put(
-          `http://localhost:5001/users/${userInfo?.user?._id}`,
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              Authorization: `Bearer ${sessionStorage.getItem('userToken')}`,
-            },
+        await axios.put(`http://localhost:5001/users/${userInfo?.user?._id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${sessionStorage.getItem('userToken')}`,
           },
-        );
+        });
 
         setUpdate(prev => prev + 1);
+        setIsScucessModal({
+          state: true,
+          message: '내 정보 수정이 완료 되었습니다.',
+        });
         navigate(ROUTE.PAGE_GROUP.link);
-
-        if (!response.ok) {
-          throw new Error('정보 수정 실패');
-        }
       }
     } catch (error) {
-      console.log(error);
+      setIsErrorModal({
+        state: true,
+        message: error.message,
+      });
     }
   };
 

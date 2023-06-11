@@ -14,11 +14,12 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Link, useNavigate } from 'react-router-dom';
 import * as API from '../../api/index';
 import { useRecoilState } from 'recoil';
-import { userTokenState } from '../../stores';
+import { isErrorModalState, userTokenState } from '../../stores';
+import { ROUTE } from '../../constants/routes/routeData';
 
 export default function LoginPage() {
   const [, setUserToken] = useRecoilState(userTokenState);
-
+  const [, setIsErrorModal] = useRecoilState(isErrorModalState);
   const [showPassword, setShowPassword] = useState(false);
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
@@ -35,8 +36,6 @@ export default function LoginPage() {
     if (name === 'password') {
       setPassword(value);
     }
-
-    console.log(userId, password);
   };
 
   const handleClickShowPassword = () => setShowPassword(show => !show);
@@ -59,10 +58,12 @@ export default function LoginPage() {
       const userToken = result.data.token;
       sessionStorage.setItem('userToken', userToken);
       setUserToken(userToken);
-      alert('로그인 성공');
-      navigate('/');
+      navigate(ROUTE.HOME.link);
     } catch (err) {
-      console.log(err);
+      setIsErrorModal({
+        state: true,
+        message: err.response.data,
+      });
     }
   };
 
@@ -140,21 +141,21 @@ const LoginContainer = styled.div`
 `;
 
 const LoginLogoboxes = styled.div`
-  display:flex;
-  flex-direction:row;
-  align-items:center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   @media (max-width: 767px) {
-    flex-direction:column;
+    flex-direction: column;
   }
 `;
 const LoginLogoBox = styled.div`
   width: 23rem;
   height: auto;
   margin-bottom: 3rem;
-  display:flex;
-  gap:2rem;
-  justify-content:center;
-  flex-direction:row;
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-direction: row;
   img {
     width: 100%;
   }
@@ -163,16 +164,16 @@ const LoginLogoBox = styled.div`
 const LoginLogoimgBox = styled.div`
   width: 23rem;
   height: 13rem;
-  display:flex;
-  gap:2rem;
-  margin-right:2rem;
-  justify-content:center;
-  flex-direction:row;
+  display: flex;
+  gap: 2rem;
+  margin-right: 2rem;
+  justify-content: center;
+  flex-direction: row;
   img {
     width: 100%;
   }
   @media (max-width: 767px) {
-    height:16rem;
+    height: 16rem;
   }
 `;
 
