@@ -5,7 +5,7 @@ import { loginRequired } from '../middlewares/loginRequired.js';
 import moment from 'moment';
 
 const activityRouter = Router();
-const imgupload = upload.single('proofImage');
+const imgupload = upload.single('proofImg');
 
 // 활동 등록
 activityRouter.post('/activities', loginRequired, imgupload, async (req, res, next) => {

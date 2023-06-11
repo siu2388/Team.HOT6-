@@ -35,15 +35,13 @@ groupRouter.post('/groups', loginRequired, imgupload, async (req, res, next) => 
 //그룹 목록 조회 - 완
 groupRouter.get('/groups', async (req, res) => {
   const result = await groupService.getGroups();
-
   res.status(200).json({ result });
   return;
 });
 
-//그룹 상세 조회
+//그룹 상세 조회 - 완
 groupRouter.get('/groups/:groupId', async (req, res) => {
   const groupId = req.params.groupId;
-
   const myGroup = await groupService.getMyGroup(groupId);
   console.log('그룹상세조회', myGroup);
   res.status(200).json({ myGroup });
@@ -51,14 +49,14 @@ groupRouter.get('/groups/:groupId', async (req, res) => {
 });
 
 //그룹 가입 대기자 조회
-groupRouter.get('/groups/:groupId/waiting', async (req, res) => {
-  const groupId = req.params.groupId;
-  console.log('gorupId', groupId);
-  const waitingList = await groupService.getWaiting(groupId);
-  console.log('그룹가입 대기자조회', waitingList);
-  res.status(200).json({ waitingList });
-  return;
-});
+// groupRouter.get('/groups/:groupId/waiting', async (req, res) => {
+//   const groupId = req.params.groupId;
+//   console.log('gorupId', groupId);
+//   const waitingList = await groupService.getWaiting(groupId);
+//   console.log('그룹가입 대기자조회', waitingList);
+//   res.status(200).json({ waitingList });
+//   return;
+// });
 
 // 그룹 가입 승인 patch
 groupRouter.patch('/groups/:groupId/accept', async (req, res) => {
