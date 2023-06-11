@@ -2,12 +2,13 @@ import { Router } from 'express';
 import { groupJoinService } from '../services/groupJoinService.js';
 import { upload } from '../middlewares/imageUploadMiddleware.js';
 import { loginRequired } from '../middlewares/loginRequired.js';
+import { userAuthService } from '../services/userService.js';
 
 const groupJoinRouter = Router();
 
 const imgupload = upload.single('image');
 
-//유저의 그룹 가입 - userId 뭘로 할지 아직 미정
+//유저의 그룹 가입 -
 groupJoinRouter.post('/mygroups/:groupId', loginRequired, async (req, res, next) => {
   try {
     const userId = req.currentUserId;
@@ -16,20 +17,25 @@ groupJoinRouter.post('/mygroups/:groupId', loginRequired, async (req, res, next)
     console.log('req.body', req.body);
     const group = await groupJoinService.getUserGroup({ userId });
 
-    //다른 그룹 종복 가입 방지
+    //다른 그룹 중복 가입 방지
     if (group) {
       res.status(401).json({ message: '가입한 그룹이 존재합니다.' });
       return;
     }
 
+    //유저스키마에 groupId 정보 업뎃
+    const toUpdate = {groupId};
+    const updatedUser = await userAuthService.setUserGroup({userId, toUpdate});
+    console.log('groupId업데이트 된 유저: ', updatedUser);  
     const result = await groupJoinService.groupJoin({ groupId, userId, state });
 
-    res.json({ result, message: '등록 성공' });
+    res.json({ result, updatedUser, message: '등록 성공' });
     return;
   } catch (err) {
     next(err);
   }
 });
+
 //유저가 가입한 그룹 조회
 groupJoinRouter.get('/mygroups/:userId', async (req, res) => {
   const result = await groupJoinService.getMyGroup();
@@ -54,14 +60,13 @@ groupJoinRouter.put('/mygroups/:groupId/:userId/approval', async (req, res) => {
   const groupId = req.params.groupId;
   const userId = req.params.userId;
 
-  const result = await groupJoinService.setJoinedGroup({ groupId , userId});
+  const result = await groupJoinService.setJoinedGroup({ groupId, userId });
   console.log('result:', result);
 
   if (result) {
     res.status(200).json({ result, message: '가입승인' });
-  }
-  else {
-    res.status(400).json({message: '대기 중인 대기자를 찾을 수 없습니다.'});
+  } else {
+    res.status(400).json({ message: '대기 중인 대기자를 찾을 수 없습니다.' });
   }
   return;
 });

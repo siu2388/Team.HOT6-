@@ -6,7 +6,6 @@ class groupService {
     groupOwnerId,
     title,
     totalNumOfMembers,
-    members,
     description,
     thumbnail,
   }) {
@@ -15,7 +14,6 @@ class groupService {
       title,
       totalNumOfMembers,
       description,
-      members,
       thumbnail,
     };
     const createdGroup = await Group.create({ newGroup });

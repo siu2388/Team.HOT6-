@@ -6,11 +6,12 @@ class User {
     return createdNewUser;
   }
 
+  //유저의 그룹 가입시
   static async findByUserId({ userId }) {
-    const user = await UserModel.findOne({ userId });
+    const user = await UserModel.findById({ _id: userId });
     return user;
   }
-  //유저의 그룹 가입
+
   static async findById({ loginedId }) {
     const user = await UserModel.findById(loginedId);
     return user;
@@ -29,6 +30,15 @@ class User {
     const updatedUser = await UserModel.findOneAndUpdate(filter, update, option);
     return updatedUser;
   }
-}
 
+  //유저가 그룹 가입 시 groupId 업데이트
+  static async updateGroupId({ userId, fieldToUpdate, newValue }) {
+    const filter = { _id: userId };
+    const update = { [fieldToUpdate]: newValue };
+    const option = { returnOriginal: false };
+
+    const updatedUser = await UserModel.findOneAndUpdate(filter, update, option);
+    return updatedUser;
+  }
+}
 export { User };

@@ -15,7 +15,6 @@ userAuthRouter.post('/users', imgUpload, async (req, res, next) => {
     }
 
     // req (request) 에서 데이터 가져오기
-
     const { userId, password, name, nickname, phone, address, addressDetail, profileImg } =
       req.body;
 
