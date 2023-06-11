@@ -12,7 +12,12 @@ import styled from 'styled-components';
 import { getDates } from '../../../commons/utils/getDate';
 import FileUpload from '../../commons/FileUpload';
 import { res } from '../../../styles/responsive';
-import { imgFileState, userInfoState } from '../../../stores';
+import {
+  imgFileState,
+  isErrorModalState,
+  isSuccessModalState,
+  userInfoState,
+} from '../../../stores';
 import { useRecoilState } from 'recoil';
 import { useParams } from 'react-router-dom';
 import * as API from '../../../api/index';
@@ -21,6 +26,8 @@ export default function AddActiveModal({ onClickToggleModal, selectedDate }) {
   const [activity, setActivity] = useState('');
   const [userInfo] = useRecoilState(userInfoState);
   const [imgFile] = useRecoilState(imgFileState);
+  const [, setIsScucessModal] = useRecoilState(isSuccessModalState);
+  const [, setIsErrorModal] = useRecoilState(isErrorModalState);
 
   const groupId = useParams().id;
 
@@ -40,12 +47,17 @@ export default function AddActiveModal({ onClickToggleModal, selectedDate }) {
     formData.append('proofImg', imgFile);
 
     try {
-      const result = await API.formPost('/activities', formData);
-      console.log(result);
-      alert('성공');
+      await API.formPost('/activities', formData);
+      setIsScucessModal({
+        state: true,
+        message: '인증요청에 성공하였습니다. 인증 완료 후 포인트가 적립됩니다.',
+      });
       onClickToggleModal();
     } catch (err) {
-      console.log(err);
+      setIsErrorModal({
+        state: true,
+        message: err.response.data,
+      });
     }
   };
 

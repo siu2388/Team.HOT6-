@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import FileUpload from '../../components/commons/FileUpload';
 import { Button, Slider, TextField } from '@mui/material';
 import * as API from '../../api/index';
-import { imgFileState } from '../../stores';
+import { imgFileState, isErrorModalState, isSuccessModalState } from '../../stores';
 import { useRecoilState } from 'recoil';
 import { Link } from 'react-router-dom';
 
@@ -25,8 +25,8 @@ export default function GroupWritePage() {
   const [titleError, setTitleError] = useState(false);
   const [descriptionError, setDescriptionError] = useState(false);
   const [thumbnail] = useRecoilState(imgFileState);
-
-  console.log(groupTitle, description);
+  const [, setIsScucessModal] = useRecoilState(isSuccessModalState);
+  const [, setIsErrorModal] = useRecoilState(isErrorModalState);
 
   const onChangeSliderValue = value => {
     setSliderValue(value);
@@ -63,9 +63,15 @@ export default function GroupWritePage() {
       formData.append('thumbnail', thumbnail);
 
       await API.formPost('/groups', formData);
-      alert('성공');
+      setIsScucessModal({
+        state: true,
+        message: '그룹을 등록하였습니다.',
+      });
     } catch (err) {
-      console.log(err);
+      setIsErrorModal({
+        state: true,
+        message: err.response.data,
+      });
     }
   };
 
@@ -115,7 +121,13 @@ export default function GroupWritePage() {
             <Button
               variant="contained"
               color="success"
-              disabled={titleError === true || descriptionError === true || sliderValue === 0}
+              disabled={
+                titleError === true ||
+                groupTitle === '' ||
+                descriptionError === true ||
+                description === '' ||
+                sliderValue === 0
+              }
               onClick={onClickAddGroup}
             >
               등록
