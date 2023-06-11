@@ -33,7 +33,7 @@ export default function Header() {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 767);
+      setIsMobile(window.innerWidth <= 950);
     };
 
     window.addEventListener('resize', handleResize);
@@ -217,7 +217,7 @@ const CountBox = styled.div`
   display: flex;
   align-items: center;
   margin-left: 10px;
-  font-size: 14px;
+  font-size: 50px;
   font-weight: bold;
   color: #252525;
 `;

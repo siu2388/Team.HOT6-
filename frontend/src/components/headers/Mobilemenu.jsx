@@ -1,15 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled,{ keyframes } from 'styled-components';
 import { ROUTE } from '../../constants/routes/routeData';
 import MyProfile from '../mypages/profilebox/MyProfile';
 
 const MobileMenu = ({ userInfo }) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  useEffect(() => {
+    const handleEscKey = (event) => {
+      if (event.keyCode === 27) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleEscKey);
+
+    return () => {
+      document.removeEventListener('keydown', handleEscKey);
+    };
+  }, []);
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
+  
 
   return (
     <>
@@ -17,7 +32,9 @@ const MobileMenu = ({ userInfo }) => {
         <HamburgerIcon className={isOpen ? 'open' : ''} />
       </HamburgerButton>
       {isOpen && (
-        <MobileMenuContainer >
+        <>
+          <MobileMenuOverlay  onClick={toggleMenu} />
+        <MobileMenuContainer isOpen={isOpen}>
         <MobileMenubox>
           <CloseButton onClick={toggleMenu}>&times;</CloseButton>
           <MyProfilebox>
@@ -33,36 +50,37 @@ const MobileMenu = ({ userInfo }) => {
             <MenuLink to={'/'} onClick={toggleMenu}>Community</MenuLink>
           </MenuItem>
           <SubMenu>
-            {userInfo ? (
-              <LoginBox>
-                <SubMenuList>
-                  <SubMenuBtn btn={'stroke'}>
-                    <Link to={ROUTE.LOGIN.link}>LOGIN</Link>
-                  </SubMenuBtn>
-                </SubMenuList>
-                <SubMenuList>
-                  <SubMenuBtn>
-                    <Link to={ROUTE.JOIN.link}>JOIN</Link>
-                  </SubMenuBtn>
-                </SubMenuList>
-              </LoginBox>
-            ) : (
-              <LoginBox>
-                <SubMenuList>
-                  <SubMenuBtn btn={'stroke'}>
-                    <Link>LOGOUT</Link>
-                  </SubMenuBtn>
-                </SubMenuList>
-                <SubMenuList>
-                  <SubMenuBtn>
-                    <Link to={ROUTE.PAGE_GROUP.link}>MYPAGE</Link>
-                  </SubMenuBtn>
-                </SubMenuList>
-              </LoginBox>
-            )}
+          {userInfo ? (
+            <LoginBox>
+              <SubMenuList>
+                <SubMenuBtn btn={'stroke'}>
+                  <Link to={ROUTE.PAGE_GROUP.link}>MYPAGE</Link>
+                </SubMenuBtn>
+              </SubMenuList>
+              <SubMenuList>
+                <SubMenuBtn>
+                  <Link>LOGOUT</Link>
+                </SubMenuBtn>
+              </SubMenuList>
+            </LoginBox>
+          ) : (
+            <LoginBox>
+              <SubMenuList>
+                <SubMenuBtn btn={'stroke'}>
+                  <Link to={ROUTE.LOGIN.link}>LOGIN</Link>
+                </SubMenuBtn>
+              </SubMenuList>
+              <SubMenuList>
+                <SubMenuBtn>
+                  <Link to={ROUTE.JOIN.link}>JOIN</Link>
+                </SubMenuBtn>
+              </SubMenuList>
+            </LoginBox>
+          )}
           </SubMenu>
           </MobileMenubox>
         </MobileMenuContainer>
+        </>
       )}
     </>
   );
@@ -118,6 +136,25 @@ const HamburgerIcon = styled.div`
   }
 `;
 
+const slideInAnimation = keyframes`
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+`;
+
+const slideOutAnimation = keyframes`
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+`;
+
+
 const MobileMenuContainer = styled.div`
   position: fixed;
   top: 0;
@@ -130,11 +167,28 @@ const MobileMenuContainer = styled.div`
   z-index: 999;
   width: 50%;
   overflow-x: visible;
-  @media (max-width: 530px) {
-    width:70%;
-  };
-  
+  animation: ${({ isOpen }) => (isOpen ? slideInAnimation : slideOutAnimation)} 0.3s ease;
+
+
+  @media (max-width: 920px) {
+    width: 70%;
+  }
+
+  @media (max-width: 500px) {
+    width: 100%;
+  }
 `;
+
+const MobileMenuOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+`;
+
 
 const MobileMenubox = styled.div`
   display:flex;
@@ -218,9 +272,8 @@ const SubMenuBtn = styled.div`
   border: 0.3rem solid ${({ btn }) => (btn === 'stroke' ? '#457B3B' : '#457B3B')};
 
   &:hover {
-    background-color: ${({ btn }) => (btn === 'stroke' ? '#f2f7f5' : '#5C8E6A')}; /* 변경된 부분: 호버 시 배경색 진하게 설정 */
-    border-color: ${({ btn }) => (btn === 'stroke' ? '#5C8E6A' : '#5C8E6A')}; /* 변경된 부분: 호버 시 테두리 색상 조정 */
-  }
+    background-color: ${({ btn }) => (btn === 'stroke' ? '#f2f7f5' : '#5C8E6A')}; 
+    border-color: ${({ btn }) => (btn === 'stroke' ? '#5C8E6A' : '#5C8E6A')}; 
 
   a {
     font-size: 2rem;
