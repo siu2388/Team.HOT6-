@@ -6,7 +6,6 @@ class User {
     return createdNewUser;
   }
 
-  
   static async findByUserId({ userId }) {
     const user = await UserModel.findOne({ userId });
     return user;
@@ -31,10 +30,10 @@ class User {
     return updatedUser;
   }
 
-  //유저가 그룹 가입 시 groupId 업데이트
-  static async updateGroupId({ userId, fieldToUpdate, newValue }) {
+  //유저가 그룹 가입 시, 그룹 생성 시  groupId 업데이트
+  static async updateGroupId({ userId, groupId }) {
     const filter = { _id: userId };
-    const update = { [fieldToUpdate]: newValue };
+    const update = { $set: { groupId: groupId } };
     const option = { returnOriginal: false };
 
     const updatedUser = await UserModel.findOneAndUpdate(filter, update, option);
@@ -42,8 +41,8 @@ class User {
   }
 
   // 유저의 groupId 삭제
-  static async deleteGroupId({ groupId, userId }) {
-    const filter = { groupId, userId };
+  static async deleteGroupId({ groupId ,userId}) {
+    const filter = { groupId ,userId};
     const update = { $set: { groupId: null } };
     const option = { returnOriginal: false };
 

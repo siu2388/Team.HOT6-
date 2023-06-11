@@ -45,17 +45,9 @@ class Group {
     const updatedGroup = await GroupModel.findOneAndUpdate(filter, update, option);
     return updatedGroup;
   }
-  // static async update({ groupId, fieldToUpdate, newValue }) {
-  //   const filter = { id: groupId };
-  //   const update = { [fieldToUpdate]: newValue };
-  //   const option = { returnOriginal: false };
-
-  //   const updatedGroup = await GroupModel.findOneAndUpdate(filter, update, option);
-  //   return updatedGroup;
-  // }
-
+  //그룹장이 그룹 삭제 시 
   static async deleteById({ groupId }) {
-    const deleteResult = await GroupModel.deleteOne({ _id: new ObjectId(groupId) });
+    const deleteResult = await GroupModel.deleteOne({ _id: groupId });
     const isDataDeleted = deleteResult.deletedCount === 1;
     return isDataDeleted;
   }

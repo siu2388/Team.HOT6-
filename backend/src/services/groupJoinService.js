@@ -24,8 +24,8 @@ class groupJoinService {
     return group;
   }
   //유저가 가입한 그룹 확인 -완
-  static async getMyGroup() {
-    const group = await GroupJoin.findMyGroup();
+  static async getMyGroup({userId}) {
+    const group = await GroupJoin.findMyGroup({userId});
     return group;
   }
   // 그룹 가입 대기자 리스트 - 관리자용

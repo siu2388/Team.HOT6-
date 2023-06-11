@@ -57,7 +57,7 @@ class userAuthService {
     const secretKey = process.env.JWT_SECRET_KEY || 'jwt-secret-key';
     const token = jwt.sign({ id: user._id }, secretKey);
 
-    const { id, name, nickname, phone, address, addressDetail, profileImg } = user;
+    const { id, name, nickname, phone, address, addressDetail, groupId, profileImg } = user;
 
     const loginUser = {
       token,
@@ -69,6 +69,7 @@ class userAuthService {
       address,
       addressDetail,
       profileImg,
+      groupId,
       errorMessage: null,
     };
     return loginUser;
@@ -135,7 +136,7 @@ class userAuthService {
 
     return user;
   }
-  //유저가 그룹에 가입신청 시 groupId값 업데이트
+  // 유저가 그룹에 가입신청 시 groupId값 업데이트
   static async setUserGroup({ userId, groupId }) {
     const updated = await User.updateGroupId({ userId, groupId });
     return updated;

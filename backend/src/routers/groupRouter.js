@@ -22,7 +22,7 @@ groupRouter.post('/groups', loginRequired, imgupload, async (req, res, next) => 
       thumbnail,
     });
 
-    //유저스키마에 groupId 정보 업뎃
+    //그룹장에게 groupId 정보 업뎃
     const createdGroup = await newGroup.save();
     const userId = groupOwnerId;
     const groupId = createdGroup._id;
@@ -55,16 +55,14 @@ groupRouter.get('/groups/:groupId', async (req, res) => {
 
 
 //그룹 삭제 -완
-groupRouter.delete('/groups/:groupId', async (req, res) => {
+groupRouter.delete('/groups/:groupId/', loginRequired, async (req, res) => {
   const groupId = req.params.groupId;
-  console.log('123',groupId);
 
-  //유저스키마에 groupId 정보 삭제
-  const updatedUser = await userAuthService.deleteGroupId({ groupId });
-  console.log('groupId업데이트 된 유저: ', updatedUser);
+  // //유저스키마에 groupId 정보 삭제
+  // const updatedUser = await userAuthService.deleteGroupId({ groupId });
+  // console.log('groupId업데이트 된 유저: ', updatedUser);
 
   const result = await groupService.deleteGroup({ groupId });
-  console.log('1', result);
   res.status(200).send(result);
   return;
 });

@@ -36,7 +36,8 @@ groupJoinRouter.post('/mygroups/:groupId', loginRequired, async (req, res, next)
 
 //유저가 가입한 그룹 조회
 groupJoinRouter.get('/mygroups/:userId', async (req, res) => {
-  const result = await groupJoinService.getMyGroup();
+  const userId = req.params.userId;
+  const result = await groupJoinService.getMyGroup({userId});
   res.status(200).json({ result });
   return;
 });
