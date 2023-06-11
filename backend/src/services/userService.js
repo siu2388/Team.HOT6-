@@ -136,23 +136,14 @@ class userAuthService {
     return user;
   }
   //유저가 그룹에 가입신청 시 groupId값 업데이트
-  static async setUserGroup({ userId, toUpdate }) {
-    //유저를 찾아서
-    let user = await User.findByUserId({ userId });
-
-    if (toUpdate.groupId) {
-      const fieldToUpdate = 'groupId';
-      const newValue = toUpdate.groupId;
-      console.log('newValue', newValue);
-      await User.updateGroupId({ userId, fieldToUpdate, newValue });
-    }
-    console.log('업뎃하고,', user);
-    return user;
+  static async setUserGroup({ userId, groupId }) {
+    const updated = await User.updateGroupId({ userId, groupId });
+    return updated;
   }
 
   // 유저의 groupId값 삭제
-  static async deleteGroupId({ groupId, userId }) {
-    const deleteGroupId = await User.deleteGroupId({ groupId, userId });
+  static async deleteGroupId({ groupId }) {
+    const deleteGroupId = await User.deleteGroupId({ groupId });
     return deleteGroupId;
   }
 

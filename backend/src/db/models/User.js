@@ -6,9 +6,9 @@ class User {
     return createdNewUser;
   }
 
-  //유저의 그룹 가입시
+  
   static async findByUserId({ userId }) {
-    const user = await UserModel.findById({ _id: userId });
+    const user = await UserModel.findOne({ userId });
     return user;
   }
 

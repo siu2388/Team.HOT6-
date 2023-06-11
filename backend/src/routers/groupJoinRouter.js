@@ -15,7 +15,7 @@ groupJoinRouter.post('/mygroups/:groupId', loginRequired, async (req, res, next)
     const groupId = req.params.groupId;
     const state = '대기';
     console.log('req.body', req.body);
-    
+
     //다른 그룹 중복 가입 방지
     const group = await groupJoinService.getUserGroup({ userId });
     if (group) {
@@ -24,12 +24,9 @@ groupJoinRouter.post('/mygroups/:groupId', loginRequired, async (req, res, next)
     }
 
     //유저스키마에 groupId 정보 업뎃
-    const toUpdate = { groupId };
-    const updatedUser = await userAuthService.setUserGroup({ userId, toUpdate });
-    console.log('groupId업데이트 된 유저: ', updatedUser);
+    const updatedUser = await userAuthService.setUserGroup({ userId, groupId });
 
     const result = await groupJoinService.groupJoin({ groupId, userId, state });
-
     res.json({ result, updatedUser, message: '등록 성공' });
     return;
   } catch (err) {
@@ -40,7 +37,6 @@ groupJoinRouter.post('/mygroups/:groupId', loginRequired, async (req, res, next)
 //유저가 가입한 그룹 조회
 groupJoinRouter.get('/mygroups/:userId', async (req, res) => {
   const result = await groupJoinService.getMyGroup();
-  //console.log('내그룹조회', result);
   res.status(200).json({ result });
   return;
 });
@@ -62,7 +58,6 @@ groupJoinRouter.put('/mygroups/:groupId/:userId/approval', async (req, res) => {
   const userId = req.params.userId;
 
   const result = await groupJoinService.setJoinedGroup({ groupId, userId });
-  console.log('result:', result);
 
   if (result) {
     res.status(200).json({ result, message: '가입승인' });
@@ -78,8 +73,7 @@ groupJoinRouter.delete('/mygroups/:groupId/:userId/rejection', async (req, res) 
   const userId = req.params.userId;
 
   //유저스키마에 groupId 정보 삭제
-  const toUpdate = { groupId };
-  const updatedUser = await userAuthService.deleteGroupId({ groupId, userId });
+  const updatedUser = await userAuthService.deleteGroupId({ groupId });
   console.log('groupId업데이트 된 유저: ', updatedUser);
 
   const result = await groupJoinService.deletedGroupJoinByOwner({ groupId, userId });
