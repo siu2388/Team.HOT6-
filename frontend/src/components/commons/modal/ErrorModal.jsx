@@ -28,6 +28,7 @@ const WhiteSection = styled.div`
   padding: 10px 0;
   display: flex;
   flex-direction: row;
+  align-items: center;
 `;
 
 const LeftCircle = styled.div`
@@ -62,7 +63,8 @@ const Circle = styled.div`
 `;
 
 const Message = styled.p`
-  margin-top: 4rem;
+  max-width: 65%;
+  line-height: 1.2;
   font-size: 1.5rem;
 `;
 

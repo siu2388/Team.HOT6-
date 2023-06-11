@@ -27,9 +27,12 @@ export default function GroupDetailPage() {
   const handleGroupJoin = async () => {
     try {
       await API.post(`/mygroups/${groupId}`);
-      setIsScucessModal({ state: true, message: '그룹등록에 성공하였습니다.' });
+      setIsScucessModal({
+        state: true,
+        message: '그룹신청에 성공하였습니다. 그룹장 수락 후 그룹 활동이 활성화 됩니다.',
+      });
     } catch (err) {
-      setIsErrorModal({ state: true, message: err.message });
+      setIsErrorModal({ state: true, message: err.response.data.message });
     }
   };
 
