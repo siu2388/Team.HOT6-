@@ -37,10 +37,10 @@ class GroupJoin {
     const groupAllInfo = await GroupJoinModel.find({});
     return groupAllInfo;
   }
-// 유저 가입 대기 -> 승인으로 관리자 승인에 의한 상태 변경 - 관리자용
-  static async update({ groupId,userId }) {
-    const filter = { groupId , userId, state:'대기'};
-    const update = { $set: {state: '승인'} };
+  // 유저 가입 대기 -> 승인으로 관리자 승인에 의한 상태 변경 - 관리자용
+  static async update({ groupId, userId }) {
+    const filter = { groupId, userId, state: '대기' };
+    const update = { $set: { state: '승인' } };
     const option = { returnOriginal: false };
 
     const updatedGroup = await GroupJoinModel.findOneAndUpdate(filter, update, option);
