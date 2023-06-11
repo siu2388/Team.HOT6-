@@ -135,18 +135,25 @@ class userAuthService {
 
     return user;
   }
-//유저가 그룹에 가입신청 시 groupId값 업데이트 
+  //유저가 그룹에 가입신청 시 groupId값 업데이트
   static async setUserGroup({ userId, toUpdate }) {
-    //유저를 찾아서 
+    //유저를 찾아서
     let user = await User.findByUserId({ userId });
 
     if (toUpdate.groupId) {
       const fieldToUpdate = 'groupId';
       const newValue = toUpdate.groupId;
+      console.log('newValue', newValue);
       await User.updateGroupId({ userId, fieldToUpdate, newValue });
-      }
-      console.log('업뎃하고,', user);
-      return user;
+    }
+    console.log('업뎃하고,', user);
+    return user;
+  }
+
+  // 유저의 groupId값 삭제
+  static async deleteGroupId({ groupId, userId }) {
+    const deleteGroupId = await User.deleteGroupId({ groupId, userId });
+    return deleteGroupId;
   }
 
   static async getUserActivityCount(userId, category) {
@@ -162,26 +169,25 @@ class userAuthService {
   static async getUserInfo({ loginedId }) {
     try {
       const user = await User.findById({ loginedId });
-  
+
       if (!user) {
         const errorMessage =
           'User 조회: 해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
         return { errorMessage };
       }
-  
+
       const tumblerCount = await userAuthService.getUserActivityCount(loginedId, 'tumbler');
       const multipleContainersCount = await userAuthService.getUserActivityCount(
         loginedId,
         'multipleContainers',
       );
-  
-      const totalCount = tumblerCount + multipleContainersCount;
-  
-      return { user, tumblerCount, multipleContainersCount, totalCount };
 
-    } catch(error) {
-    throw new Error('Failed to get user info.');
+      const totalCount = tumblerCount + multipleContainersCount;
+
+      return { user, tumblerCount, multipleContainersCount, totalCount };
+    } catch (error) {
+      throw new Error('Failed to get user info.');
+    }
   }
-}
 }
 export { userAuthService };

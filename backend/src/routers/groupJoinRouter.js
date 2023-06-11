@@ -15,18 +15,19 @@ groupJoinRouter.post('/mygroups/:groupId', loginRequired, async (req, res, next)
     const groupId = req.params.groupId;
     const state = '대기';
     console.log('req.body', req.body);
-    const group = await groupJoinService.getUserGroup({ userId });
-
+    
     //다른 그룹 중복 가입 방지
+    const group = await groupJoinService.getUserGroup({ userId });
     if (group) {
       res.status(401).json({ message: '가입한 그룹이 존재합니다.' });
       return;
     }
 
     //유저스키마에 groupId 정보 업뎃
-    const toUpdate = {groupId};
-    const updatedUser = await userAuthService.setUserGroup({userId, toUpdate});
-    console.log('groupId업데이트 된 유저: ', updatedUser);  
+    const toUpdate = { groupId };
+    const updatedUser = await userAuthService.setUserGroup({ userId, toUpdate });
+    console.log('groupId업데이트 된 유저: ', updatedUser);
+
     const result = await groupJoinService.groupJoin({ groupId, userId, state });
 
     res.json({ result, updatedUser, message: '등록 성공' });
@@ -71,13 +72,40 @@ groupJoinRouter.put('/mygroups/:groupId/:userId/approval', async (req, res) => {
   return;
 });
 
+//유저 가입 대기 -> 거절로 관리자 거절에 의한 상태 변경
+groupJoinRouter.delete('/mygroups/:groupId/:userId/rejection', async (req, res) => {
+  const groupId = req.params.groupId;
+  const userId = req.params.userId;
+
+  //유저스키마에 groupId 정보 삭제
+  const toUpdate = { groupId };
+  const updatedUser = await userAuthService.deleteGroupId({ groupId, userId });
+  console.log('groupId업데이트 된 유저: ', updatedUser);
+
+  const result = await groupJoinService.deletedGroupJoinByOwner({ groupId, userId });
+  console.log('result:', result);
+
+  if (result) {
+    res.status(200).json({ result, updatedUser });
+  } else {
+    res.status(400).json({ message: '대기 중인 대기자를 찾을 수 없습니다.' });
+  }
+  return;
+});
+
 // 유저가 가입한 그룹 탈퇴 - 완
-groupJoinRouter.delete('/mygroups/:userId', async (req, res) => {
-  //const userId = req.currentUserId;
-  //console.log(userId);
+groupJoinRouter.delete('/mygroups/:groupId/:userId', async (req, res) => {
+  const groupId = req.params.groupId;
+  const userId = req.currentUserId;
+
+  //유저스키마에 groupId 정보 삭제
+  const toUpdate = { groupId };
+  const updatedUser = await userAuthService.deleteGroupId({ groupId, userId });
+  console.log('groupId업데이트 된 유저: ', updatedUser);
+
   const result = await groupJoinService.deleteMyGroup({ userId });
   console.log('1', result);
-  res.status(200).send(result);
+  res.status(200).json({ result, updatedUser });
   return;
 });
 

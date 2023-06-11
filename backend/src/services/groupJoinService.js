@@ -23,31 +23,35 @@ class groupJoinService {
     const group = await GroupJoin.findByUserId({ userId });
     return group;
   }
-//유저가 가입한 그룹 확인 -완
+  //유저가 가입한 그룹 확인 -완
   static async getMyGroup() {
     const group = await GroupJoin.findMyGroup();
     return group;
   }
-// 그룹 가입 대기자 리스트 - 관리자용
-  static async getWaitingList({groupId}) {
-    const waitingList = await GroupJoin.findByGroupId({groupId}); 
-    console.log('되냐',waitingList);
+  // 그룹 가입 대기자 리스트 - 관리자용
+  static async getWaitingList({ groupId }) {
+    const waitingList = await GroupJoin.findByGroupId({ groupId });
+    console.log('되냐', waitingList);
     return waitingList;
   }
 
-    // 유저 가입 대기 -> 승인으로 관리자 승인에 의한 상태 변경
-    static async setJoinedGroup({ groupId, userId }) {
-      const approvalList = await GroupJoin.update({ groupId, userId });
-      return approvalList;
-    }
-  
-
-  // 이거 잘못된게. 승인으로 변경해주는 건 관리자만 할 수 있음
   // 유저 가입 대기 -> 승인으로 관리자 승인에 의한 상태 변경
-  // static async setJoinedGroup({ groupId }) {
-  //   const approvalList = await GroupJoin.update({ groupId });
-  //   return approvalList;
-  // }
+  static async setJoinedGroup({ groupId, userId }) {
+    const approvalList = await GroupJoin.update({ groupId, userId });
+    return approvalList;
+  }
+
+  //유저 가입 대기 -> 거절로 관리자 거절에 의한 삭제
+  static async deletedGroupJoinByOwner({ groupId, userId }) {
+    const isDataDeleted = await GroupJoin.deleteGroupJoinByIds({ groupId, userId });
+
+    if (!isDataDeleted) {
+      const errorMessage =
+        '그룹거절오류: 해당 id를 가진 사용자가 없습니다. 아이디와 가입상태를 다시 한 번 확인해 주세요.';
+      return { errorMessage };
+    }
+    return { status: '가입거절완료' };
+  }
 
   // 유저의 그룹 탈퇴 - 완
   static async deleteMyGroup({ userId }) {

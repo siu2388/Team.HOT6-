@@ -40,5 +40,18 @@ class User {
     const updatedUser = await UserModel.findOneAndUpdate(filter, update, option);
     return updatedUser;
   }
+
+  // 유저의 groupId 삭제
+  static async deleteGroupId({ groupId, userId }) {
+    const filter = { groupId, userId };
+    const update = { $set: { groupId: null } };
+    const option = { returnOriginal: false };
+
+    const updatedGroup = await UserModel.findOneAndUpdate(filter, update, option);
+    if (!updatedGroup) {
+      return false;
+    }
+    return true;
+  }
 }
 export { User };
