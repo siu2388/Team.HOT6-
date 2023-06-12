@@ -16,10 +16,12 @@ export default function GroupList() {
   useEffect(() => {
     const getGroups = async () => {
       const result = await Api.get('/groups');
-      setGroupList(result.data.result.reverse());
+      setGroupList(result.data.groups.reverse());
     };
     getGroups();
   }, []);
+
+  console.log(groupList);
 
   return (
     <GroupListWrap>
