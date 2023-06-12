@@ -41,7 +41,29 @@ activityRouter.get('/activities/:groupId/:usedDate', loginRequired, async (req, 
 
     const activityInfo = await activityService.getActivityInfo(groupId, parsedYear, parsedMonth);
 
-    res.status(200).send(activityInfo);
+    const monthlyActivities = activityInfo.activities;
+
+    const dailyActivities = {};
+
+    monthlyActivities.forEach(activity => {
+      const usedDate = moment(activity.usedDate).format('YYYY-MM-DD');
+
+      if (!dailyActivities[usedDate]) {
+        dailyActivities[usedDate] = [];
+      }
+
+      dailyActivities[usedDate].push({
+        name: activity.name,
+        category: activity.category,
+      });
+    });
+
+    res.status(200).send({
+      monthlyActivities,
+      dailyActivities,
+      tumbler: activityInfo.tumbler,
+      multipleContainers: activityInfo.multipleContainers,
+    });
   } catch (error) {
     next(error);
   }
