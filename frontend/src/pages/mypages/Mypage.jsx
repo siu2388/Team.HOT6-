@@ -123,6 +123,15 @@ const GroupMembers = styled.div`
   align-items: center;
   padding-top: 3rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  @media (max-width: 1080px) {
+    width:30%;
+  }
+  @media (max-width: 840px) {
+    width:35%;
+  }
+  @media (max-width: 767px) {
+    height:42rem;
+  }
 `;
 
 const MenuContainer = styled.div`
@@ -136,6 +145,7 @@ const MenuContainer = styled.div`
   @media ${res.mobile} {
     flex-direction: column;
     gap: 2rem;
+  }
 `;
 const Card = styled.div`
   width: 52rem;
