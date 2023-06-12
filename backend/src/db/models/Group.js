@@ -7,7 +7,6 @@ class Group {
   //그룹생성
   static async create({ newGroup }) {
     const createdNewGroup = await GroupModel.create(newGroup);
-    console.log('생성된그룹', createdNewGroup);
     return createdNewGroup;
   }
   //유저의 그룹 가입
@@ -20,9 +19,7 @@ class Group {
   }
   //그룹 상세조회
   static async findBygroupId(id) {
-    //const groupOwner = await UserModel.findOwnerById()
     const mygroup = await GroupModel.findById(id).populate('groupOwnerId');
-    console.log('그룹상세', mygroup);
     return mygroup;
   }
   //그룹 목록 조회
@@ -48,17 +45,9 @@ class Group {
     const updatedGroup = await GroupModel.findOneAndUpdate(filter, update, option);
     return updatedGroup;
   }
-  // static async update({ groupId, fieldToUpdate, newValue }) {
-  //   const filter = { id: groupId };
-  //   const update = { [fieldToUpdate]: newValue };
-  //   const option = { returnOriginal: false };
-
-  //   const updatedGroup = await GroupModel.findOneAndUpdate(filter, update, option);
-  //   return updatedGroup;
-  // }
-
+  //그룹장이 그룹 삭제 시 
   static async deleteById({ groupId }) {
-    const deleteResult = await GroupModel.deleteOne({ _id: new ObjectId(groupId) });
+    const deleteResult = await GroupModel.deleteOne({ _id: groupId });
     const isDataDeleted = deleteResult.deletedCount === 1;
     return isDataDeleted;
   }

@@ -34,6 +34,7 @@ const userSchema = new Schema(
     groupId: {
       type: Schema.Types.ObjectId,
       ref: 'Group',
+      default: null,
     },
     profileImg: {
       type: String,
