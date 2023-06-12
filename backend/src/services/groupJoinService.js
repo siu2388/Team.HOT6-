@@ -18,6 +18,7 @@ class groupJoinService {
   // 그룹 가입 시 중복가입 방지 조회용
   static async getUserGroup({ userId }) {
     const group = await GroupJoin.findByUserId({ userId });
+    
     return group;
   }
   //나의 그룹 조회

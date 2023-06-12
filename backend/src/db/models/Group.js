@@ -19,16 +19,25 @@ class Group {
     const group = await GroupModel.findOne({ id: groupId });
     return group;
   }
+
   //그룹 상세조회
   static async findBygroupId(id) {
     const mygroup = await GroupModel.findById(id).populate('groupOwnerId');
     return mygroup;
   }
+
   //그룹 목록 조회
   static async findGroupList() {
     const groupAllInfo = await GroupModel.find({});
     return groupAllInfo;
   }
+
+  //그룹명 검색
+  static async findByTitle({ title }) {
+    const search = await GroupModel.findOne({ title: title });
+    return search;
+  }
+  
   //대기자조회
   static async findBygroupIdAndState({ groupId, state }) {
     const groupJoinready = await GroupModel.find({

@@ -31,6 +31,10 @@ class groupService {
   //그룹의 목록 조회
   static async getGroups() {
     const groups = await Group.findGroupList();
+    if (!groups) {
+      const errorMessage = 'Group 목록이 없습니다. 다시 확인해 주세요.';
+      return { errorMessage };
+    }
     return groups;
   }
 
@@ -38,6 +42,17 @@ class groupService {
   static async getMyGroup(groupId) {
     const myGroup = await Group.findBygroupId(groupId);
     return myGroup;
+  }
+  //그룹명 검색
+  static async searchGroup(title) {
+    const group = await Group.findByTitle(title);
+
+    if (!group) {
+      const errorMessage =
+        '그룹명 조회: 해당 이름을 가진 그룹이 없습니다. 다시 한 번 확인해 주세요.';
+      return { errorMessage };
+    }
+    return group;
   }
 
   //그룹 삭제

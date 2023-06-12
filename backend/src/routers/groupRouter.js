@@ -50,32 +50,56 @@ groupRouter.post('/groups', loginRequired, imgupload, async (req, res, next) => 
 });
 
 //그룹 목록 조회
-groupRouter.get('/groups', async (req, res) => {
-  const result = await groupService.getGroups();
-  res.status(200).json({ result });
-  return;
+groupRouter.get('/groups', async (req, res, next) => {
+  try {
+    const result = await groupService.getGroups();
+    res.status(200).json({ result });
+    return;
+  } catch (error) {
+    next(error);
+  }
 });
 
 //그룹 상세 조회
-groupRouter.get('/groups/:groupId', async (req, res) => {
-  const groupId = req.params.groupId;
-  const myGroup = await groupService.getMyGroup(groupId);
-  const members = await userAuthService.getMembers({ groupId });
-  res.status(200).json({ myGroup, members });
-  return;
+groupRouter.get('/groups/:groupId', async (req, res, next) => {
+  try {
+    const groupId = req.params.groupId;
+    const myGroup = await groupService.getMyGroup(groupId);
+    const members = await userAuthService.getMembers({ groupId });
+    res.status(200).json({ myGroup, members });
+    return;
+  } catch (error) {
+    next(error);
+  }
+});
+
+// 그룹명 검색
+groupRouter.get('/searchgroups', async (req, res, next) => {
+  try {
+    const { title } = req.query;
+    const result = await groupService.searchGroup({ title });
+    res.status(200).json({ result });
+    return;
+  } catch (error) {
+    next(error);
+  }
 });
 
 //그룹 삭제
-groupRouter.delete('/groups/:groupId/', loginRequired, async (req, res) => {
-  const userId = req.currentUserId;
-  const groupId = req.params.groupId;
+groupRouter.delete('/groups/:groupId/', loginRequired, async (req, res, next) => {
+  try {
+    const userId = req.currentUserId;
+    const groupId = req.params.groupId;
 
-  //그룹장의 groupId도 삭제
-  const updatedUser = await userAuthService.deleteGroupId({ groupId, userId });
+    //그룹장의 groupId도 삭제
+    const updatedUser = await userAuthService.deleteGroupId({ groupId, userId });
 
-  const result = await groupService.deleteGroup({ groupId });
-  res.status(200).send({ result, updatedUser });
-  return;
+    const result = await groupService.deleteGroup({ groupId });
+    res.status(200).send({ result, updatedUser });
+    return;
+  } catch (error) {
+    next(error);
+  }
 });
 
 export { groupRouter };
