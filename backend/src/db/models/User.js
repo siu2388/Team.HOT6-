@@ -21,6 +21,16 @@ class User {
     return users;
   }
 
+  
+ // 나의 그룹 조회
+ static async findMyGroup({ userId }) {
+  const group = await UserModel.find({ _id: userId }, 'groupId').populate({
+    path: 'groupId',
+    populate: { path: 'groupOwnerId' },
+  });
+  return group;
+}
+
   static async update({ loginedId, fieldToUpdate, newValue }) {
     const filter = { _id: loginedId };
     const update = { [fieldToUpdate]: newValue };

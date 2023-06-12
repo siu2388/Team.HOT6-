@@ -1,35 +1,31 @@
 import { GroupJoinModel } from '../schemas/groupJoin.js';
+import { UserModel } from '../schemas/user.js';
 
 class GroupJoin {
   static async create(newGroupJoin) {
     const createdNewGroupJoin = await GroupJoinModel.create(newGroupJoin);
     return createdNewGroupJoin;
   }
-  //코치님과 했던 코드
-  // static async findById({ id }) {
-  //   console.log('1', id);
-  //   const group = await GroupJoinModel.findOne({ id });
-  //   console.log('group', group);
-  //   return group.groupOwnerId;
-  // }
 
   static async findByUserId({ userId }) {
     const group = await GroupJoinModel.findOne({ userId });
     return group;
   }
   //유저가 나의 그룹 조회
-  static async findMyGroup({userId}) {
-    const group = await GroupJoinModel.find({userId}).populate('userId').populate('groupId');
+  static async findMyGroup({ userId }) {
+    const group = await GroupJoinModel.find({ userId }).populate({
+      path: 'groupId',
+      populate: { path: 'groupOwnerId' },
+    });
     console.log('group내그룹조회', group);
     return group;
   }
-
+  // 그룹 가입 승인 대기자 조회 - 관리자용
   static async findByGroupId({ groupId }) {
     const waitingList = await GroupJoinModel.find({ groupId: groupId, state: '대기' }).populate(
       'userId',
       'name nickname profileImg',
     );
-    console.log('Waiting list', waitingList);
     return waitingList;
   }
 
@@ -57,14 +53,13 @@ class GroupJoin {
       userId,
       state: '대기',
     });
-    console.log('123', deletedGroup);
     const isDataDeleted = deletedGroup.deletedCount === 1;
     return isDataDeleted;
   }
 
   // 유저의 그룹 탈퇴
   static async deleteByUserId({ userId }) {
-    const deletedGroup = await GroupJoinModel.deleteOne({ id: userId });
+    const deletedGroup = await GroupJoinModel.deleteOne({ userId });
     const isDataDeleted = deletedGroup.deletedCount === 1;
     return isDataDeleted;
   }
