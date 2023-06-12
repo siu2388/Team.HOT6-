@@ -32,7 +32,7 @@ class Activity {
   }
 
   static async find(conditions) {
-    const activities = await ActivityModel.find(conditions);
+    const activities = await ActivityModel.find(conditions).populate('userId');
     return activities;
   }
 }

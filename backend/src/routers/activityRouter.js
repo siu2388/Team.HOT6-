@@ -35,35 +35,13 @@ activityRouter.get('/activities/:groupId/:usedDate', loginRequired, async (req, 
     const groupId = req.params.groupId;
     const usedDate = req.params.usedDate;
 
-    const date = moment(usedDate, 'YYYY-MM');
+    const date = moment(usedDate, 'YYYY-MM-DD');
     const parsedYear = date.year();
     const parsedMonth = date.month() + 1;
 
     const activityInfo = await activityService.getActivityInfo(groupId, parsedYear, parsedMonth);
 
-    const monthlyActivities = activityInfo.activities;
-
-    const dailyActivities = {};
-
-    monthlyActivities.forEach(activity => {
-      const usedDate = moment(activity.usedDate).format('YYYY-MM-DD');
-
-      if (!dailyActivities[usedDate]) {
-        dailyActivities[usedDate] = [];
-      }
-
-      dailyActivities[usedDate].push({
-        name: activity.name,
-        category: activity.category,
-      });
-    });
-
-    res.status(200).send({
-      monthlyActivities,
-      dailyActivities,
-      tumbler: activityInfo.tumbler,
-      multipleContainers: activityInfo.multipleContainers,
-    });
+    res.status(200).json({ activityInfo });
   } catch (error) {
     next(error);
   }
