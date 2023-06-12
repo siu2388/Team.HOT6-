@@ -20,16 +20,16 @@ export default function MyProfile({ userInfo }) {
       </InfoRow>
       <Separator />
       <Credit>
-        <CreditNum>⭐️ 13</CreditNum>
+        <CreditNum>⭐️ {userInfo?.totalCount}</CreditNum>
       </Credit>
       <EmojiRow>
         <EmojiItem>
           <Emoji>🥤</Emoji>
-          <EmojiCount>3</EmojiCount>
+          <EmojiCount>{userInfo?.tumblerCount}</EmojiCount>
         </EmojiItem>
         <EmojiItem>
           <Emoji>♻️</Emoji>
-          <EmojiCount>10</EmojiCount>
+          <EmojiCount>{userInfo?.multipleContainersCount}</EmojiCount>
         </EmojiItem>
       </EmojiRow>
     </ProfileBox>
