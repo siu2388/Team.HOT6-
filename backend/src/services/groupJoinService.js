@@ -23,7 +23,6 @@ class groupJoinService {
   //나의 그룹 조회
   static async getMyGroup({ userId }) {
     const group = await GroupJoin.findMyGroup({ userId });
-    console.log('서비스쪽 그룹', group);
     return group;
   }
   // 그룹 가입 대기자 리스트 - 관리자용

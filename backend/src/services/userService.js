@@ -143,6 +143,12 @@ class userAuthService {
     return group;
   }
 
+  // groupId 같은 멤버 조회 
+  static async getMembers({groupId}) {
+    const members = await User.findGroupMembers({groupId});
+    return members;
+  }
+
   // 유저가 그룹에 가입신청 시 groupId값 업데이트
   static async setUserGroup({ userId, groupId }) {
     const updated = await User.updateGroupId({ userId, groupId });

@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { groupJoinService } from '../services/groupJoinService.js';
+import { groupService } from '../services/groupService.js';
 import { upload } from '../middlewares/imageUploadMiddleware.js';
 import { loginRequired } from '../middlewares/loginRequired.js';
 import { userAuthService } from '../services/userService.js';
@@ -31,10 +32,13 @@ groupJoinRouter.post('/mygroups/:groupId', loginRequired, async (req, res, next)
 });
 
 //유저가 가입한 그룹 조회
-groupJoinRouter.get('/mygroups', loginRequired, async (req, res) => {
+groupJoinRouter.get('/mygroups/:groupId', loginRequired, async (req, res) => {
   const userId = req.currentUserId;
+  const groupId = req.params.groupId;
+  const members = await userAuthService.getMembers({ groupId });
+
   const result = await userAuthService.getMyGroup({ userId });
-  res.status(200).json(result);
+  res.status(200).json({ result, members });
   return;
 });
 

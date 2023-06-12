@@ -7,12 +7,16 @@ class Group {
     const createdNewGroup = await GroupModel.create(newGroup);
     return createdNewGroup;
   }
+
+  // 그룹 중복 생성 확인
+  static async findByGroupOwnerId(groupOwnerId) {
+    const group = await GroupModel.findOne({ groupOwnerId });
+    return group;
+  }
+
   //유저의 그룹 가입
   static async findById({ groupId }) {
-    console.log('groupId', groupId);
     const group = await GroupModel.findOne({ id: groupId });
-    console.log('1group:', group);
-
     return group;
   }
   //그룹 상세조회
@@ -30,7 +34,6 @@ class Group {
     const groupJoinready = await GroupModel.find({
       groupId: groupId,
       state: '대기',
-      // $and: [{ id }, { state: '대기' }],
     });
     return groupJoinready;
   }
@@ -43,7 +46,7 @@ class Group {
     const updatedGroup = await GroupModel.findOneAndUpdate(filter, update, option);
     return updatedGroup;
   }
-  //그룹장이 그룹 삭제 시 
+  //그룹장이 그룹 삭제 시
   static async deleteById({ groupId }) {
     const deleteResult = await GroupModel.deleteOne({ _id: groupId });
     const isDataDeleted = deleteResult.deletedCount === 1;

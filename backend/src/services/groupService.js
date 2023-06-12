@@ -9,7 +9,6 @@ class groupService {
     description,
     createdAt,
     thumbnail,
-    
   }) {
     const newGroup = {
       groupOwnerId,
@@ -23,6 +22,12 @@ class groupService {
     return createdGroup;
   }
 
+  // 그룹 중복 생성 방지용
+  static async getGroupByOwnerId(groupOwnerId) {
+    const group = await Group.findByGroupOwnerId(groupOwnerId);
+    return group;
+  }
+
   //그룹의 목록 조회
   static async getGroups() {
     const groups = await Group.findGroupList();
@@ -34,7 +39,6 @@ class groupService {
     const myGroup = await Group.findBygroupId(groupId);
     return myGroup;
   }
-
 
   //그룹 삭제
   static async deleteGroup({ groupId }) {

@@ -11,13 +11,12 @@ class GroupJoin {
     const group = await GroupJoinModel.findOne({ userId });
     return group;
   }
-  //유저가 나의 그룹 조회
+  // 나의 그룹 조회
   static async findMyGroup({ userId }) {
     const group = await GroupJoinModel.find({ userId }).populate({
       path: 'groupId',
       populate: { path: 'groupOwnerId' },
     });
-    console.log('group내그룹조회', group);
     return group;
   }
   // 그룹 가입 승인 대기자 조회 - 관리자용

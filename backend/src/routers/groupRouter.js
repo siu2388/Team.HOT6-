@@ -16,12 +16,20 @@ groupRouter.post('/groups', loginRequired, imgupload, async (req, res, next) => 
     const groupOwnerId = req.currentUserId;
     const { title, totalNumOfMembers, createdAt, description } = req.body;
     const thumbnail = req.file ? req.file.filename : null;
+
+    //그룹 중복 생성 방지
+    const isGroupexisted = await groupService.getGroupByOwnerId(groupOwnerId);
+    if (isGroupexisted) {
+      res.status(401).json({ message: '생성한 그룹이 존재합니다.' });
+      return;
+    }
+
     const newGroup = await groupService.addGroup({
       groupOwnerId,
       title,
       totalNumOfMembers,
       description,
-      createdAt:date,
+      createdAt: date,
       thumbnail,
     });
 
@@ -52,12 +60,12 @@ groupRouter.get('/groups', async (req, res) => {
 groupRouter.get('/groups/:groupId', async (req, res) => {
   const groupId = req.params.groupId;
   const myGroup = await groupService.getMyGroup(groupId);
-  res.status(200).json({ myGroup });
+  const members = await userAuthService.getMembers({ groupId });
+  res.status(200).json({ myGroup, members });
   return;
 });
 
-
-//그룹 삭제 -완
+//그룹 삭제
 groupRouter.delete('/groups/:groupId/', loginRequired, async (req, res) => {
   const userId = req.currentUserId;
   const groupId = req.params.groupId;
@@ -66,7 +74,7 @@ groupRouter.delete('/groups/:groupId/', loginRequired, async (req, res) => {
   const updatedUser = await userAuthService.deleteGroupId({ groupId, userId });
 
   const result = await groupService.deleteGroup({ groupId });
-  res.status(200).send({result, updatedUser});
+  res.status(200).send({ result, updatedUser });
   return;
 });
 
