@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { ROUTE } from '../../constants/routes/routeData';
 import { useRecoilState } from 'recoil';
-import { updateState, userInfoState, userTokenState } from '../../stores';
+import { isErrorModalState, updateState, userInfoState, userTokenState } from '../../stores';
 import * as API from '../../api/index';
 import MobileMenu from './Mobilemenu';
 
@@ -12,6 +12,7 @@ export default function Header() {
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const [isMobile, setIsMobile] = useState(false);
   const [update] = useRecoilState(updateState);
+  const [, setIsErrorModal] = useRecoilState(isErrorModalState);
 
   useEffect(() => {
     if (sessionStorage.getItem('userToken')) {
@@ -42,6 +43,19 @@ export default function Header() {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  const logOut = () => {
+    if (userToken) {
+      sessionStorage.removeItem('userToken');
+
+      window.location.reload();
+    } else {
+      setIsErrorModal({
+        state: true,
+        message: '로그아웃에 실패하였습니다.',
+      });
+    }
+  };
 
   console.log(userInfo);
 
@@ -105,7 +119,7 @@ export default function Header() {
               ) : (
                 <>
                   <SubMenuList>
-                    <SubMenuBtn>
+                    <SubMenuBtn onClick={logOut}>
                       <Link>로그아웃</Link>
                     </SubMenuBtn>
                   </SubMenuList>
