@@ -29,6 +29,20 @@ activityRouter.post('/activities', loginRequired, imgupload, async (req, res, ne
   }
 });
 
+// 활동 신청 승인 대기 조회
+activityRouter.get('/activities/:groupId/waiting', loginRequired, async (req, res) => {
+  const groupId = req.params.groupId;
+
+  try {
+    const result = await activityService.getWaitingList({ groupId });
+
+    res.status(200).json({ result });
+    return;
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // 그룹 활동 조회
 activityRouter.get('/activities/:groupId/:usedDate', loginRequired, async (req, res, next) => {
   try {
@@ -44,6 +58,23 @@ activityRouter.get('/activities/:groupId/:usedDate', loginRequired, async (req, 
     res.status(200).json({ activityInfo });
   } catch (error) {
     next(error);
+  }
+});
+
+// 활동 신청 승인 수락
+activityRouter.put('/:activityId', loginRequired, async (req, res) => {
+  try {
+    const activityId = req.params.activityId;
+
+    const result = await activityService.setActivity({ activityId });
+
+    if (result) {
+      res.status(200).json({ result, message: '승인' });
+    } else {
+      res.status(400).json({ message: '거절' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
