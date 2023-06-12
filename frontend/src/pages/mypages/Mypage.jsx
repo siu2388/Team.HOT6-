@@ -17,6 +17,7 @@ export default function Mypage() {
   const [activeMenuItem, setActiveMenuItem] = useState('나의그룹');
   const [myGroup, setMyGroup] = useState([]);
   const [waitingMembers, setWaitingMembers] = useState([]);
+  const [waitingActivity, setWaitingActivity] = useState([]);
 
   useEffect(() => {
     const getMyGroup = async () => {
@@ -32,14 +33,23 @@ export default function Mypage() {
       const result = await API.get(`/mygroups/${myGroup?.groupId?._id}/waiting`);
       setWaitingMembers(result.data);
     };
-    console.log(getWaitingMembers);
-    console.log(myGroup?.groupId?._id);
     if (myGroup?.groupId?._id) {
       getWaitingMembers();
     }
   }, [myGroup]);
 
-  console.log(waitingMembers);
+  useEffect(() => {
+    const getWaitingActivity = async () => {
+      const result = await API.get(`/activities/${myGroup?.groupId?._id}/waiting`);
+      setWaitingActivity(result.data);
+    };
+    console.log(getWaitingActivity);
+    // if (myGroup?.groupId?._id) {
+    //   getWaitingActivity();
+    // }
+  }, [myGroup]);
+
+  console.log(waitingActivity);
 
   const navigate = useNavigate();
 

@@ -52,20 +52,20 @@ export default function GroupDetailPage() {
         <GroupTitle>{groupData.title}</GroupTitle>
         <DetailContent01>
           <DetailInfoBox>
-            <DetailThumbnail />
+            <DetailThumbnail img={`http://localhost:5001/uploads/${groupData?.thumbnail}`} />
             <DetailInfo>
               <div>
                 <UserProfile>
                   <Avatar
                     alt="내 프로필"
-                    src="/images/commons/kkam.png"
+                    src={`http:localhost:5001/uploads/${groupData?.groupOwnerId?.profileImg}`}
                     sx={{ width: 40, height: 40 }}
                   />
-                  <UserName>깜장이</UserName>
+                  <UserName>{groupData?.groupOwnerId?.name}</UserName>
                 </UserProfile>
                 <UserBox>
                   <span>생성일</span>
-                  <span>2023.01.01</span>
+                  <span>{groupData?.createdAt}</span>
                 </UserBox>
                 <UserBox>
                   <span>모집인원</span>
@@ -183,8 +183,9 @@ const DetailInfoBox = styled.div`
 const DetailThumbnail = styled.div`
   width: 30rem;
   height: 30rem;
-  background-image: url('/images/main/main01.png');
+  background-image: ${({ img }) => `url(${img})`};
   background-size: cover;
+  background-position: center;
   border-radius: 0.8rem;
 
   @media (max-width: 1080px) {
