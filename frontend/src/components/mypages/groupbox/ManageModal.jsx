@@ -35,23 +35,27 @@ export default function ManageModal({ setIsManageModalOpen, waitingMembers }) {
           </ButtonContainer>
           {isJoinModalOpen ? (
             <MembersInfo>
-              {waitingMembers?.map(el => (
-                <MemberItem key={el._id}>
-                  <MemberNameBox>
-                    <Avatar
-                      alt="멤버 이미지"
-                      src={`http://localhost:5001/uploads/${el.userId.profileImg}`}
-                    />
-                    <MemberText>
-                      {el.userId.name}({el.userId.nickname})
-                    </MemberText>
-                  </MemberNameBox>
-                  <ManageButton>
-                    <AcceptButton>수락</AcceptButton>
-                    <RejectButton>거절</RejectButton>
-                  </ManageButton>
-                </MemberItem>
-              ))}
+              {waitingMembers.length > 0 ? (
+                waitingMembers?.map(el => (
+                  <MemberItem key={el._id}>
+                    <MemberNameBox>
+                      <Avatar
+                        alt="멤버 이미지"
+                        src={`http://localhost:5001/uploads/${el.userId.profileImg}`}
+                      />
+                      <MemberText>
+                        {el.userId.name}({el.userId.nickname})
+                      </MemberText>
+                    </MemberNameBox>
+                    <ManageButton>
+                      <AcceptButton>수락</AcceptButton>
+                      <RejectButton>거절</RejectButton>
+                    </ManageButton>
+                  </MemberItem>
+                ))
+              ) : (
+                <ErrorText>가입 신청 내역이 없습니다.</ErrorText>
+              )}
             </MembersInfo>
           ) : (
             <MembersInfo>
@@ -264,4 +268,12 @@ const ContainerText = styled.button`
   font-size: 10px;
   margin-left: 10px;
   color: #999999;
+`;
+
+const ErrorText = styled.p`
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: #111;
+  text-align: center;
+  margin: 3rem 0;
 `;

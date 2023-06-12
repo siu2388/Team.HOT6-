@@ -1,6 +1,7 @@
 import { Activity } from '../db/models/Activity.js';
 
 class activityService {
+  // 활동 등록
   static async addActivity({ userId, groupId, state, name, usedDate, category, proofImg }) {
     const newActivity = {
       userId,
@@ -14,6 +15,7 @@ class activityService {
     return Activity.create({ newActivity });
   }
 
+  // 그룹 활동 조회
   static async getActivityInfo(groupId, year, month) {
     // 년도, 월에 해당하는 데이터 가져오기
     const activities = await Activity.find({
@@ -27,7 +29,6 @@ class activityService {
 
     function countActivity(activities, activityType) {
       return activities.reduce((count, activity) => {
-        console.log('11', activity);
         return activity.category === activityType ? count + 1 : count;
       }, 0);
     }
@@ -44,6 +45,7 @@ class activityService {
           member: [],
         };
       }
+
       activityDataByDate[dateKey].tumbler += countActivity([activity], 'tumbler');
       activityDataByDate[dateKey].multipleContainers += countActivity(
         [activity],
@@ -57,6 +59,36 @@ class activityService {
     const activityData = Object.values(activityDataByDate);
 
     return activityData;
+  }
+
+  static async getActivities() {
+    const activities = await Activity.findAll();
+    return activities;
+  }
+
+  // 활동 신청 승인 대기 조회
+  static async getWaitingList({ groupId }) {
+    const waitingList = await Activity.findByGroupId({ groupId });
+    return waitingList;
+  }
+
+  // 활동 신청 승인 수락
+  static async setActivity(activityId) {
+    try {
+      const activity = await Activity.findById(activityId);
+
+      if (!activity) {
+        return false;
+      }
+
+      activity.state = '승인';
+
+      await activity.save();
+
+      return true;
+    } catch (error) {
+      throw error;
+    }
   }
 }
 
