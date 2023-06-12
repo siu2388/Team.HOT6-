@@ -3,7 +3,9 @@ import { groupService } from '../services/groupService.js';
 import { userAuthService } from '../services/userService.js';
 import { upload } from '../middlewares/imageUploadMiddleware.js';
 import { loginRequired } from '../middlewares/loginRequired.js';
+import moment from 'moment';
 
+const date = moment().format('YYYY.MM.DD');
 const groupRouter = Router();
 
 const imgupload = upload.single('thumbnail');
@@ -11,14 +13,15 @@ const imgupload = upload.single('thumbnail');
 //그룹 생성 ( 그룹장이 되는 유저 )
 groupRouter.post('/groups', loginRequired, imgupload, async (req, res, next) => {
   try {
-    const { groupOwnerId, title, totalNumOfMembers, description } = req.body;
+    const groupOwnerId = req.currentUserId;
+    const { title, totalNumOfMembers, createdAt, description } = req.body;
     const thumbnail = req.file ? req.file.filename : null;
-
     const newGroup = await groupService.addGroup({
       groupOwnerId,
       title,
       totalNumOfMembers,
       description,
+      createdAt:date,
       thumbnail,
     });
 
@@ -56,14 +59,14 @@ groupRouter.get('/groups/:groupId', async (req, res) => {
 
 //그룹 삭제 -완
 groupRouter.delete('/groups/:groupId/', loginRequired, async (req, res) => {
+  const userId = req.currentUserId;
   const groupId = req.params.groupId;
 
-  // //유저스키마에 groupId 정보 삭제
-  // const updatedUser = await userAuthService.deleteGroupId({ groupId });
-  // console.log('groupId업데이트 된 유저: ', updatedUser);
+  //그룹장의 groupId도 삭제
+  const updatedUser = await userAuthService.deleteGroupId({ groupId, userId });
 
   const result = await groupService.deleteGroup({ groupId });
-  res.status(200).send(result);
+  res.status(200).send({result, updatedUser});
   return;
 });
 

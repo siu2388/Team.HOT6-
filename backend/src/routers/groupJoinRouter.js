@@ -35,7 +35,7 @@ groupJoinRouter.post('/mygroups/:groupId', loginRequired, async (req, res, next)
 });
 
 //유저가 가입한 그룹 조회
-groupJoinRouter.get('/mygroups/:userId', async (req, res) => {
+groupJoinRouter.get('/mygroups/:userId', loginRequired, async (req, res) => {
   const userId = req.params.userId;
   const result = await groupJoinService.getMyGroup({userId});
   res.status(200).json({ result });
@@ -43,7 +43,7 @@ groupJoinRouter.get('/mygroups/:userId', async (req, res) => {
 });
 
 // 그룹 가입 대기자 리스트 - 관리자용 - 완
-groupJoinRouter.get('/mygroups/:groupId/waiting', async (req, res) => {
+groupJoinRouter.get('/mygroups/:groupId/waiting', loginRequired, async (req, res) => {
   const groupId = req.params.groupId;
   console.log('groupId', groupId);
 
@@ -54,7 +54,7 @@ groupJoinRouter.get('/mygroups/:groupId/waiting', async (req, res) => {
 });
 
 /// 유저 가입 대기 -> 승인으로 관리자 승인에 의한 상태 변경 - 관리자용
-groupJoinRouter.put('/mygroups/:groupId/:userId/approval', async (req, res) => {
+groupJoinRouter.put('/mygroups/:groupId/:userId/approval', loginRequired,  async (req, res) => {
   const groupId = req.params.groupId;
   const userId = req.params.userId;
 
@@ -69,7 +69,7 @@ groupJoinRouter.put('/mygroups/:groupId/:userId/approval', async (req, res) => {
 });
 
 //유저 가입 대기 -> 거절로 관리자 거절에 의한 상태 변경
-groupJoinRouter.delete('/mygroups/:groupId/:userId/rejection', async (req, res) => {
+groupJoinRouter.delete('/mygroups/:groupId/:userId/rejection', loginRequired,  async (req, res) => {
   const groupId = req.params.groupId;
   const userId = req.params.userId;
 
@@ -89,7 +89,7 @@ groupJoinRouter.delete('/mygroups/:groupId/:userId/rejection', async (req, res) 
 });
 
 // 유저가 가입한 그룹 탈퇴 - 완
-groupJoinRouter.delete('/mygroups/:groupId/:userId', async (req, res) => {
+groupJoinRouter.delete('/mygroups/:groupId/:userId', loginRequired, async (req, res) => {
   const groupId = req.params.groupId;
   const userId = req.currentUserId;
 

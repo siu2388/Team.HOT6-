@@ -1,7 +1,5 @@
 import { GroupModel } from '../schemas/group.js';
 import { ObjectId } from 'mongodb';
-// import { GroupJoinModel } from '../schemas/groupJoin.js';
-// import { UserModel } from '../schemas/user.js';
 
 class Group {
   //그룹생성

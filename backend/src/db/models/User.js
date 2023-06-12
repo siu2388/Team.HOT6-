@@ -41,8 +41,8 @@ class User {
   }
 
   // 유저의 groupId 삭제
-  static async deleteGroupId({ groupId ,userId}) {
-    const filter = { groupId ,userId};
+  static async deleteGroupId({ groupId, userId }) {
+    const filter = { groupId, _id:userId };
     const update = { $set: { groupId: null } };
     const option = { returnOriginal: false };
 

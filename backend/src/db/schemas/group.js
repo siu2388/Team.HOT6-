@@ -19,7 +19,13 @@ const GroupSchema = new Schema(
       type: Number,
       required: true,
     },
-    thumbnail: { type: String },
+    createdAt: {
+      type: String,
+      default: Date.now,
+    },
+    thumbnail: {
+      type: String,
+    },
   },
   { strictPopulate: false },
   {
