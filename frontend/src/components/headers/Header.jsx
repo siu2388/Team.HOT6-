@@ -3,16 +3,16 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { ROUTE } from '../../constants/routes/routeData';
 import { useRecoilState } from 'recoil';
-import { updateState, userInfoState, userTokenState } from '../../stores';
+import { isErrorModalState, updateState, userInfoState, userTokenState } from '../../stores';
 import * as API from '../../api/index';
 import MobileMenu from './Mobilemenu';
-
 
 export default function Header() {
   const [userToken, setUserToken] = useRecoilState(userTokenState);
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const [isMobile, setIsMobile] = useState(false);
   const [update] = useRecoilState(updateState);
+  const [, setIsErrorModal] = useRecoilState(isErrorModalState);
 
   useEffect(() => {
     if (sessionStorage.getItem('userToken')) {
@@ -43,6 +43,19 @@ export default function Header() {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  const logOut = () => {
+    if (userToken) {
+      sessionStorage.removeItem('userToken');
+
+      window.location.reload();
+    } else {
+      setIsErrorModal({
+        state: true,
+        message: '로그아웃에 실패하였습니다.',
+      });
+    }
+  };
 
   console.log(userInfo);
 
@@ -83,7 +96,11 @@ export default function Header() {
               </CountBox>
             </InfoMenu>
           )}
-          {isMobile && <MobileMenubox><MobileMenu userInfo={userInfo} /></MobileMenubox>}
+          {isMobile && (
+            <MobileMenubox>
+              <MobileMenu userInfo={userInfo} />
+            </MobileMenubox>
+          )}
           {!isMobile && (
             <SubMenu>
               {!userToken ? (
@@ -102,7 +119,7 @@ export default function Header() {
               ) : (
                 <>
                   <SubMenuList>
-                    <SubMenuBtn>
+                    <SubMenuBtn onClick={logOut}>
                       <Link>로그아웃</Link>
                     </SubMenuBtn>
                   </SubMenuList>
@@ -131,7 +148,6 @@ const HeaderWrap = styled.div`
   z-index: 998;
 `;
 
-
 const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
@@ -152,8 +168,8 @@ const LogoImgBox = styled.div`
   width: 100px;
   height: 40px;
   cursor: pointer;
-  display:flex;
-  align-items:center;
+  display: flex;
+  align-items: center;
   img {
     width: 8rem;
     height: auto;
@@ -204,8 +220,6 @@ const InfoMenu = styled.div`
   margin-left: 24px;
 `;
 
-
-
 const UserName = styled.div`
   margin-right: 8px;
   font-size: 16px;
@@ -237,7 +251,7 @@ const SubMenuList = styled.ul`
 const SubMenuBtn = styled.button`
   width: 120px;
   height: 48px;
-  margin-left:2rem;
+  margin-left: 2rem;
   border: ${({ btn }) => (btn === 'stroke' ? '1px solid #01881c' : 'none')};
   border-radius: 5px;
   background-color: ${({ btn }) => (btn === 'stroke' ? 'none' : '#01881c')};

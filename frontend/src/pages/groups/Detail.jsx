@@ -6,10 +6,13 @@ import GroupCalendar from '../../components/groups/details/Calendar';
 import { useParams } from 'react-router-dom';
 import * as API from '../../api/index';
 import { res } from '../../styles/responsive';
-import Modal from '../../components/commons/modal/Modal';
+import { useRecoilState } from 'recoil';
+import { isErrorModalState, isSuccessModalState } from '../../stores';
 
 export default function GroupDetailPage() {
   const [groupData, setGroupData] = useState([]);
+  const [, setIsScucessModal] = useRecoilState(isSuccessModalState);
+  const [, setIsErrorModal] = useRecoilState(isErrorModalState);
 
   const groupId = useParams().id;
 
@@ -24,9 +27,12 @@ export default function GroupDetailPage() {
   const handleGroupJoin = async () => {
     try {
       await API.post(`/mygroups/${groupId}`);
-      alert(`${groupData.title}그룹에 신청하였습니다.`);
+      setIsScucessModal({
+        state: true,
+        message: '그룹신청에 성공하였습니다. 그룹장 수락 후 그룹 활동이 활성화 됩니다.',
+      });
     } catch (err) {
-      console.log(err);
+      setIsErrorModal({ state: true, message: err.response.data.message });
     }
   };
 
@@ -68,7 +74,6 @@ export default function GroupDetailPage() {
                 <GroupDescription>{groupData.description}</GroupDescription>
               </div>
               <div>
-                <Modal />
                 <Button
                   style={{ width: '180px', height: '40px', fontSize: '2.2rem' }}
                   variant="contained"
@@ -393,6 +398,6 @@ const LogoImage = styled.div`
 
   img {
     margin-top: -1rem;
-    width: 30rem; 
+    width: 30rem;
   }
 `;

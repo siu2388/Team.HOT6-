@@ -6,26 +6,29 @@ class GroupJoin {
     return createdNewGroupJoin;
   }
   //코치님과 했던 코드
-  static async findById({ id }) {
-    console.log('1', id);
-    const group = await GroupJoinModel.findOne({ id });
-    console.log('group', group);
-    return group.groupOwnerId;
-  }
+  // static async findById({ id }) {
+  //   console.log('1', id);
+  //   const group = await GroupJoinModel.findOne({ id });
+  //   console.log('group', group);
+  //   return group.groupOwnerId;
+  // }
 
   static async findByUserId({ userId }) {
     const group = await GroupJoinModel.findOne({ userId });
     return group;
   }
   //유저가 나의 그룹 조회
-  static async findMyGroup() {
-    const group = await GroupJoinModel.find({}).populate('userId').populate('groupId');
+  static async findMyGroup({userId}) {
+    const group = await GroupJoinModel.find({userId}).populate('userId').populate('groupId');
     console.log('group내그룹조회', group);
     return group;
   }
 
   static async findByGroupId({ groupId }) {
-    const waitingList = await GroupJoinModel.find({ groupId: groupId, state: '대기' }).populate('userId','name nickname profileImg');
+    const waitingList = await GroupJoinModel.find({ groupId: groupId, state: '대기' }).populate(
+      'userId',
+      'name nickname profileImg',
+    );
     console.log('Waiting list', waitingList);
     return waitingList;
   }
@@ -34,16 +37,32 @@ class GroupJoin {
     const groupAllInfo = await GroupJoinModel.find({});
     return groupAllInfo;
   }
-
-  static async update({ loginedId }) {
-    const filter = { loginedId };
-    const update = { state: '승인' };
+  // 유저 가입 대기 -> 승인으로 관리자 승인에 의한 상태 변경 - 관리자용
+  static async update({ groupId, userId }) {
+    const filter = { groupId, userId, state: '대기' };
+    const update = { $set: { state: '승인' } };
     const option = { returnOriginal: false };
 
     const updatedGroup = await GroupJoinModel.findOneAndUpdate(filter, update, option);
-    return updatedGroup;
+    if (!updatedGroup) {
+      return false;
+    }
+    return true;
   }
 
+  // 유저 가입 대기 -> 거절로 관리자 거절에 의한 삭제
+  static async deleteGroupJoinByIds({ groupId, userId }) {
+    const deletedGroup = await GroupJoinModel.deleteOne({
+      groupId,
+      userId,
+      state: '대기',
+    });
+    console.log('123', deletedGroup);
+    const isDataDeleted = deletedGroup.deletedCount === 1;
+    return isDataDeleted;
+  }
+
+  // 유저의 그룹 탈퇴
   static async deleteByUserId({ userId }) {
     const deletedGroup = await GroupJoinModel.deleteOne({ id: userId });
     const isDataDeleted = deletedGroup.deletedCount === 1;

@@ -12,6 +12,7 @@ class userAuthService {
     phone,
     address,
     addressDetail,
+    groupId,
     profileImg,
   }) {
     const user = await User.findByUserId({ userId });
@@ -30,6 +31,7 @@ class userAuthService {
       phone,
       address,
       addressDetail,
+      groupId,
       profileImg,
     };
 
@@ -55,7 +57,7 @@ class userAuthService {
     const secretKey = process.env.JWT_SECRET_KEY || 'jwt-secret-key';
     const token = jwt.sign({ id: user._id }, secretKey);
 
-    const { id, name, nickname, phone, address, addressDetail, profileImg } = user;
+    const { id, name, nickname, phone, address, addressDetail, groupId, profileImg } = user;
 
     const loginUser = {
       token,
@@ -67,6 +69,7 @@ class userAuthService {
       address,
       addressDetail,
       profileImg,
+      groupId,
       errorMessage: null,
     };
     return loginUser;
@@ -133,6 +136,17 @@ class userAuthService {
 
     return user;
   }
+  // 유저가 그룹에 가입신청 시 groupId값 업데이트
+  static async setUserGroup({ userId, groupId }) {
+    const updated = await User.updateGroupId({ userId, groupId });
+    return updated;
+  }
+
+  // 유저의 groupId값 삭제
+  static async deleteGroupId({ groupId , userId}) {
+    const deleteGroupId = await User.deleteGroupId({ groupId, userId });
+    return deleteGroupId;
+  }
 
   static async getUserActivityCount(userId, category) {
     const count = await ActivityModel.countDocuments({
@@ -145,27 +159,27 @@ class userAuthService {
   }
 
   static async getUserInfo({ loginedId }) {
-    const user = await User.findById({ loginedId });
+    try {
+      const user = await User.findById({ loginedId });
 
-    if (!user) {
-      const errorMessage =
-        'User 조회: 해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
-      return { errorMessage };
+      if (!user) {
+        const errorMessage =
+          'User 조회: 해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
+        return { errorMessage };
+      }
+
+      const tumblerCount = await userAuthService.getUserActivityCount(loginedId, 'tumbler');
+      const multipleContainersCount = await userAuthService.getUserActivityCount(
+        loginedId,
+        'multipleContainers',
+      );
+
+      const totalCount = tumblerCount + multipleContainersCount;
+
+      return { user, tumblerCount, multipleContainersCount, totalCount };
+    } catch (error) {
+      throw new Error('Failed to get user info.');
     }
-
-    const tumblerCount = await userAuthService.getUserActivityCount(loginedId, 'tumbler');
-    const multipleContainersCount = await userAuthService.getUserActivityCount(
-      loginedId,
-      'multipleContainers',
-    );
-
-    const totalCount = tumblerCount + multipleContainersCount;
-
-    return { user, tumblerCount, multipleContainersCount, totalCount };
-  }
-  catch(error) {
-    throw new Error('Failed to get user info.');
   }
 }
-
 export { userAuthService };

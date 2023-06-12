@@ -30,6 +30,11 @@ class Activity {
     const isDataDeleted = deleteResult.deletedCount === 1;
     return isDataDeleted;
   }
+
+  static async find(conditions) {
+    const activities = await ActivityModel.find(conditions);
+    return activities;
+  }
 }
 
 export { Activity };

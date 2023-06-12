@@ -6,16 +6,17 @@ class groupService {
     groupOwnerId,
     title,
     totalNumOfMembers,
-    members,
     description,
+    createdAt,
     thumbnail,
+    
   }) {
     const newGroup = {
       groupOwnerId,
       title,
       totalNumOfMembers,
       description,
-      members,
+      createdAt,
       thumbnail,
     };
     const createdGroup = await Group.create({ newGroup });
@@ -34,17 +35,6 @@ class groupService {
     return myGroup;
   }
 
-  // 그룹 가입 대기자 조회
-  static async getWaiting({ groupId, state }) {
-    const waitingList = await Group.findBygroupIdAndState({ groupId, state });
-    return waitingList;
-  }
-
-  // 유저 가입 대기 -> 승인으로 관리자 승인에 의한 상태 변경
-  static async setJoinedGroup({ loginedId }) {
-    const updatedGroup = await Group.update({ loginedId });
-    return updatedGroup;
-  }
 
   //그룹 삭제
   static async deleteGroup({ groupId }) {

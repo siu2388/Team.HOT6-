@@ -10,7 +10,7 @@ class User {
     const user = await UserModel.findOne({ userId });
     return user;
   }
-  //유저의 그룹 가입
+
   static async findById({ loginedId }) {
     const user = await UserModel.findById(loginedId);
     return user;
@@ -29,6 +29,28 @@ class User {
     const updatedUser = await UserModel.findOneAndUpdate(filter, update, option);
     return updatedUser;
   }
-}
 
+  //유저가 그룹 가입 시, 그룹 생성 시  groupId 업데이트
+  static async updateGroupId({ userId, groupId }) {
+    const filter = { _id: userId };
+    const update = { $set: { groupId: groupId } };
+    const option = { returnOriginal: false };
+
+    const updatedUser = await UserModel.findOneAndUpdate(filter, update, option);
+    return updatedUser;
+  }
+
+  // 유저의 groupId 삭제
+  static async deleteGroupId({ groupId, userId }) {
+    const filter = { groupId, _id:userId };
+    const update = { $set: { groupId: null } };
+    const option = { returnOriginal: false };
+
+    const updatedGroup = await UserModel.findOneAndUpdate(filter, update, option);
+    if (!updatedGroup) {
+      return false;
+    }
+    return true;
+  }
+}
 export { User };
