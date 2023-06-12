@@ -61,11 +61,6 @@ class activityService {
     return activityData;
   }
 
-  static async getActivities() {
-    const activities = await Activity.findAll();
-    return activities;
-  }
-
   // 활동 신청 승인 대기 조회
   static async getWaitingList({ groupId }) {
     const waitingList = await Activity.findByGroupId({ groupId });
@@ -86,6 +81,27 @@ class activityService {
       await activity.save();
 
       return true;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // 활동 신청 승인 거절
+  static async deleteActivity(activityId) {
+    try {
+      const isDataDeleted = await Activity.deleteById(activityId);
+
+      return { status: '활동 거절 완료' };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // 유저 활동 목록 조회
+  static async getActivities(userId) {
+    try {
+      const activities = await Activity.findByUserId(userId);
+      return activities;
     } catch (error) {
       throw error;
     }

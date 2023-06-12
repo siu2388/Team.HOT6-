@@ -31,6 +31,7 @@ const ActivitySchema = new Schema(
     },
     proofImg: {
       type: String,
+      required: true,
     },
   },
   {

@@ -43,7 +43,7 @@ activityRouter.get('/activities/:groupId/waiting', loginRequired, async (req, re
   }
 });
 
-// 그룹 활동 조회
+// 그룹 활동 조회(달력 표시)
 activityRouter.get('/activities/:groupId/:usedDate', loginRequired, async (req, res, next) => {
   try {
     const groupId = req.params.groupId;
@@ -75,6 +75,31 @@ activityRouter.put('/:activityId', loginRequired, async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+// 활동 신청 승인 거절
+activityRouter.delete('/:activityId', loginRequired, async (req, res, next) => {
+  try {
+    const activityId = req.params.activityId;
+
+    const result = await activityService.deleteActivity({ activityId });
+
+    res.status(200).json({ result });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// 유저 활동 목록 조회
+activityRouter.get('/activities', loginRequired, async (req, res, next) => {
+  try {
+    const userId = req.currentUserId;
+    const currentActivityInfo = await activityService.getActivities(userId);
+
+    res.status(200).send(currentActivityInfo);
+  } catch (error) {
+    next(error);
   }
 });
 
