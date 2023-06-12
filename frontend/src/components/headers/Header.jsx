@@ -26,9 +26,7 @@ export default function Header() {
       setUserInfo(result.data);
     };
 
-    if (userToken) {
-      getUserInfo();
-    }
+    getUserInfo();
   }, [userToken, update]);
 
   useEffect(() => {
@@ -56,8 +54,6 @@ export default function Header() {
       });
     }
   };
-
-  console.log(userInfo);
 
   return (
     <HeaderWrap>

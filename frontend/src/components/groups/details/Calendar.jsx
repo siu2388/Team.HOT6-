@@ -6,10 +6,17 @@ import MemberProfileBox from '../../commons/box/MemberProfileBox';
 import { getDate, getDayOfWeek } from '../../../commons/utils/getDate';
 import AddActiveModal from './AddActiveModal';
 import { res } from '../../../styles/responsive';
+import { useParams } from 'react-router-dom';
+import { userInfoState } from '../../../stores';
+import { useRecoilState } from 'recoil';
 
 export default function GroupCalendar() {
+  const [userInfo] = useRecoilState(userInfoState);
+
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
+
+  const groupId = useParams().id;
 
   const onClickToggleModal = () => {
     setIsOpen(prev => !prev);
@@ -51,9 +58,11 @@ export default function GroupCalendar() {
             <TodayDate>{getDate(selectedDate)}</TodayDate>
             <TodayDw>{getDayOfWeek(selectedDate)}</TodayDw>
           </div>
-          <AddBtn onClick={onClickToggleModal}>
-            <img src="/images/groups/details/addBtn.png" alt="" />
-          </AddBtn>
+          {userInfo?.user?.groupId === groupId && (
+            <AddBtn onClick={onClickToggleModal}>
+              <img src="/images/groups/details/addBtn.png" alt="" />
+            </AddBtn>
+          )}
         </TodayDateBox>
         <MemberProfilies>
           <MemberProfileBox />
