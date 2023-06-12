@@ -33,6 +33,20 @@ class Activity {
 
     return waitingList;
   }
+
+  // 활동 신청 승인 거절
+  static async deleteById({ activityId }) {
+    const activity = await ActivityModel.deleteOne({ _id: activityId });
+    return activity;
+  }
+
+  // 유저 활동 목록 조회
+  static async findByUserId(userId) {
+    const activities = await ActivityModel.find({ userId, state: '승인' }).select(
+      'usedDate category',
+    );
+    return activities;
+  }
 }
 
 export { Activity };
