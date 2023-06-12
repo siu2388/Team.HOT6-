@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ManageModal from '../../components/mypages/groupbox/ManageModal';
 import MyProfile from '../../components/mypages/profilebox/MyProfile';
@@ -8,11 +8,38 @@ import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { ROUTE } from '../../constants/routes/routeData';
 import { res } from '../../styles/responsive';
+import * as API from '../../api/index';
+
 export default function Mypage() {
   const [userInfo] = useRecoilState(userInfoState);
 
   const [isManageModalOpen, setIsManageModalOpen] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState('나의그룹');
+  const [myGroup, setMyGroup] = useState([]);
+  const [waitingMembers, setWaitingMembers] = useState([]);
+
+  useEffect(() => {
+    const getMyGroup = async () => {
+      const result = await API.get('/mygroups');
+      setMyGroup(result.data[0]);
+    };
+
+    getMyGroup();
+  }, []);
+
+  useEffect(() => {
+    const getWaitingMembers = async () => {
+      const result = await API.get(`/mygroups/${myGroup?.groupId?._id}/waiting`);
+      setWaitingMembers(result.data);
+    };
+    console.log(getWaitingMembers);
+    console.log(myGroup?.groupId?._id);
+    if (myGroup?.groupId?._id) {
+      getWaitingMembers();
+    }
+  }, [myGroup]);
+
+  console.log(waitingMembers);
 
   const navigate = useNavigate();
 
@@ -60,7 +87,7 @@ export default function Mypage() {
             <GroupInfo>
               <GroupImage alt="그룹장 사진" src="/images/commons/kiki.JPG" />
               <GroupDetails>
-                <GroupName>3학년 1반</GroupName>
+                <GroupName>{myGroup?.groupId?.title}</GroupName>
                 <GroupRole>
                   <GroupRoleText>그룹장</GroupRoleText>
                   <GroupRoleName>유진이</GroupRoleName>
@@ -77,15 +104,19 @@ export default function Mypage() {
                 </GroupMembersCount>
                 <GroupCreation>
                   <GroupCreationText>생성일</GroupCreationText>
-                  <GroupCreationDate>2020.01.01</GroupCreationDate>
+                  <GroupCreationDate>{myGroup?.groupId?.createdAt}</GroupCreationDate>
                 </GroupCreation>
               </GroupDetails>
-              </GroupInfo>
-                <GroupButton>
-                  <GroupLeaveButton>그룹탈퇴</GroupLeaveButton>
-                  <GroupManageButton onClick={openManageModal}>그룹관리</GroupManageButton>
-                  <GroupMoveButton>이동</GroupMoveButton>
-                </GroupButton>
+            </GroupInfo>
+            <GroupButton>
+              <GroupLeaveButton>그룹탈퇴</GroupLeaveButton>
+              <GroupManageButton onClick={openManageModal}>그룹관리</GroupManageButton>
+              <GroupMoveButton
+                onClick={() => navigate(`${ROUTE.GROUP_DETAIL.link}/${myGroup?.groupId?._id}`)}
+              >
+                이동
+              </GroupMoveButton>
+            </GroupButton>
           </LargeBox>
         )}
         {activeMenuItem === '그룹관리' && <GroupManagement></GroupManagement>}
@@ -95,7 +126,12 @@ export default function Mypage() {
           </PointInquiry>
         )}
         {activeMenuItem === '내정보수정' && <ProfileModification></ProfileModification>}
-        {isManageModalOpen && <ManageModal setIsManageModalOpen={setIsManageModalOpen} />}
+        {isManageModalOpen && (
+          <ManageModal
+            setIsManageModalOpen={setIsManageModalOpen}
+            waitingMembers={waitingMembers}
+          />
+        )}
       </MenuContainer>
     </Container>
   );
@@ -123,6 +159,15 @@ const GroupMembers = styled.div`
   align-items: center;
   padding-top: 3rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  @media (max-width: 1080px) {
+    width: 30%;
+  }
+  @media (max-width: 840px) {
+    width: 35%;
+  }
+  @media (max-width: 767px) {
+    height: 42rem;
+  }
 `;
 
 const MenuContainer = styled.div`
@@ -136,6 +181,7 @@ const MenuContainer = styled.div`
   @media ${res.mobile} {
     flex-direction: column;
     gap: 2rem;
+  }
 `;
 const Card = styled.div`
   width: 52rem;
@@ -193,14 +239,14 @@ const LargeBox = styled.div`
   margin-top: 3rem;
   position: relative;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  
+
   @media ${res.tablet} {
-    justify-content:center;
-    width:75rem;
+    justify-content: center;
+    width: 75rem;
   }
   @media ${res.mobile} {
     flex-direction: column;
-    width:65rem;
+    width: 65rem;
     gap: 2rem;
   }
 `;
@@ -209,11 +255,11 @@ const GroupInfo = styled.div`
   display: flex;
   align-items: center;
   @media ${res.tablet} {
-    justify-content:left;
-    width:75rem;
+    justify-content: left;
+    width: 75rem;
   }
   @media ${res.mobile} {
-    width:65rem;
+    width: 65rem;
     gap: 2rem;
     justify-content: left;
   }
@@ -225,7 +271,6 @@ const GroupImage = styled.img`
   margin-left: 3rem;
   margin-right: 3rem;
   margin-top: -1rem;
-  
 `;
 
 const GroupDetails = styled.div`

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import { ROUTE } from '../../constants/routes/routeData';
 import MyProfile from '../mypages/profilebox/MyProfile';
 
@@ -11,59 +11,79 @@ const MobileMenu = ({ userInfo }) => {
     setIsOpen(!isOpen);
   };
 
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
+
+  const logOut = () => {
+    sessionStorage.removeItem('userToken');
+    window.location.reload();
+  };
+
   return (
     <>
       <HamburgerButton onClick={toggleMenu}>
         <HamburgerIcon className={isOpen ? 'open' : ''} />
       </HamburgerButton>
-      {isOpen && (
-        <MobileMenuContainer >
-        <MobileMenubox>
-          <CloseButton onClick={toggleMenu}>&times;</CloseButton>
+      <MobileMenuContainer isOpen={isOpen}>
+        <MobileMenuContent isOpen={isOpen}>
+          <CloseButton onClick={closeMenu}>&times;</CloseButton>
           <MyProfilebox>
             <MyProfile userInfo={userInfo} />
           </MyProfilebox>
           <MenuItem>
-            <MenuLink to={ROUTE.GROUP_LIST.link} onClick={toggleMenu}>Group</MenuLink>
+            <MenuLink to={ROUTE.GROUP_LIST.link} onClick={closeMenu}>
+              Group
+            </MenuLink>
           </MenuItem>
           <MenuItem>
-            <MenuLink to={'/'} onClick={toggleMenu}>Challenge</MenuLink>
+            <MenuLink to={'/'} onClick={closeMenu}>
+              Challenge
+            </MenuLink>
           </MenuItem>
           <MenuItem>
-            <MenuLink to={'/'} onClick={toggleMenu}>Community</MenuLink>
+            <MenuLink to={'/'} onClick={closeMenu}>
+              Community
+            </MenuLink>
           </MenuItem>
           <SubMenu>
-            {userInfo ? (
-              <LoginBox>
-                <SubMenuList>
-                  <SubMenuBtn btn={'stroke'}>
-                    <Link to={ROUTE.LOGIN.link}>LOGIN</Link>
-                  </SubMenuBtn>
-                </SubMenuList>
-                <SubMenuList>
-                  <SubMenuBtn>
-                    <Link to={ROUTE.JOIN.link}>JOIN</Link>
-                  </SubMenuBtn>
-                </SubMenuList>
-              </LoginBox>
-            ) : (
-              <LoginBox>
-                <SubMenuList>
-                  <SubMenuBtn btn={'stroke'}>
-                    <Link>LOGOUT</Link>
-                  </SubMenuBtn>
-                </SubMenuList>
-                <SubMenuList>
-                  <SubMenuBtn>
-                    <Link to={ROUTE.PAGE_GROUP.link}>MYPAGE</Link>
-                  </SubMenuBtn>
-                </SubMenuList>
-              </LoginBox>
-            )}
-          </SubMenu>
-          </MobileMenubox>
-        </MobileMenuContainer>
-      )}
+        {userInfo ? (
+          <LoginBox>
+            <SubMenuList>
+              <SubMenuBtn btn={'stroke'}>
+                <Link to={ROUTE.PAGE_GROUP.link} onClick={closeMenu}>
+                  MYPAGE
+                </Link>
+              </SubMenuBtn>
+            </SubMenuList>
+            <SubMenuList>
+              <SubMenuBtn onClick={logOut}>
+                <Link to={'/'}>LOGOUT</Link>
+              </SubMenuBtn>
+            </SubMenuList>
+          </LoginBox>
+        ) : (
+          <LoginBox>
+            <SubMenuList>
+              <SubMenuBtn btn={'stroke'}>
+                <Link to={ROUTE.LOGIN.link} onClick={closeMenu}>
+                  LOGIN
+                </Link>
+              </SubMenuBtn>
+            </SubMenuList>
+            <SubMenuList>
+              <SubMenuBtn>
+                <Link to={ROUTE.JOIN.link} onClick={closeMenu}>
+                  JOIN
+                </Link>
+              </SubMenuBtn>
+            </SubMenuList>
+          </LoginBox>
+        )}
+        </SubMenu>
+        </MobileMenuContent>
+      </MobileMenuContainer>
+      {isOpen && <MobileMenuOverlay onClick={closeMenu} />}
     </>
   );
 };
@@ -75,8 +95,9 @@ const HamburgerButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 3rem; 
+  height: 3rem; 
 `;
-
 const HamburgerIcon = styled.div`
   width: 24px;
   height: 3px;
@@ -118,7 +139,27 @@ const HamburgerIcon = styled.div`
   }
 `;
 
+const slideInAnimation = keyframes`
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+`;
+
+const slideOutAnimation = keyframes`
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+`;
+
+
 const MobileMenuContainer = styled.div`
+  transform: ${({ isOpen }) => (isOpen ? 'translateX(0)' : 'translateX(100%)')};
   position: fixed;
   top: 0;
   right: 0;
@@ -128,19 +169,43 @@ const MobileMenuContainer = styled.div`
   display: flex;
   flex-direction: column;
   z-index: 999;
-  width: 50%;
+  width: 50%; 
   overflow-x: visible;
-  @media (max-width: 530px) {
-    width:70%;
-  };
-  
+  ${({ isOpen }) =>
+    isOpen
+      ? css`
+          animation: ${slideInAnimation} 0.3s ease;
+        `
+      : css`
+          animation: ${slideOutAnimation} 0.3s ease;
+        `};
+  overflow-y:auto;
+  @media (max-width: 920px) {
+    width: 70%;
+  }
+
+  @media (max-width: 500px) {
+    width: 100%;
+  }
 `;
 
-const MobileMenubox = styled.div`
-  display:flex;
-  flex-direction:column;
-  margin:-12px;
-  position:relative;
+const MobileMenuOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+`;
+
+
+const MobileMenuContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: -12px;
+  position: relative;
+  visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
 `;
 const CloseButton = styled.button`
   position: absolute;
@@ -206,7 +271,7 @@ const LoginBox = styled.div`
     flex-direction: column;
 `;
 
-const SubMenuBtn = styled.div`
+const SubMenuBtn = styled.button`
   background-color: ${({ btn }) => (btn === 'stroke' ? '#fff' : '#457B3B')}; 
   margin-top: 1.2rem;
   width: 50rem;
@@ -218,11 +283,14 @@ const SubMenuBtn = styled.div`
   border: 0.3rem solid ${({ btn }) => (btn === 'stroke' ? '#457B3B' : '#457B3B')};
 
   &:hover {
-    background-color: ${({ btn }) => (btn === 'stroke' ? '#f2f7f5' : '#5C8E6A')}; /* 변경된 부분: 호버 시 배경색 진하게 설정 */
-    border-color: ${({ btn }) => (btn === 'stroke' ? '#5C8E6A' : '#5C8E6A')}; /* 변경된 부분: 호버 시 테두리 색상 조정 */
+    background-color: ${({ btn }) => (btn === 'stroke' ? '#f2f7f5' : '#5C8E6A')}; 
+    border-color: ${({ btn }) => (btn === 'stroke' ? '#5C8E6A' : '#5C8E6A')}; 
   }
 
   a {
+    padding-top:2rem;
+    width:100%;
+    height:100%;
     font-size: 2rem;
     font-weight: 500;
     color: ${({ btn }) => (btn === 'stroke' ? '#457B3B' : '#fff')};

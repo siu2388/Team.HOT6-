@@ -5,7 +5,7 @@ class activityService {
     const newActivity = {
       userId,
       groupId,
-      state,
+      state: '대기',
       name,
       usedDate,
       category,
@@ -15,6 +15,7 @@ class activityService {
   }
 
   static async getActivityInfo(groupId, year, month) {
+    // 년도, 월에 해당하는 데이터 가져오기
     const activities = await Activity.find({
       groupId: groupId,
       state: '승인',
@@ -24,29 +25,39 @@ class activityService {
       },
     });
 
-    const activityCount = {
-      tumbler: 0,
-      multipleContainers: 0,
-    };
-
-    for (const activity of activities) {
-      const { category } = activity;
-      activityCount[category]++;
+    function countActivity(activities, activityType) {
+      return activities.reduce((count, activity) => {
+        console.log('11', activity);
+        return activity.category === activityType ? count + 1 : count;
+      }, 0);
     }
 
-    const response = {
-      activities: activities.map(activity => ({
-        usedDate: activity.usedDate,
-        name: activity.name,
-        category: activity.category,
-      })),
-    };
+    const activityDataByDate = {};
 
-    return { ...response, ...activityCount };
+    activities.forEach(activity => {
+      const dateKey = activity.usedDate.toISOString().slice(0, 10); // 날짜 포맷 변경
+      if (!activityDataByDate[dateKey]) {
+        activityDataByDate[dateKey] = {
+          date: dateKey,
+          tumbler: 0,
+          multipleContainers: 0,
+          member: [],
+        };
+      }
+      activityDataByDate[dateKey].tumbler += countActivity([activity], 'tumbler');
+      activityDataByDate[dateKey].multipleContainers += countActivity(
+        [activity],
+        'multipleContainers',
+      );
+      if (activityDataByDate[dateKey].member.indexOf(activity.userId._id) === -1) {
+        activityDataByDate[dateKey].member.push(activity.userId._id);
+      }
+    });
+
+    const activityData = Object.values(activityDataByDate);
+
+    return activityData;
   }
-
-  // static async addActivity() {}
-  // static async removeActivity() {}
 }
 
 export { activityService };

@@ -35,16 +35,16 @@ export default function AddActiveModal({ onClickToggleModal, selectedDate }) {
     setActivity(e.target.value);
   };
 
-  console.log(groupId);
-
   const handleAddActivity = async () => {
     const formData = new FormData();
-
+    console.log(userInfo);
     formData.append('name', userInfo.user.name);
     formData.append('groupId', groupId);
     formData.append('usedDate', selectedDate);
     formData.append('category', activity);
     formData.append('proofImg', imgFile);
+
+    console.log(formData);
 
     try {
       await API.formPost('/activities', formData);
@@ -52,7 +52,6 @@ export default function AddActiveModal({ onClickToggleModal, selectedDate }) {
         state: true,
         message: '인증요청에 성공하였습니다. 인증 완료 후 포인트가 적립됩니다.',
       });
-      onClickToggleModal();
     } catch (err) {
       setIsErrorModal({
         state: true,
