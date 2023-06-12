@@ -1,42 +1,27 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState} from 'react';
 import { Link } from 'react-router-dom';
-import styled,{ keyframes } from 'styled-components';
+import styled,{ keyframes, css } from 'styled-components';
 import { ROUTE } from '../../constants/routes/routeData';
 import MyProfile from '../mypages/profilebox/MyProfile';
 
 const MobileMenu = ({ userInfo }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  useEffect(() => {
-    const handleEscKey = (event) => {
-      if (event.keyCode === 27) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('keydown', handleEscKey);
-
-    return () => {
-      document.removeEventListener('keydown', handleEscKey);
-    };
-  }, []);
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
-
   
-
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
   return (
     <>
       <HamburgerButton onClick={toggleMenu}>
         <HamburgerIcon className={isOpen ? 'open' : ''} />
       </HamburgerButton>
-      {isOpen && (
-        <>
-          <MobileMenuOverlay  onClick={toggleMenu} />
-        <MobileMenuContainer isOpen={isOpen}>
-        <MobileMenubox>
-          <CloseButton onClick={toggleMenu}>&times;</CloseButton>
+      <MobileMenuContainer isOpen={isOpen}>
+        <MobileMenuContent isOpen={isOpen}>
+          <CloseButton onClick={closeMenu}>&times;</CloseButton>
           <MyProfilebox>
             <MyProfile userInfo={userInfo} />
           </MyProfilebox>
@@ -78,10 +63,9 @@ const MobileMenu = ({ userInfo }) => {
             </LoginBox>
           )}
           </SubMenu>
-          </MobileMenubox>
-        </MobileMenuContainer>
-        </>
-      )}
+          </MobileMenuContent>
+      </MobileMenuContainer>
+      {isOpen && <MobileMenuOverlay onClick={closeMenu} />}
     </>
   );
 };
@@ -93,8 +77,9 @@ const HamburgerButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 3rem; 
+  height: 3rem; 
 `;
-
 const HamburgerIcon = styled.div`
   width: 24px;
   height: 3px;
@@ -156,6 +141,7 @@ const slideOutAnimation = keyframes`
 
 
 const MobileMenuContainer = styled.div`
+  transform: ${({ isOpen }) => (isOpen ? 'translateX(0)' : 'translateX(100%)')};
   position: fixed;
   top: 0;
   right: 0;
@@ -165,11 +151,17 @@ const MobileMenuContainer = styled.div`
   display: flex;
   flex-direction: column;
   z-index: 999;
-  width: 50%;
+  width: 50%; 
   overflow-x: visible;
-  animation: ${({ isOpen }) => (isOpen ? slideInAnimation : slideOutAnimation)} 0.3s ease;
-
-
+  ${({ isOpen }) =>
+    isOpen
+      ? css`
+          animation: ${slideInAnimation} 0.3s ease;
+        `
+      : css`
+          animation: ${slideOutAnimation} 0.3s ease;
+        `};
+  overflow-y:auto;
   @media (max-width: 920px) {
     width: 70%;
   }
@@ -190,11 +182,12 @@ const MobileMenuOverlay = styled.div`
 `;
 
 
-const MobileMenubox = styled.div`
-  display:flex;
-  flex-direction:column;
-  margin:-12px;
-  position:relative;
+const MobileMenuContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: -12px;
+  position: relative;
+  visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
 `;
 const CloseButton = styled.button`
   position: absolute;
@@ -260,7 +253,7 @@ const LoginBox = styled.div`
     flex-direction: column;
 `;
 
-const SubMenuBtn = styled.div`
+const SubMenuBtn = styled.button`
   background-color: ${({ btn }) => (btn === 'stroke' ? '#fff' : '#457B3B')}; 
   margin-top: 1.2rem;
   width: 50rem;
@@ -274,8 +267,12 @@ const SubMenuBtn = styled.div`
   &:hover {
     background-color: ${({ btn }) => (btn === 'stroke' ? '#f2f7f5' : '#5C8E6A')}; 
     border-color: ${({ btn }) => (btn === 'stroke' ? '#5C8E6A' : '#5C8E6A')}; 
+  }
 
   a {
+    padding-top:2rem;
+    width:100%;
+    height:100%;
     font-size: 2rem;
     font-weight: 500;
     color: ${({ btn }) => (btn === 'stroke' ? '#457B3B' : '#fff')};

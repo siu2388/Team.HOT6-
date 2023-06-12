@@ -198,7 +198,7 @@ export const MainMent03 = styled.h3`
 
 export const ScrollBox = styled.div`
   position: absolute;
-  z-index: 999;
+  z-index: 990;
   bottom: 5rem;
   left: 50%;
   transform: translateX(-50%);
