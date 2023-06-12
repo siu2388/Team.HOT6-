@@ -40,6 +40,12 @@ export default function JoinPage({ page }) {
     addressDetail: userInfo?.user?.addressDetail || '',
   });
 
+  useEffect(() => {
+    if (userInfo) {
+      navigate('/');
+    }
+  }, [userInfo]);
+
   const [formError, setFormError] = useState({
     userId: false,
     password: false,
