@@ -14,19 +14,19 @@ const ActivitySchema = new Schema(
     },
     name: {
       type: String,
-      require: true,
+      required: true,
     },
     usedDate: {
       type: Date,
-      require: true,
+      required: true,
     },
     state: {
       type: String,
-      require: true,
+      required: true,
     },
     category: {
       type: String,
-      require: true,
+      required: true,
       enum: ['tumbler', 'multipleContainers'],
     },
     proofImg: {
