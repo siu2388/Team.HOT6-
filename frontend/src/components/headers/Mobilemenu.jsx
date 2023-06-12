@@ -1,6 +1,6 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import styled,{ keyframes, css } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import { ROUTE } from '../../constants/routes/routeData';
 import MyProfile from '../mypages/profilebox/MyProfile';
 
@@ -10,10 +10,16 @@ const MobileMenu = ({ userInfo }) => {
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
-  
+
   const closeMenu = () => {
     setIsOpen(false);
   };
+
+  const logOut = () => {
+    sessionStorage.removeItem('userToken');
+    window.location.reload();
+  };
+
   return (
     <>
       <HamburgerButton onClick={toggleMenu}>
@@ -26,44 +32,56 @@ const MobileMenu = ({ userInfo }) => {
             <MyProfile userInfo={userInfo} />
           </MyProfilebox>
           <MenuItem>
-            <MenuLink to={ROUTE.GROUP_LIST.link} onClick={toggleMenu}>Group</MenuLink>
+            <MenuLink to={ROUTE.GROUP_LIST.link} onClick={closeMenu}>
+              Group
+            </MenuLink>
           </MenuItem>
           <MenuItem>
-            <MenuLink to={'/'} onClick={toggleMenu}>Challenge</MenuLink>
+            <MenuLink to={'/'} onClick={closeMenu}>
+              Challenge
+            </MenuLink>
           </MenuItem>
           <MenuItem>
-            <MenuLink to={'/'} onClick={toggleMenu}>Community</MenuLink>
+            <MenuLink to={'/'} onClick={closeMenu}>
+              Community
+            </MenuLink>
           </MenuItem>
           <SubMenu>
-          {userInfo ? (
-            <LoginBox>
-              <SubMenuList>
-                <SubMenuBtn btn={'stroke'}>
-                  <Link to={ROUTE.PAGE_GROUP.link}>MYPAGE</Link>
-                </SubMenuBtn>
-              </SubMenuList>
-              <SubMenuList>
-                <SubMenuBtn>
-                  <Link>LOGOUT</Link>
-                </SubMenuBtn>
-              </SubMenuList>
-            </LoginBox>
-          ) : (
-            <LoginBox>
-              <SubMenuList>
-                <SubMenuBtn btn={'stroke'}>
-                  <Link to={ROUTE.LOGIN.link}>LOGIN</Link>
-                </SubMenuBtn>
-              </SubMenuList>
-              <SubMenuList>
-                <SubMenuBtn>
-                  <Link to={ROUTE.JOIN.link}>JOIN</Link>
-                </SubMenuBtn>
-              </SubMenuList>
-            </LoginBox>
-          )}
-          </SubMenu>
-          </MobileMenuContent>
+        {userInfo ? (
+          <LoginBox>
+            <SubMenuList>
+              <SubMenuBtn btn={'stroke'}>
+                <Link to={ROUTE.PAGE_GROUP.link} onClick={closeMenu}>
+                  MYPAGE
+                </Link>
+              </SubMenuBtn>
+            </SubMenuList>
+            <SubMenuList>
+              <SubMenuBtn onClick={logOut}>
+                <Link to={'/'}>LOGOUT</Link>
+              </SubMenuBtn>
+            </SubMenuList>
+          </LoginBox>
+        ) : (
+          <LoginBox>
+            <SubMenuList>
+              <SubMenuBtn btn={'stroke'}>
+                <Link to={ROUTE.LOGIN.link} onClick={closeMenu}>
+                  LOGIN
+                </Link>
+              </SubMenuBtn>
+            </SubMenuList>
+            <SubMenuList>
+              <SubMenuBtn>
+                <Link to={ROUTE.JOIN.link} onClick={closeMenu}>
+                  JOIN
+                </Link>
+              </SubMenuBtn>
+            </SubMenuList>
+          </LoginBox>
+        )}
+        </SubMenu>
+        </MobileMenuContent>
       </MobileMenuContainer>
       {isOpen && <MobileMenuOverlay onClick={closeMenu} />}
     </>
