@@ -3,8 +3,10 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { imgFileState } from '../../stores';
 
-export default function FileUpload({ img }) {
-  const [imageSrc, setImageSrc] = useState(img ? `http://localhost:5001/uploads/${img}` : null);
+export default function FileUpload({ profileImg }) {
+  const [imageSrc, setImageSrc] = useState(
+    profileImg ? `http://localhost:5001/uploads/${profileImg}` : null,
+  );
   const [, setImgFile] = useRecoilState(imgFileState);
 
   console.log(imageSrc);

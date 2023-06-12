@@ -41,7 +41,13 @@ export default function JoinPage({ page }) {
   });
 
   useEffect(() => {
-    if (userInfo) {
+    if (page === 'join' && userInfo) {
+      navigate('/');
+    }
+  }, [userInfo]);
+
+  useEffect(() => {
+    if (page === 'changeInfo' && !sessionStorage.getItem('userToken')) {
       navigate('/');
     }
   }, [userInfo]);
@@ -87,7 +93,6 @@ export default function JoinPage({ page }) {
     const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$&*])[a-zA-Z\d!@#$%^&*]{8,}$/;
 
     if (name === 'password') {
-      console.log(passwordRegex.test(value));
       if (!passwordRegex.test(value)) {
         setFormError(prev => ({ ...prev, password: true }));
       } else {
@@ -126,7 +131,9 @@ export default function JoinPage({ page }) {
     formData.append('phone', formDatas.phone);
     formData.append('address', postcodeAddress);
     formData.append('addressDetail', formDatas.addressDetail);
-    formData.append('profileImg', imgFile);
+    if (imgFile !== null) {
+      formData.append('profileImg', imgFile);
+    }
 
     try {
       if (page === 'join') {
@@ -164,7 +171,6 @@ export default function JoinPage({ page }) {
       });
     }
   };
-
   return (
     <JoinWrap>
       <JoinContainer>
@@ -176,7 +182,7 @@ export default function JoinPage({ page }) {
         </TitleBox>
         <Form onSubmit={handleSubmit}>
           <ProfileImgBox>
-            <FileUpload img={userInfo?.user?.profile} />
+            <FileUpload profileImg={userInfo?.user?.profileImg} />
           </ProfileImgBox>
           <InputBox>
             <TextField
