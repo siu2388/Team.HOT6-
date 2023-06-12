@@ -29,13 +29,9 @@ class groupService {
   }
 
   //그룹의 목록 조회
-  static async getGroups() {
-    const groups = await Group.findGroupList();
-    if (!groups) {
-      const errorMessage = 'Group 목록이 없습니다. 다시 확인해 주세요.';
-      return { errorMessage };
-    }
-    return groups;
+  static async getGroups(skip, limit) {
+    const { groups, count } = await Group.findAndCountAll(skip, limit);
+    return { groups, count };
   }
 
   // 그룹의 상세페이지 조회

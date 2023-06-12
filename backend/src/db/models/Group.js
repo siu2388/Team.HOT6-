@@ -27,9 +27,10 @@ class Group {
   }
 
   //그룹 목록 조회
-  static async findGroupList() {
-    const groupAllInfo = await GroupModel.find({});
-    return groupAllInfo;
+  static async findAndCountAll(skip, limit) {
+    const groups = await GroupModel.find().skip(skip).limit(limit).exec();
+    const count = await GroupModel.countDocuments();
+    return { groups, count };
   }
 
   //그룹명 검색
@@ -37,7 +38,7 @@ class Group {
     const search = await GroupModel.findOne({ title: title });
     return search;
   }
-  
+
   //대기자조회
   static async findBygroupIdAndState({ groupId, state }) {
     const groupJoinready = await GroupModel.find({
