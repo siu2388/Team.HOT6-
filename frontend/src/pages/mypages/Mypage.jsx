@@ -136,6 +136,7 @@ const MenuContainer = styled.div`
   @media ${res.mobile} {
     flex-direction: column;
     gap: 2rem;
+  }
 `;
 const Card = styled.div`
   width: 52rem;
