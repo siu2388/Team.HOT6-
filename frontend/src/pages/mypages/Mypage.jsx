@@ -3,7 +3,12 @@ import styled from 'styled-components';
 import ManageModal from '../../components/mypages/groupbox/ManageModal';
 import MyProfile from '../../components/mypages/profilebox/MyProfile';
 import RewardPoints from '../../components/mypages/largebox/RewardPoints';
-import { userInfoState, userTokenState } from '../../stores';
+import {
+  isErrorModalState,
+  isSuccessModalState,
+  userInfoState,
+  userTokenState,
+} from '../../stores';
 import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { ROUTE } from '../../constants/routes/routeData';
@@ -20,6 +25,8 @@ export default function Mypage() {
   const [waitingMembers, setWaitingMembers] = useState([]);
   const [waitingActivity, setWaitingActivity] = useState([]);
   const [userToken] = useRecoilState(userTokenState);
+  const [, setIsScucessModal] = useRecoilState(isSuccessModalState);
+  const [, setIsErrorModal] = useRecoilState(isErrorModalState);
 
   useEffect(() => {
     if (!sessionStorage.getItem('userToken')) {
@@ -69,6 +76,22 @@ export default function Mypage() {
 
   const handleMenuItemClick = menuItem => {
     setActiveMenuItem(menuItem);
+  };
+
+  const onClickDeleteGroup = () => {
+    try {
+      const result = API.delete(`/mygroups/${myGroup?.result[0]?.groupId?._id}`);
+      setIsScucessModal({
+        state: true,
+        message: '그룹을 탈퇴하였습니다.',
+      });
+      console.log(result);
+    } catch (err) {
+      setIsErrorModal({
+        state: true,
+        message: err.response.data.message,
+      });
+    }
   };
 
   return (
@@ -145,7 +168,7 @@ export default function Mypage() {
                 </GroupDetails>
               </GroupInfo>
               <GroupButton>
-                <GroupLeaveButton>그룹탈퇴</GroupLeaveButton>
+                <GroupLeaveButton onClick={onClickDeleteGroup}>그룹탈퇴</GroupLeaveButton>
                 {myGroup?.result?.[0]?.groupId?.groupOwnerId?._id === userInfo?.user?._id && (
                   <GroupManageButton onClick={openManageModal}>그룹관리</GroupManageButton>
                 )}

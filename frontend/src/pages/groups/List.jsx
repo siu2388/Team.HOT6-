@@ -12,14 +12,19 @@ import { res } from '../../styles/responsive';
 
 export default function GroupList() {
   const [groupList, setGroupList] = useState([]);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     const getGroups = async () => {
-      const result = await Api.get('/groups');
-      setGroupList(result.data.groups.reverse());
+      const result = await Api.get(`/groups?page=${page}`);
+      setGroupList(result.data);
     };
     getGroups();
-  }, []);
+  }, [page]);
+
+  const onChangePage = (_, value) => {
+    setPage(value);
+  };
 
   console.log(groupList);
 
@@ -47,12 +52,19 @@ export default function GroupList() {
           </Button>
         </SearchContainer>
         <GroupLists>
-          {groupList?.map(group => (
+          {groupList?.groups?.map(group => (
             <ListBox key={group.id} group={group} />
           ))}
         </GroupLists>
         <PagenationBox>
-          <Pagination count={5} size="large" />
+          <Pagination
+            count={groupList?.totalPages}
+            page={page}
+            size="large"
+            variant="outlined"
+            color="primary"
+            onChange={onChangePage}
+          />
         </PagenationBox>
       </GroupListContainer>
     </GroupListWrap>
