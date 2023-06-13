@@ -47,6 +47,15 @@ class Activity {
     );
     return activities;
   }
+
+  // 그룹 랭킹
+  static async getActivityCountBygroupId(groupId, startOfMonth, endOfMonth) {
+    const totalCount = await ActivityModel.countDocuments({
+      groupId,
+      usedDate: { $gte: startOfMonth, $lte: endOfMonth },
+    });
+    return totalCount;
+  }
 }
 
 export { Activity };

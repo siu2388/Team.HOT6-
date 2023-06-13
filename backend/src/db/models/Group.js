@@ -62,6 +62,11 @@ class Group {
     const isDataDeleted = deleteResult.deletedCount === 1;
     return isDataDeleted;
   }
+
+  static async findAll() {
+    const groups = await GroupModel.find();
+    return groups;
+  }
 }
 
 export { Group };
