@@ -136,6 +136,19 @@ class userAuthService {
 
     return user;
   }
+
+  // 나의 그룹 조회용
+  static async getMyGroup({ userId }) {
+    const group = await User.findMyGroup({ userId });
+    return group;
+  }
+
+  // groupId 같은 멤버 조회 
+  static async getMembers({groupId}) {
+    const members = await User.findGroupMembers({groupId});
+    return members;
+  }
+
   // 유저가 그룹에 가입신청 시 groupId값 업데이트
   static async setUserGroup({ userId, groupId }) {
     const updated = await User.updateGroupId({ userId, groupId });
@@ -143,7 +156,7 @@ class userAuthService {
   }
 
   // 유저의 groupId값 삭제
-  static async deleteGroupId({ groupId , userId}) {
+  static async deleteGroupId({ groupId, userId }) {
     const deleteGroupId = await User.deleteGroupId({ groupId, userId });
     return deleteGroupId;
   }

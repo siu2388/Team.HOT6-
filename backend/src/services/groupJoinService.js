@@ -3,35 +3,32 @@ import { User } from '../db/models/User.js';
 import { Group } from '../db/models/Group.js';
 
 class groupJoinService {
-  // 유저의 그룹 가입 - 완
+  // 유저의 그룹 가입
   static async groupJoin({ groupId, userId, state }) {
-    const group = await Group.findById({ groupId });
-    const user = await User.findById({ userId });
+    // const group = await Group.findById({ groupId });
+    // const user = await User.findById({ userId });
     const newGroupJoin = {
       groupId,
       userId,
       state,
     };
-
-    //console.log('444', newGroupJoin);
     const groupJoin = await GroupJoin.create(newGroupJoin);
-    //console.log('234', groupJoin);
     return groupJoin;
   }
-
+  // 그룹 가입 시 중복가입 방지 조회용
   static async getUserGroup({ userId }) {
     const group = await GroupJoin.findByUserId({ userId });
+    
     return group;
   }
-  //유저가 가입한 그룹 확인 -완
-  static async getMyGroup({userId}) {
-    const group = await GroupJoin.findMyGroup({userId});
+  //나의 그룹 조회
+  static async getMyGroup({ userId }) {
+    const group = await GroupJoin.findMyGroup({ userId });
     return group;
   }
   // 그룹 가입 대기자 리스트 - 관리자용
   static async getWaitingList({ groupId }) {
     const waitingList = await GroupJoin.findByGroupId({ groupId });
-    console.log('되냐', waitingList);
     return waitingList;
   }
 

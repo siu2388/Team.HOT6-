@@ -5,7 +5,7 @@ import { Button, Slider, TextField } from '@mui/material';
 import * as API from '../../api/index';
 import { imgFileState, isErrorModalState, isSuccessModalState } from '../../stores';
 import { useRecoilState } from 'recoil';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const marks = [
   {
@@ -27,6 +27,8 @@ export default function GroupWritePage() {
   const [thumbnail] = useRecoilState(imgFileState);
   const [, setIsScucessModal] = useRecoilState(isSuccessModalState);
   const [, setIsErrorModal] = useRecoilState(isErrorModalState);
+
+  const navigete = useNavigate();
 
   const onChangeSliderValue = value => {
     setSliderValue(value);
@@ -62,15 +64,18 @@ export default function GroupWritePage() {
       formData.append('totalNumOfMembers', sliderValue);
       formData.append('thumbnail', thumbnail);
 
-      await API.formPost('/groups', formData);
+      const result = await API.formPost('/groups', formData);
       setIsScucessModal({
         state: true,
         message: '그룹을 등록하였습니다.',
       });
+
+      console.log(result);
+      navigete(`/groups/${result.data.newGroup._id}`);
     } catch (err) {
       setIsErrorModal({
         state: true,
-        message: err.response.data,
+        message: err.response.data.message,
       });
     }
   };

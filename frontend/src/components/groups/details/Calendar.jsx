@@ -6,8 +6,8 @@ import MemberProfileBox from '../../commons/box/MemberProfileBox';
 import { getDate, getDayOfWeek } from '../../../commons/utils/getDate';
 import AddActiveModal from './AddActiveModal';
 import { res } from '../../../styles/responsive';
-import * as api from '../../../api.js';
 import { useParams } from 'react-router-dom';
+import * as api from '../../../api.js';
 
 export default function GroupCalendar() {
   const [selectedDate, setSelectedDate] = useState(new Date());

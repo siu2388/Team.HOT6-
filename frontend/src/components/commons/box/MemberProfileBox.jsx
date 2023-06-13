@@ -2,11 +2,17 @@ import { Avatar } from '@mui/material';
 import React from 'react';
 import styled from 'styled-components';
 
-export default function MemberProfileBox() {
+export default function MemberProfileBox({ member }) {
   return (
     <ProfileWrap>
-      <Avatar alt="내 프로필" src="/images/commons/kkam.png" sx={{ width: 48, height: 48 }} />
-      <UserName>조정택 (깜장이)</UserName>
+      <Avatar
+        alt="내 프로필"
+        src={`http://localhost:5001/uploads/${member?.profileImg}`}
+        sx={{ width: 48, height: 48 }}
+      />
+      <UserName>
+        {member?.name} ({member?.nickname})
+      </UserName>
     </ProfileWrap>
   );
 }

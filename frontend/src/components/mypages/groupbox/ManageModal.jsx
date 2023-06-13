@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Avatar } from '@mui/material';
 
-export default function ManageModal({ setIsManageModalOpen }) {
+export default function ManageModal({ setIsManageModalOpen, waitingMembers }) {
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(true);
 
   const closeManageModal = () => {
@@ -35,46 +35,27 @@ export default function ManageModal({ setIsManageModalOpen }) {
           </ButtonContainer>
           {isJoinModalOpen ? (
             <MembersInfo>
-              <MemberItem>
-                <MemberNameBox>
-                  <Avatar alt="멤버 이미지" src="/images/commons/kkam.png" />
-                  <MemberText>깜장이 친구가 되고싶은 (조정택짱ㅋ)</MemberText>
-                </MemberNameBox>
-                <ManageButton>
-                  <AcceptButton>수락</AcceptButton>
-                  <RejectButton>거절</RejectButton>
-                </ManageButton>
-              </MemberItem>
-              <MemberItem>
-                <MemberNameBox>
-                  <Avatar alt="멤버 이미지" src="/images/commons/kkam.png" />
-                  <MemberText>깜장이 친구가 되고싶은 (조정택짱ㅋ)</MemberText>
-                </MemberNameBox>
-                <ManageButton>
-                  <AcceptButton>수락</AcceptButton>
-                  <RejectButton>거절</RejectButton>
-                </ManageButton>
-              </MemberItem>
-              <MemberItem>
-                <MemberNameBox>
-                  <Avatar alt="멤버 이미지" src="/images/commons/kkam.png" />
-                  <MemberText>깜장이 친구가 되고싶은 (조정택짱ㅋ)</MemberText>
-                </MemberNameBox>
-                <ManageButton>
-                  <AcceptButton>수락</AcceptButton>
-                  <RejectButton>거절</RejectButton>
-                </ManageButton>
-              </MemberItem>
-              <MemberItem>
-                <MemberNameBox>
-                  <Avatar alt="멤버 이미지" src="/images/commons/kkam.png" />
-                  <MemberText>깜장이 친구가 되고싶은 (조정택짱ㅋ)</MemberText>
-                </MemberNameBox>
-                <ManageButton>
-                  <AcceptButton>수락</AcceptButton>
-                  <RejectButton>거절</RejectButton>
-                </ManageButton>
-              </MemberItem>
+              {waitingMembers.length > 0 ? (
+                waitingMembers?.map(el => (
+                  <MemberItem key={el._id}>
+                    <MemberNameBox>
+                      <Avatar
+                        alt="멤버 이미지"
+                        src={`http://localhost:5001/uploads/${el.userId.profileImg}`}
+                      />
+                      <MemberText>
+                        {el.userId.name}({el.userId.nickname})
+                      </MemberText>
+                    </MemberNameBox>
+                    <ManageButton>
+                      <AcceptButton>수락</AcceptButton>
+                      <RejectButton>거절</RejectButton>
+                    </ManageButton>
+                  </MemberItem>
+                ))
+              ) : (
+                <ErrorText>가입 신청 내역이 없습니다.</ErrorText>
+              )}
             </MembersInfo>
           ) : (
             <MembersInfo>
@@ -177,14 +158,14 @@ const ModalCloseButton = styled.button`
   position: absolute;
   right: 3rem;
 `;
-  
+
 const ModalBody = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 `;
-  
+
 const ButtonContainer = styled.div`
   width: 25rem;
   height: 4rem;
@@ -203,7 +184,7 @@ const JoinButton = styled.button`
   padding: 0.3rem;
   margin: 1.5rem;
   transition: background-color 0.3s;
-  background-color: ${(props) => (props.active ? '#fff' : '#9fdf9f')};
+  background-color: ${props => (props.active ? '#fff' : '#9fdf9f')};
   border-radius: 0.7rem;
 `;
 
@@ -213,10 +194,9 @@ const ActButton = styled.button`
   padding: 0.3rem;
   margin: 1.5rem;
   transition: background-color 0.3s;
-  background-color: ${(props) => (props.active ? '#fff' : '#9fdf9f')};
+  background-color: ${props => (props.active ? '#fff' : '#9fdf9f')};
   border-radius: 0.7rem;
 `;
-
 
 const ManageButton = styled.div`
   display: flex;
@@ -249,13 +229,13 @@ const RejectButton = styled.button`
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `;
-  
+
 const MembersInfo = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 2rem;
 `;
-  
+
 const MemberItem = styled.div`
   width: 43rem;
   display: flex;
@@ -266,7 +246,7 @@ const MemberItem = styled.div`
   padding: 1.2rem;
   justify-content: space-between;
 `;
-  
+
 const MemberText = styled.span`
   font-size: 16px;
   margin-left: 10px;
@@ -288,4 +268,12 @@ const ContainerText = styled.button`
   font-size: 10px;
   margin-left: 10px;
   color: #999999;
+`;
+
+const ErrorText = styled.p`
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: #111;
+  text-align: center;
+  margin: 3rem 0;
 `;

@@ -21,6 +21,24 @@ class User {
     return users;
   }
 
+  // 나의 그룹 조회
+  static async findMyGroup({ userId }) {
+    const group = await UserModel.find({ _id: userId }, 'groupId').populate({
+      path: 'groupId',
+      populate: { path: 'groupOwnerId' },
+    });
+    return group;
+  }
+
+  // groupId 같은 멤버 조회용
+  static async findGroupMembers({ groupId }) {
+    const foundMembers = await UserModel.find(
+      { groupId },
+      'userId name nickname phone profileImg groupId',
+    );
+    return foundMembers;
+  }
+
   static async update({ loginedId, fieldToUpdate, newValue }) {
     const filter = { _id: loginedId };
     const update = { [fieldToUpdate]: newValue };
@@ -42,7 +60,7 @@ class User {
 
   // 유저의 groupId 삭제
   static async deleteGroupId({ groupId, userId }) {
-    const filter = { groupId, _id:userId };
+    const filter = { groupId, _id: userId };
     const update = { $set: { groupId: null } };
     const option = { returnOriginal: false };
 

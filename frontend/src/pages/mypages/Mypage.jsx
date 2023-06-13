@@ -1,18 +1,72 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ManageModal from '../../components/mypages/groupbox/ManageModal';
 import MyProfile from '../../components/mypages/profilebox/MyProfile';
 import RewardPoints from '../../components/mypages/largebox/RewardPoints';
-import { userInfoState } from '../../stores';
+import {
+  isErrorModalState,
+  isSuccessModalState,
+  userInfoState,
+  userTokenState,
+} from '../../stores';
 import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { ROUTE } from '../../constants/routes/routeData';
 import { res } from '../../styles/responsive';
+import * as API from '../../api/index';
+import { Avatar, AvatarGroup } from '@mui/material';
+
 export default function Mypage() {
   const [userInfo] = useRecoilState(userInfoState);
 
   const [isManageModalOpen, setIsManageModalOpen] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState('나의그룹');
+  const [myGroup, setMyGroup] = useState([]);
+  const [waitingMembers, setWaitingMembers] = useState([]);
+  const [waitingActivity, setWaitingActivity] = useState([]);
+  const [userToken] = useRecoilState(userTokenState);
+  const [, setIsScucessModal] = useRecoilState(isSuccessModalState);
+  const [, setIsErrorModal] = useRecoilState(isErrorModalState);
+
+  useEffect(() => {
+    if (!sessionStorage.getItem('userToken')) {
+      navigate('/');
+    }
+  }, [userToken]);
+
+  useEffect(() => {
+    const getMyGroup = async () => {
+      const result = await API.get(`/mygroups/${userInfo?.user?.groupId}`);
+      setMyGroup(result.data);
+    };
+    if (userInfo?.user?.groupId) {
+      console.log(getMyGroup);
+      getMyGroup();
+    }
+  }, [userInfo]);
+
+  useEffect(() => {
+    const getWaitingMembers = async () => {
+      const result = await API.get(`/mygroups/${myGroup?.result[0]?.groupId?._id}/waiting`);
+      setWaitingMembers(result.data);
+    };
+    if (myGroup?.groupId?._id) {
+      getWaitingMembers();
+    }
+  }, [myGroup]);
+
+  useEffect(() => {
+    const getWaitingActivity = async () => {
+      const result = await API.get(`/activities/${myGroup?.result[0]?.groupId?._id}/waiting`);
+      setWaitingActivity(result.data);
+    };
+    console.log(getWaitingActivity);
+    // if (myGroup?.groupId?._id) {
+    //   getWaitingActivity();
+    // }
+  }, [myGroup]);
+
+  console.log(waitingActivity);
 
   const navigate = useNavigate();
 
@@ -22,6 +76,22 @@ export default function Mypage() {
 
   const handleMenuItemClick = menuItem => {
     setActiveMenuItem(menuItem);
+  };
+
+  const onClickDeleteGroup = () => {
+    try {
+      const result = API.delete(`/mygroups/${myGroup?.result[0]?.groupId?._id}`);
+      setIsScucessModal({
+        state: true,
+        message: '그룹을 탈퇴하였습니다.',
+      });
+      console.log(result);
+    } catch (err) {
+      setIsErrorModal({
+        state: true,
+        message: err.response.data.message,
+      });
+    }
   };
 
   return (
@@ -55,39 +125,66 @@ export default function Mypage() {
         </Menu>
       </Card>
       <MenuContainer>
-        {activeMenuItem === '나의그룹' && (
-          <LargeBox>
-            <GroupInfo>
-              <GroupImage alt="그룹장 사진" src="/images/commons/kiki.JPG" />
-              <GroupDetails>
-                <GroupName>3학년 1반</GroupName>
-                <GroupRole>
-                  <GroupRoleText>그룹장</GroupRoleText>
-                  <GroupRoleName>유진이</GroupRoleName>
-                </GroupRole>
-                <GroupMembersCount>
-                  <GroupMembersNum>인원</GroupMembersNum>
-                  <GroupMembersImgBox>
-                    <GroupMembersImage src="/images/commons/kkam.png" alt="멤버 이미지" />
-                    <GroupMembersImage src="/images/commons/kkam.png" alt="멤버 이미지" />
-                    <GroupMembersImage src="/images/commons/kkam.png" alt="멤버 이미지" />
-                    <GroupMembersImage src="/images/commons/kkam.png" alt="멤버 이미지" />
-                  </GroupMembersImgBox>
-                  <GroupMembersCountText>4/15</GroupMembersCountText>
-                </GroupMembersCount>
-                <GroupCreation>
-                  <GroupCreationText>생성일</GroupCreationText>
-                  <GroupCreationDate>2020.01.01</GroupCreationDate>
-                </GroupCreation>
-              </GroupDetails>
+        {activeMenuItem === '나의그룹' &&
+          (userInfo?.user?.groupId ? (
+            <LargeBox>
+              <GroupInfo>
+                <GroupImage
+                  alt="그룹 사진"
+                  src={`http://localhost:5001/uploads/${myGroup?.result?.[0]?.groupId?.thumbnail}`}
+                />
+                <GroupDetails>
+                  <GroupName>{myGroup?.result?.[0]?.groupId?.title}</GroupName>
+                  <GroupRole>
+                    <GroupRoleText>그룹장</GroupRoleText>
+                    <GroupRoleName>
+                      {myGroup?.result?.[0]?.groupId?.groupOwnerId?.name}
+                    </GroupRoleName>
+                  </GroupRole>
+                  <GroupMembersCount>
+                    <GroupMembersNum>인원</GroupMembersNum>
+                    <GroupMembersImgBox>
+                      <AvatarGroup max={4}>
+                        {myGroup?.members?.map(member => (
+                          <Avatar
+                            key={member._id}
+                            alt="Remy Sharp"
+                            src={`http://localhost:5001/${member.profileImg}`}
+                            sx={{ width: '3rem', height: '3rem' }}
+                          />
+                        ))}
+                      </AvatarGroup>
+                    </GroupMembersImgBox>
+                    <GroupMembersCountText>
+                      {myGroup?.members?.length}/{myGroup?.result?.[0]?.groupId?.totalNumOfMembers}
+                    </GroupMembersCountText>
+                  </GroupMembersCount>
+                  <GroupCreation>
+                    <GroupCreationText>생성일</GroupCreationText>
+                    <GroupCreationDate>
+                      {myGroup?.result?.[0]?.groupId?.createdAt}
+                    </GroupCreationDate>
+                  </GroupCreation>
+                </GroupDetails>
               </GroupInfo>
-                <GroupButton>
-                  <GroupLeaveButton>그룹탈퇴</GroupLeaveButton>
+              <GroupButton>
+                <GroupLeaveButton onClick={onClickDeleteGroup}>그룹탈퇴</GroupLeaveButton>
+                {myGroup?.result?.[0]?.groupId?.groupOwnerId?._id === userInfo?.user?._id && (
                   <GroupManageButton onClick={openManageModal}>그룹관리</GroupManageButton>
-                  <GroupMoveButton>이동</GroupMoveButton>
-                </GroupButton>
-          </LargeBox>
-        )}
+                )}
+
+                <GroupMoveButton
+                  onClick={() =>
+                    navigate(`${ROUTE.GROUP_DETAIL.link}/${myGroup?.result?.[0]?.groupId?._id}`)
+                  }
+                >
+                  이동
+                </GroupMoveButton>
+              </GroupButton>
+            </LargeBox>
+          ) : (
+            <ErrorText>가입한 그룹이 없습니다.</ErrorText>
+          ))}
         {activeMenuItem === '그룹관리' && <GroupManagement></GroupManagement>}
         {activeMenuItem === '적립조회' && (
           <PointInquiry>
@@ -95,7 +192,12 @@ export default function Mypage() {
           </PointInquiry>
         )}
         {activeMenuItem === '내정보수정' && <ProfileModification></ProfileModification>}
-        {isManageModalOpen && <ManageModal setIsManageModalOpen={setIsManageModalOpen} />}
+        {isManageModalOpen && (
+          <ManageModal
+            setIsManageModalOpen={setIsManageModalOpen}
+            waitingMembers={waitingMembers}
+          />
+        )}
       </MenuContainer>
     </Container>
   );
@@ -124,13 +226,13 @@ const GroupMembers = styled.div`
   padding-top: 3rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   @media (max-width: 1080px) {
-    width:30%;
+    width: 30%;
   }
   @media (max-width: 840px) {
-    width:35%;
+    width: 35%;
   }
   @media (max-width: 767px) {
-    height:42rem;
+    height: 42rem;
   }
 `;
 
@@ -203,14 +305,14 @@ const LargeBox = styled.div`
   margin-top: 3rem;
   position: relative;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  
+
   @media ${res.tablet} {
-    justify-content:center;
-    width:75rem;
+    justify-content: center;
+    width: 75rem;
   }
   @media ${res.mobile} {
     flex-direction: column;
-    width:65rem;
+    width: 65rem;
     gap: 2rem;
   }
 `;
@@ -219,11 +321,11 @@ const GroupInfo = styled.div`
   display: flex;
   align-items: center;
   @media ${res.tablet} {
-    justify-content:left;
-    width:75rem;
+    justify-content: left;
+    width: 75rem;
   }
   @media ${res.mobile} {
-    width:65rem;
+    width: 65rem;
     gap: 2rem;
     justify-content: left;
   }
@@ -235,7 +337,6 @@ const GroupImage = styled.img`
   margin-left: 3rem;
   margin-right: 3rem;
   margin-top: -1rem;
-  
 `;
 
 const GroupDetails = styled.div`
@@ -276,34 +377,31 @@ const GroupMembersNum = styled.p`
   font-size: 2rem;
   font-weight: 400;
   color: #777;
-  margin-top: 1rem;
-  margin-right: 3rem;
 `;
 const GroupMembersCount = styled.div`
   display: flex;
   align-items: center;
   margin-top: 1rem;
+  gap: 1.5rem;
 `;
 
 const GroupMembersImgBox = styled.div`
   margin-left: 2rem;
 `;
 
-const GroupMembersImage = styled.img`
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  margin-right: -1rem;
-  z-index: 1;
-  margin-top: 1rem;
-`;
+// const GroupMembersImage = styled.img`
+//   width: 3rem;
+//   height: 3rem;
+//   border-radius: 50%;
+//   margin-right: -1rem;
+//   z-index: 1;
+//   margin-top: 1rem;
+// `;
 
 const GroupMembersCountText = styled.p`
-  margin-left: 2rem;
   font-size: 1.5rem;
   font-weight: 600;
   color: #777;
-  margin-top: 1rem;
 `;
 const GroupCreation = styled.p`
   display: flex;
@@ -385,3 +483,10 @@ const PointInquiry = styled.div`
 `;
 
 const ProfileModification = styled.div``;
+
+const ErrorText = styled.p`
+  font-size: 2rem;
+  font-weight: 400;
+  color: #111;
+  margin: 3rem 0;
+`;
