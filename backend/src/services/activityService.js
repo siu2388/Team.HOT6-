@@ -43,7 +43,7 @@ class activityService {
           date: dateKey,
           tumbler: 0,
           multipleContainers: 0,
-          member: [],
+          members: [],
         };
       }
 
@@ -52,8 +52,18 @@ class activityService {
         [activity],
         'multipleContainers',
       );
-      if (activityDataByDate[dateKey].member.indexOf(activity.userId._id) === -1) {
-        activityDataByDate[dateKey].member.push(activity.userId._id);
+
+      const member = {
+        userId: activity.userId._id,
+        name: activity.userId.name,
+        nickname: activity.userId.nickname,
+      };
+
+      const existingMember = activityDataByDate[dateKey].members.find(
+        existing => existing.userId === member.userId,
+      );
+      if (!existingMember) {
+        activityDataByDate[dateKey].members.push(member);
       }
     });
 
