@@ -3,7 +3,12 @@ import styled from 'styled-components';
 import { Avatar } from '@mui/material';
 import * as API from '../../../api/index';
 
-export default function ManageModal({ setIsManageModalOpen, waitingMembers }) {
+export default function ManageModal({
+  setIsManageModalOpen,
+  waitingMembers,
+  onClickAcceptMember,
+  onClickRefuseMember,
+}) {
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(true);
 
   const closeManageModal = () => {
@@ -46,8 +51,8 @@ export default function ManageModal({ setIsManageModalOpen, waitingMembers }) {
                       </MemberText>
                     </MemberNameBox>
                     <ManageButton>
-                      <AcceptButton>수락</AcceptButton>
-                      <RejectButton>거절</RejectButton>
+                      <AcceptButton onClick={onClickAcceptMember(el.userId._id)}>수락</AcceptButton>
+                      <RejectButton onClick={onClickRefuseMember(el.userId._id)}>거절</RejectButton>
                     </ManageButton>
                   </MemberItem>
                 ))
