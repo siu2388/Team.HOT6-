@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Avatar } from '@mui/material';
+import * as API from '../../../api/index';
 
 export default function ManageModal({ setIsManageModalOpen, waitingMembers }) {
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(true);
@@ -39,10 +40,7 @@ export default function ManageModal({ setIsManageModalOpen, waitingMembers }) {
                 waitingMembers?.map(el => (
                   <MemberItem key={el._id}>
                     <MemberNameBox>
-                      <Avatar
-                        alt="멤버 이미지"
-                        src={`http://localhost:5001/uploads/${el.userId.profileImg}`}
-                      />
+                      <Avatar alt="멤버 이미지" src={`${API.imgUrl}${el.userId.profileImg}`} />
                       <MemberText>
                         {el.userId.name}({el.userId.nickname})
                       </MemberText>

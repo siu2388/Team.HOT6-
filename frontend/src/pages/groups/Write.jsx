@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import FileUpload from '../../components/commons/FileUpload';
 import { Button, Slider, TextField } from '@mui/material';
 import * as API from '../../api/index';
-import { imgFileState, isErrorModalState, isSuccessModalState } from '../../stores';
+import { imgFileState, isErrorModalState, isSuccessModalState, updateState } from '../../stores';
 import { useRecoilState } from 'recoil';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -27,6 +27,7 @@ export default function GroupWritePage() {
   const [thumbnail] = useRecoilState(imgFileState);
   const [, setIsScucessModal] = useRecoilState(isSuccessModalState);
   const [, setIsErrorModal] = useRecoilState(isErrorModalState);
+  const [, setUpdate] = useRecoilState(updateState);
 
   const navigete = useNavigate();
 
@@ -70,7 +71,7 @@ export default function GroupWritePage() {
         message: '그룹을 등록하였습니다.',
       });
 
-      console.log(result);
+      setUpdate(prev => prev + 1);
       navigete(`/groups/${result.data.newGroup._id}`);
     } catch (err) {
       setIsErrorModal({

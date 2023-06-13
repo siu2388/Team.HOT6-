@@ -5,12 +5,13 @@ import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import { ROUTE } from '../../../constants/routes/routeData';
 import { res } from '../../../styles/responsive';
+import * as API from '../../../api/index';
 
 export default function ListBox({ group }) {
   return (
     <ListBoxWrap>
       <Link to={`${ROUTE.GROUP_DETAIL.link}/${group._id}`}>
-        <ListBackImg img={`http://localhost:5001/uploads/${group.thumbnail}`} />
+        <ListBackImg img={`${API.imgUrl}${group.thumbnail}`} />
         <ListContent>
           <TitleBox>
             <ListTitle>{group.title}</ListTitle>
