@@ -18,7 +18,7 @@ class groupJoinService {
   // 그룹 가입 시 중복가입 방지 조회용
   static async getUserGroup({ userId }) {
     const group = await GroupJoin.findByUserId({ userId });
-    
+
     return group;
   }
   //나의 그룹 조회
@@ -45,7 +45,7 @@ class groupJoinService {
     if (!isDataDeleted) {
       const errorMessage =
         '그룹거절오류: 해당 id를 가진 사용자가 없습니다. 아이디와 가입상태를 다시 한 번 확인해 주세요.';
-      return { errorMessage };
+      throw new Error(errorMessage);
     }
     return { status: '가입거절완료' };
   }
@@ -56,7 +56,7 @@ class groupJoinService {
 
     if (!isDataDeleted) {
       const errorMessage = 'Group 탈퇴: 해당 id를 가진 그룹이 없습니다. 다시 한 번 확인해 주세요.';
-      return { errorMessage };
+      throw new Error(errorMessage);
     }
     return { status: 'ok' };
   }

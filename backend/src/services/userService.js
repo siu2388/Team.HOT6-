@@ -18,7 +18,7 @@ class userAuthService {
     const user = await User.findByUserId({ userId });
     if (user) {
       const errorMessage = '이 아이디는 현재 사용중입니다. 다른 아이디를 입력해 주세요.';
-      return { errorMessage };
+      throw new Error(errorMessage);
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -43,7 +43,7 @@ class userAuthService {
     if (!user) {
       const errorMessage =
         'User 조회: 해당 아이디는 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
-      return { errorMessage };
+      throw new Error(errorMessage);
     }
 
     const correctPasswordHash = user.password;
@@ -51,7 +51,7 @@ class userAuthService {
 
     if (!isPasswordCorrect) {
       const errorMessage = 'User 조회: 비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.';
-      return { errorMessage };
+      throw new Error(errorMessage);
     }
 
     const secretKey = process.env.JWT_SECRET_KEY || 'jwt-secret-key';
@@ -85,17 +85,17 @@ class userAuthService {
 
     if (!user) {
       const errorMessage = 'User 조회: 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
-      return { errorMessage };
+      throw new Error(errorMessage);
     }
 
     if (toUpdate.userId) {
       const errorMessage = 'userId는 변경할 수 없습니다.';
-      return { errorMessage };
+      throw new Error(errorMessage);
     }
 
     if (toUpdate.name) {
       const errorMessage = '이름은 변경할 수 없습니다.';
-      return { errorMessage };
+      throw new Error(errorMessage);
     }
 
     if (toUpdate.password) {
@@ -143,9 +143,9 @@ class userAuthService {
     return group;
   }
 
-  // groupId 같은 멤버 조회 
-  static async getMembers({groupId}) {
-    const members = await User.findGroupMembers({groupId});
+  // groupId 같은 멤버 조회
+  static async getMembers({ groupId }) {
+    const members = await User.findGroupMembers({ groupId });
     return members;
   }
 
@@ -178,7 +178,7 @@ class userAuthService {
       if (!user) {
         const errorMessage =
           'User 조회: 해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
-        return { errorMessage };
+        throw new Error(errorMessage);
       }
 
       const tumblerCount = await userAuthService.getUserActivityCount(loginedId, 'tumbler');

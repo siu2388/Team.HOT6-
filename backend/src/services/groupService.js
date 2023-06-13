@@ -46,7 +46,7 @@ class groupService {
     if (!group) {
       const errorMessage =
         '그룹명 조회: 해당 이름을 가진 그룹이 없습니다. 다시 한 번 확인해 주세요.';
-      return { errorMessage };
+      throw new Error(errorMessage);
     }
     return group;
   }
@@ -57,7 +57,7 @@ class groupService {
 
     if (!isDataDeleted) {
       const errorMessage = 'Group 삭제: 해당 id를 가진 그룹이 없습니다. 다시 한 번 확인해 주세요.';
-      return { errorMessage };
+      throw new Error(errorMessage);
     }
     return { status: 'ok' };
   }
