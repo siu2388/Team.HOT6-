@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { imgFileState } from '../../stores';
+import * as API from '../../api/index';
 
 export default function FileUpload({ profileImg }) {
-  const [imageSrc, setImageSrc] = useState(
-    profileImg ? `http://localhost:5001/uploads/${profileImg}` : null,
-  );
+  const [imageSrc, setImageSrc] = useState(profileImg ? `${API.imgUrl}${profileImg}` : null);
   const [, setImgFile] = useRecoilState(imgFileState);
 
   console.log(imageSrc);

@@ -6,6 +6,7 @@ import RewardPoints from '../../components/mypages/largebox/RewardPoints';
 import {
   isErrorModalState,
   isSuccessModalState,
+  updateState,
   userInfoState,
   userTokenState,
 } from '../../stores';
@@ -27,6 +28,7 @@ export default function Mypage() {
   const [userToken] = useRecoilState(userTokenState);
   const [, setIsScucessModal] = useRecoilState(isSuccessModalState);
   const [, setIsErrorModal] = useRecoilState(isErrorModalState);
+  const [update] = useRecoilState(updateState);
 
   useEffect(() => {
     if (!sessionStorage.getItem('userToken')) {
@@ -43,7 +45,9 @@ export default function Mypage() {
       console.log(getMyGroup);
       getMyGroup();
     }
-  }, [userInfo]);
+  }, [userInfo, update]);
+
+  console.log(myGroup);
 
   useEffect(() => {
     const getWaitingMembers = async () => {
@@ -131,7 +135,7 @@ export default function Mypage() {
               <GroupInfo>
                 <GroupImage
                   alt="그룹 사진"
-                  src={`http://localhost:5001/uploads/${myGroup?.result?.[0]?.groupId?.thumbnail}`}
+                  src={`${API.imgUrl}${myGroup?.result?.[0]?.groupId?.thumbnail}`}
                 />
                 <GroupDetails>
                   <GroupName>{myGroup?.result?.[0]?.groupId?.title}</GroupName>
@@ -149,7 +153,7 @@ export default function Mypage() {
                           <Avatar
                             key={member._id}
                             alt="Remy Sharp"
-                            src={`http://localhost:5001/${member.profileImg}`}
+                            src={`${API.imgUrl}${member.profileImg}`}
                             sx={{ width: '3rem', height: '3rem' }}
                           />
                         ))}
@@ -168,7 +172,11 @@ export default function Mypage() {
                 </GroupDetails>
               </GroupInfo>
               <GroupButton>
-                <GroupLeaveButton onClick={onClickDeleteGroup}>그룹탈퇴</GroupLeaveButton>
+                {myGroup?.result?.[0]?.groupId?.groupOwnerId?._id === userInfo?.user?._id ? (
+                  <GroupLeaveButton onClick={onClickDeleteGroup}>그룹삭제</GroupLeaveButton>
+                ) : (
+                  <GroupLeaveButton onClick={onClickDeleteGroup}>그룹탈퇴</GroupLeaveButton>
+                )}
                 {myGroup?.result?.[0]?.groupId?.groupOwnerId?._id === userInfo?.user?._id && (
                   <GroupManageButton onClick={openManageModal}>그룹관리</GroupManageButton>
                 )}

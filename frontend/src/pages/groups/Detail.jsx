@@ -55,15 +55,13 @@ export default function GroupDetailPage() {
         <GroupTitle>{groupData?.myGroup?.title}</GroupTitle>
         <DetailContent01>
           <DetailInfoBox>
-            <DetailThumbnail
-              img={`http://localhost:5001/uploads/${groupData?.myGroup?.thumbnail}`}
-            />
+            <DetailThumbnail img={`${API.imgUrl}${groupData?.myGroup?.thumbnail}`} />
             <DetailInfo>
               <div>
                 <UserProfile>
                   <Avatar
                     alt="내 프로필"
-                    src={`http:localhost:5001/uploads/${groupData?.groupOwnerId?.profileImg}`}
+                    src={`${API.imgUrl}${groupData?.groupOwnerId?.profileImg}`}
                     sx={{ width: 40, height: 40 }}
                   />
                   <UserName>{groupData?.myGroup?.groupOwnerId?.name}</UserName>
