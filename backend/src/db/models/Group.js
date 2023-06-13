@@ -35,8 +35,10 @@ class Group {
 
   //그룹명 검색
   static async findByTitle({ title }) {
-    const search = await GroupModel.findOne({ title: title });
-    return search;
+    const search = await GroupModel.find({});
+    const filterSearch = search.filter(group => group.title.includes(title.slice(0, -1)));
+    console.log(filterSearch);
+    return filterSearch;
   }
 
   //대기자조회
