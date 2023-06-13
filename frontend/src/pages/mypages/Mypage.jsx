@@ -28,7 +28,7 @@ export default function Mypage() {
   const [userToken] = useRecoilState(userTokenState);
   const [, setIsScucessModal] = useRecoilState(isSuccessModalState);
   const [, setIsErrorModal] = useRecoilState(isErrorModalState);
-  const [update] = useRecoilState(updateState);
+  const [update, setUpdate] = useRecoilState(updateState);
 
   useEffect(() => {
     if (!sessionStorage.getItem('userToken')) {
@@ -47,17 +47,15 @@ export default function Mypage() {
     }
   }, [userInfo, update]);
 
-  console.log(myGroup);
-
   useEffect(() => {
     const getWaitingMembers = async () => {
-      const result = await API.get(`/mygroups/${myGroup?.result[0]?.groupId?._id}/waiting`);
+      const result = await API.get(`/mygroups/${myGroup?.result?.[0]?.groupId?._id}/waiting`);
       setWaitingMembers(result.data);
     };
-    if (myGroup?.groupId?._id) {
+    if (myGroup?.result?.[0]?.groupId?._id) {
       getWaitingMembers();
     }
-  }, [myGroup]);
+  }, [myGroup, update]);
 
   useEffect(() => {
     const getWaitingActivity = async () => {
@@ -82,16 +80,48 @@ export default function Mypage() {
     setActiveMenuItem(menuItem);
   };
 
-  const onClickDeleteGroup = () => {
+  const onClickDeleteGroup = async () => {
     try {
-      const result = API.delete(`/mygroups/${myGroup?.result[0]?.groupId?._id}`);
+      await API.delete(`/mygroups/${myGroup?.result[0]?.groupId?._id}`);
+      setUpdate(prev => prev + 1);
       setIsScucessModal({
         state: true,
         message: '그룹을 탈퇴하였습니다.',
       });
-      console.log(result);
     } catch (err) {
       setIsErrorModal({
+        state: true,
+        message: err.response.data.message,
+      });
+    }
+  };
+
+  const onClickAcceptMember = userId => async () => {
+    try {
+      await API.put(`/mygroups/${myGroup?.result[0]?.groupId?._id}/${userId}/approval`);
+      setUpdate(prev => prev + 1);
+      setIsScucessModal({
+        state: true,
+        message: '수락하였습니다.',
+      });
+    } catch (err) {
+      setIsScucessModal({
+        state: true,
+        message: err.response.data.message,
+      });
+    }
+  };
+
+  const onClickRefuseMember = userId => async () => {
+    try {
+      await API.delete(`/mygroups/${myGroup?.result[0]?.groupId?._id}/${userId}/rejection`);
+      setUpdate(prev => prev + 1);
+      setIsScucessModal({
+        state: true,
+        message: '거절하였습니다..',
+      });
+    } catch (err) {
+      setIsScucessModal({
         state: true,
         message: err.response.data.message,
       });
@@ -204,6 +234,8 @@ export default function Mypage() {
           <ManageModal
             setIsManageModalOpen={setIsManageModalOpen}
             waitingMembers={waitingMembers}
+            onClickAcceptMember={onClickAcceptMember}
+            onClickRefuseMember={onClickRefuseMember}
           />
         )}
       </MenuContainer>
