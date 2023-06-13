@@ -7,14 +7,14 @@ import {
   OutlinedInput,
   TextField,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Link, useNavigate } from 'react-router-dom';
 import * as API from '../../api/index';
 import { useRecoilState } from 'recoil';
-import { isErrorModalState, userTokenState } from '../../stores';
+import { isErrorModalState, userInfoState, userTokenState } from '../../stores';
 import { ROUTE } from '../../constants/routes/routeData';
 
 export default function LoginPage() {
@@ -23,8 +23,15 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
+  const [userInfo] = useRecoilState(userInfoState);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate('/');
+    }
+  }, [userInfo]);
 
   const onChangeInput = e => {
     const { name, value } = e.target;

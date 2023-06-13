@@ -12,14 +12,35 @@ import { res } from '../../styles/responsive';
 
 export default function GroupList() {
   const [groupList, setGroupList] = useState([]);
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     const getGroups = async () => {
-      const result = await Api.get('/groups');
-      setGroupList(result.data.result.reverse());
+      const result = await Api.get(`/groups?page=${page}`);
+      setGroupList(result.data);
     };
     getGroups();
-  }, []);
+  }, [page]);
+
+  console.log(groupList);
+
+  const onChangeSearch = e => {
+    setSearch(e.target.value);
+  };
+
+  const onChangePage = (_, value) => {
+    setPage(value);
+  };
+
+  const onClickSearch = async () => {
+    try {
+      const result = await Api.get(`/searchgroups?title=${search}`);
+      setGroupList(result?.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <GroupListWrap>
@@ -39,18 +60,30 @@ export default function GroupList() {
       <GroupListContainer>
         <SubTitle title="GROUP" />
         <SearchContainer>
-          <Search variant="contained" />
+          <Search
+            variant="contained"
+            search={search}
+            onChangeSearch={onChangeSearch}
+            onClickSearch={onClickSearch}
+          />
           <Button variant="contained">
             <Link to={ROUTE.GROUP_WRITE.link}>그룹등록</Link>
           </Button>
         </SearchContainer>
         <GroupLists>
-          {groupList?.map(group => (
+          {groupList?.groups?.map(group => (
             <ListBox key={group.id} group={group} />
           ))}
         </GroupLists>
         <PagenationBox>
-          <Pagination count={5} size="large" />
+          <Pagination
+            count={groupList?.totalPages}
+            page={page}
+            size="large"
+            variant="outlined"
+            color="primary"
+            onChange={onChangePage}
+          />
         </PagenationBox>
       </GroupListContainer>
     </GroupListWrap>

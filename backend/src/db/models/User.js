@@ -32,7 +32,10 @@ class User {
 
   // groupId 같은 멤버 조회용
   static async findGroupMembers({ groupId }) {
-    const foundMembers = await UserModel.find({ groupId },'userId name nickname phone profileImg groupId');
+    const foundMembers = await UserModel.find(
+      { groupId },
+      'userId name nickname phone profileImg groupId',
+    );
     return foundMembers;
   }
 

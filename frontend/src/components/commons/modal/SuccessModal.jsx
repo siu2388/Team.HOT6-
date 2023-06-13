@@ -48,7 +48,7 @@ const SuccessModalContent = styled.div`
 
 const BlueSection = styled.div`
   height: 25%;
-  background-color: blue;
+  background-color: 657DD2;
   display: flex;
   align-items: center;
   padding: 0 10px;
@@ -57,7 +57,7 @@ const BlueSection = styled.div`
 `;
 
 const BlueInitial = styled.div`
-  color: #1411c1;
+  color: #657DD2;
   font-size: 9rem;
   font-weight: bold;
   font-family: 'Your preferred font', sans-serif;
@@ -81,7 +81,7 @@ const XButton = styled.button`
   background-color: transparent;
   cursor: pointer;
   font-size: 18px;
-  color: blue;
+  color: #657DD2;
   position: absolute;
   right: 1rem;
   right: 2.9rem;

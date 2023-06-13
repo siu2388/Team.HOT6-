@@ -51,12 +51,13 @@ groupRouter.post('/groups', loginRequired, imgupload, async (req, res, next) => 
 
 //그룹 목록 조회
 groupRouter.get('/groups', async (req, res, next) => {
+  console.log(req.query);
   try {
     const page = parseInt(req.query.page || 1);
     const limit = 9;
     const skip = (page - 1) * limit;
-    console.log("page : ", page);
-    console.log("skip : ", skip);
+    console.log('page : ', page);
+    console.log('skip : ', skip);
 
     const { groups, count } = await groupService.getGroups(skip, limit);
     res.status(200).json({
@@ -88,7 +89,7 @@ groupRouter.get('/searchgroups', async (req, res, next) => {
   try {
     const { title } = req.query;
     const result = await groupService.searchGroup({ title });
-    res.status(200).json({ result });
+    res.status(200).json({ groups: result });
     return;
   } catch (error) {
     next(error);

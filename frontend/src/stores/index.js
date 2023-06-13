@@ -22,7 +22,7 @@ export const imgFileState = atom({
 
 export const userInfoState = atom({
   key: 'userInfo',
-  default: [],
+  default: null,
 });
 
 export const updateState = atom({

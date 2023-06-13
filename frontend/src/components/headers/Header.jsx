@@ -22,13 +22,15 @@ export default function Header() {
 
   useEffect(() => {
     const getUserInfo = async () => {
-      const result = await API.get('/user');
-      setUserInfo(result.data);
+      try {
+        const result = await API.get('/user');
+        setUserInfo(result.data);
+      } catch (err) {
+        console.log(err);
+      }
     };
 
-    if (userToken) {
-      getUserInfo();
-    }
+    getUserInfo();
   }, [userToken, update]);
 
   useEffect(() => {
@@ -89,10 +91,10 @@ export default function Header() {
             <InfoMenu>
               <UserName>{userInfo?.user?.nickname}</UserName>
               <CountBox>
-                <span>🥤: 9</span>
+                <span>🥤: {userInfo?.tumblerCount}</span>
               </CountBox>
               <CountBox>
-                <span>♻️ : 9</span>
+                <span>♻️ : {userInfo?.multipleContainersCount}</span>
               </CountBox>
             </InfoMenu>
           )}
@@ -155,7 +157,7 @@ const HeaderContainer = styled.div`
   height: 100%;
   max-width: 100%;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 2rem;
 `;
 
 const LogoBox = styled.div`
@@ -193,12 +195,12 @@ const NavMenu = styled.ul`
 `;
 
 const MenuList = styled.li`
-  padding: 0 16px;
+  padding: 0 1.6rem;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: 1.6rem;
   font-weight: bold;
   letter-spacing: -0.5px;
   color: #252525;
@@ -217,12 +219,12 @@ const InfoMenu = styled.div`
   display: flex;
   align-items: center;
   height: 100%;
-  margin-left: 24px;
+  margin-left: 2.4rem;
 `;
 
 const UserName = styled.div`
-  margin-right: 8px;
-  font-size: 16px;
+  margin-right: 0.8rem;
+  font-size: 1.6rem;
   font-weight: bold;
   color: #252525;
 `;
@@ -230,16 +232,19 @@ const UserName = styled.div`
 const CountBox = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 10px;
-  font-size: 50px;
+  margin-left: 1rem;
+  font-size: 5rem;
   font-weight: bold;
   color: #252525;
+  span {
+    font-size: 1.6rem;
+  }
 `;
 
 const SubMenu = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 24px;
+  margin-left: 2.4rem;
 `;
 
 const SubMenuList = styled.ul`

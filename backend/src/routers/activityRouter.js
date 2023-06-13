@@ -43,7 +43,29 @@ activityRouter.get('/activities/:groupId/waiting', loginRequired, async (req, re
   }
 });
 
-// 그룹 활동 조회
+// 그룹 활동 월별 총합
+activityRouter.get(
+  '/activities/:groupId/:usedDate/totalCount',
+  loginRequired,
+  async (req, res, next) => {
+    try {
+      const groupId = req.params.groupId;
+      const usedDate = req.params.usedDate;
+
+      const date = moment(usedDate, 'YYYY-MM-DD');
+      const parsedYear = date.year();
+      const parsedMonth = date.month() + 1;
+
+      const activityInfo = await activityService.getActivityCount(groupId, parsedYear, parsedMonth);
+
+      res.status(200).json(activityInfo);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// 그룹 활동 조회(달력 표시)
 activityRouter.get('/activities/:groupId/:usedDate', loginRequired, async (req, res, next) => {
   try {
     const groupId = req.params.groupId;
@@ -75,6 +97,41 @@ activityRouter.put('/:activityId', loginRequired, async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+// 활동 신청 승인 거절
+activityRouter.delete('/:activityId', loginRequired, async (req, res, next) => {
+  try {
+    const activityId = req.params.activityId;
+
+    const result = await activityService.deleteActivity({ activityId });
+
+    res.status(200).json({ result });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// 유저 활동 목록 조회
+activityRouter.get('/activities', loginRequired, async (req, res, next) => {
+  try {
+    const userId = req.currentUserId;
+    const currentActivityInfo = await activityService.getActivities(userId);
+
+    res.status(200).send(currentActivityInfo);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// 그룹 활동 랭킹
+activityRouter.get('/activities/totalCount', loginRequired, async (req, res, next) => {
+  try {
+    const totalCounts = await activityService.getTotalCounts();
+    res.status(200).json({ totalCounts });
+  } catch (error) {
+    next(error);
   }
 });
 

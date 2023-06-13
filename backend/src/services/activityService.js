@@ -1,4 +1,5 @@
 import { Activity } from '../db/models/Activity.js';
+import { Group } from '../db/models/Group.js';
 
 class activityService {
   // 활동 등록
@@ -61,9 +62,29 @@ class activityService {
     return activityData;
   }
 
-  static async getActivities() {
-    const activities = await Activity.findAll();
-    return activities;
+  // 그룹 활동 월별 총합
+  static async getActivityCount(groupId, year, month) {
+    // 년도, 월에 해당하는 데이터 가져오기
+    const activities = await Activity.find({
+      groupId: groupId,
+      state: '승인',
+      usedDate: {
+        $gte: new Date(year, month - 1, 1),
+        $lt: new Date(year, month, 1),
+      },
+    });
+
+    const activityCount = {
+      tumbler: 0,
+      multipleContainers: 0,
+    };
+
+    for (const activity of activities) {
+      const { category } = activity;
+      activityCount[category]++;
+    }
+
+    return activityCount;
   }
 
   // 활동 신청 승인 대기 조회
@@ -89,6 +110,61 @@ class activityService {
     } catch (error) {
       throw error;
     }
+  }
+
+  // 활동 신청 승인 거절
+  static async deleteActivity(activityId) {
+    try {
+      const isDataDeleted = await Activity.deleteById(activityId);
+
+      return { status: '활동 거절 완료' };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // 유저 활동 목록 조회
+  static async getActivities(userId) {
+    try {
+      const activities = await Activity.findByUserId(userId);
+      return activities;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // 그룹 활동 랭킹
+  static async getTotalCounts() {
+    const currentDate = new Date();
+    const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+
+    const groups = await Group.findAll();
+    const totalCountsByGroup = {};
+
+    for (const group of groups) {
+      const groupId = group._id;
+      const totalCount = await Activity.getActivityCountBygroupId(
+        groupId,
+        startOfMonth,
+        endOfMonth,
+      );
+      totalCountsByGroup[groupId] = totalCount;
+    }
+
+    const sortedTotalCounts = Object.entries(totalCountsByGroup).sort((a, b) => b[1] - a[1]);
+
+    const rankedTotalCounts = sortedTotalCounts.map(([groupId, count], index) => {
+      const group = groups.find(group => group._id.toString() === groupId.toString());
+      const groupName = group ? group.name : '';
+      return {
+        rank: index + 1,
+        groupId,
+        count,
+      };
+    });
+
+    return rankedTotalCounts;
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -6,10 +6,47 @@ import MemberProfileBox from '../../commons/box/MemberProfileBox';
 import { getDate, getDayOfWeek } from '../../../commons/utils/getDate';
 import AddActiveModal from './AddActiveModal';
 import { res } from '../../../styles/responsive';
+import { useParams } from 'react-router-dom';
+import * as api from '../../../api.js';
 
 export default function GroupCalendar() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
+  const [calendarData, setCalendarData] = useState([]);
+  const groupId = useParams().id;
+
+  const fetchCalendarData = async (date) => {
+    try {
+      const formattedDate = new Date(date.getTime() + (24 * 60 * 60 * 1000)).toISOString().slice(0, 10);
+      const res = await api.get(`/activities/${groupId}/${formattedDate}`);
+      const data = res.data.activityInfo;
+  
+      setCalendarData(data || []);
+    } catch (error) {
+      console.log('Error fetching calendar data:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCalendarData(selectedDate);
+  }, [selectedDate, groupId]);
+
+
+  
+  const tileContent = ({ date }) => {
+    const formattedDate = date.toISOString().slice(0, 10);
+    const tileData = calendarData.filter(data => data.date === formattedDate);
+
+    if (tileData.length > 0) {
+      return tileData.map((activity, index) => (
+        <CalendarContent key={index}>
+          🥤: {activity.tumbler} ♻️: {activity.multipleContainers}
+        </CalendarContent>
+      ));
+    }
+
+    return null;
+  };
 
   const onClickToggleModal = () => {
     setIsOpen(prev => !prev);
@@ -26,14 +63,28 @@ export default function GroupCalendar() {
     return date.getDay() === 6 ? 'saturday' : null;
   };
 
-  const tileContent = () => {
-    return <CalendarContent>하이</CalendarContent>;
-  };
-
-  const handleDateChange = date => {
+  const handleDateChange = (date) => {
     setSelectedDate(date);
+    fetchCalendarData(date);
   };
 
+  const onClickMonth = async(date) => {
+    try {
+      const currentMonth = date.getMonth();
+      const nextMonth = currentMonth + 1;
+      const formattedNextMonth = nextMonth < 10 ? `0${nextMonth}` : nextMonth;
+      const year = date.getFullYear();
+      const monthDate = `${year}-${formattedNextMonth}`;
+    
+      const res = await api.get(`/activities/${groupId}/${monthDate}`);
+      const data = res.data.activityInfo;
+      setCalendarData(data || []);
+    } catch (error) {
+      console.log('Error fetching calendar data:', error);
+    }
+  };
+
+  
   return (
     <CalendarWrap>
       <CalendarBox>
@@ -43,6 +94,11 @@ export default function GroupCalendar() {
           onChange={handleDateChange}
           tileClassName={[tileClassName, titleSat]}
           tileContent={tileContent}
+          onActiveStartDateChange={({ activeStartDate, view }) => {
+            if (view === 'month') {
+              onClickMonth(activeStartDate);
+            }
+          }}
         />
       </CalendarBox>
       <CalendarDetailBox>
@@ -56,19 +112,9 @@ export default function GroupCalendar() {
           </AddBtn>
         </TodayDateBox>
         <MemberProfilies>
-          <MemberProfileBox />
-          <MemberProfileBox />
-          <MemberProfileBox />
-          <MemberProfileBox />
-          <MemberProfileBox />
-          <MemberProfileBox />
-          <MemberProfileBox />
-          <MemberProfileBox />
-          <MemberProfileBox />
-          <MemberProfileBox />
-          <MemberProfileBox />
-          <MemberProfileBox />
-          <MemberProfileBox />
+          {calendarData.map(activity => (
+            <MemberProfileBox key={activity.date} />
+          ))}
         </MemberProfilies>
       </CalendarDetailBox>
       {isOpen && (
@@ -77,6 +123,8 @@ export default function GroupCalendar() {
     </CalendarWrap>
   );
 }
+
+
 
 const CalendarWrap = styled.div`
   width: 100%;

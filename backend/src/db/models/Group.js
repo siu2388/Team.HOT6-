@@ -35,8 +35,10 @@ class Group {
 
   //그룹명 검색
   static async findByTitle({ title }) {
-    const search = await GroupModel.findOne({ title: title });
-    return search;
+    const search = await GroupModel.find({});
+    const filterSearch = search.filter(group => group.title.includes(title.slice(0, -1)));
+    console.log(filterSearch);
+    return filterSearch;
   }
 
   //대기자조회
@@ -61,6 +63,11 @@ class Group {
     const deleteResult = await GroupModel.deleteOne({ _id: groupId });
     const isDataDeleted = deleteResult.deletedCount === 1;
     return isDataDeleted;
+  }
+
+  static async findAll() {
+    const groups = await GroupModel.find();
+    return groups;
   }
 }
 
