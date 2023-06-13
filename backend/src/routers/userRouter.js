@@ -57,7 +57,7 @@ userAuthRouter.post('/login', async (req, res, next) => {
     next(error);
   }
 });
-
+// 유저 목록
 userAuthRouter.get('/users', loginRequired, async (req, res, next) => {
   try {
     const users = await userAuthService.getUsers();
@@ -99,7 +99,7 @@ userAuthRouter.put('/users/:id', imgUpload, loginRequired, async (req, res, next
     next(error);
   }
 });
-
+// 유저 정보 조회
 userAuthRouter.get('/user', loginRequired, async (req, res, next) => {
   try {
     const loginedId = req.currentUserId;
