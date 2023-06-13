@@ -19,10 +19,10 @@ groupRouter.post('/groups', loginRequired, imgupload, async (req, res, next) => 
 
     //그룹 중복 생성 방지
     const isGroupexisted = await groupService.getGroupByOwnerId(groupOwnerId);
-    if (isGroupexisted) {
-      res.status(401).json({ message: '생성한 그룹이 존재합니다.' });
-      return;
-    }
+    // if (isGroupexisted) {
+    //   res.status(401).json({ message: '생성한 그룹이 존재합니다.' });
+    //   return;
+    // }
 
     const newGroup = await groupService.addGroup({
       groupOwnerId,
@@ -51,12 +51,13 @@ groupRouter.post('/groups', loginRequired, imgupload, async (req, res, next) => 
 
 //그룹 목록 조회
 groupRouter.get('/groups', async (req, res, next) => {
+  console.log(req.query);
   try {
     const page = parseInt(req.query.page || 1);
     const limit = 9;
     const skip = (page - 1) * limit;
-    console.log("page : ", page);
-    console.log("skip : ", skip);
+    console.log('page : ', page);
+    console.log('skip : ', skip);
 
     const { groups, count } = await groupService.getGroups(skip, limit);
     res.status(200).json({
