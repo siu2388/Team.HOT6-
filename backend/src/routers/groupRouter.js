@@ -57,7 +57,7 @@ groupRouter.get('/groups', async (req, res, next) => {
     console.log('page : ', page);
 
     const { groups, count } = await groupService.getGroups(page, limit);
-    const sortedGroups = groups.sort().reverse();
+    // const sortedGroups = groups.sort().reverse();
 
     const totalPages = Math.ceil(count / limit);
     const currentPage = Math.min(page, totalPages);
@@ -65,7 +65,7 @@ groupRouter.get('/groups', async (req, res, next) => {
     res.status(200).json({
       currentPage: currentPage,
       totalPages: totalPages,
-      groups: sortedGroups,
+      groups,
     });
     return;
   } catch (error) {
