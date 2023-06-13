@@ -13,6 +13,7 @@ import { res } from '../../styles/responsive';
 export default function GroupList() {
   const [groupList, setGroupList] = useState([]);
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     const getGroups = async () => {
@@ -22,11 +23,24 @@ export default function GroupList() {
     getGroups();
   }, [page]);
 
+  console.log(groupList);
+
+  const onChangeSearch = e => {
+    setSearch(e.target.value);
+  };
+
   const onChangePage = (_, value) => {
     setPage(value);
   };
 
-  console.log(groupList);
+  const onClickSearch = async () => {
+    try {
+      const result = await Api.get(`/searchgroups?title=${search}`);
+      setGroupList(result?.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <GroupListWrap>
@@ -46,7 +60,12 @@ export default function GroupList() {
       <GroupListContainer>
         <SubTitle title="GROUP" />
         <SearchContainer>
-          <Search variant="contained" />
+          <Search
+            variant="contained"
+            search={search}
+            onChangeSearch={onChangeSearch}
+            onClickSearch={onClickSearch}
+          />
           <Button variant="contained">
             <Link to={ROUTE.GROUP_WRITE.link}>그룹등록</Link>
           </Button>
