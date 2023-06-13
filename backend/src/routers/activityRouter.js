@@ -43,6 +43,28 @@ activityRouter.get('/activities/:groupId/waiting', loginRequired, async (req, re
   }
 });
 
+// 그룹 활동 월별 총합
+activityRouter.get(
+  '/activities/:groupId/:usedDate/totalCount',
+  loginRequired,
+  async (req, res, next) => {
+    try {
+      const groupId = req.params.groupId;
+      const usedDate = req.params.usedDate;
+
+      const date = moment(usedDate, 'YYYY-MM-DD');
+      const parsedYear = date.year();
+      const parsedMonth = date.month() + 1;
+
+      const activityInfo = await activityService.getActivityCount(groupId, parsedYear, parsedMonth);
+
+      res.status(200).json(activityInfo);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
 // 그룹 활동 조회(달력 표시)
 activityRouter.get('/activities/:groupId/:usedDate', loginRequired, async (req, res, next) => {
   try {
@@ -98,6 +120,16 @@ activityRouter.get('/activities', loginRequired, async (req, res, next) => {
     const currentActivityInfo = await activityService.getActivities(userId);
 
     res.status(200).send(currentActivityInfo);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// 그룹 활동 랭킹
+activityRouter.get('/activities/totalCount', loginRequired, async (req, res, next) => {
+  try {
+    const totalCounts = await activityService.getTotalCounts();
+    res.status(200).json({ totalCounts });
   } catch (error) {
     next(error);
   }
