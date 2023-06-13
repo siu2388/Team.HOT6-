@@ -154,17 +154,33 @@ class activityService {
 
     const sortedTotalCounts = Object.entries(totalCountsByGroup).sort((a, b) => b[1] - a[1]);
 
-    const rankedTotalCounts = sortedTotalCounts.map(([groupId, count], index) => {
-      const group = groups.find(group => group._id.toString() === groupId.toString());
-      const groupName = group ? group.name : '';
-      return {
-        rank: index + 1,
+    let currentRank = 1;
+    let previousCount = null;
+    const rankedTotalCounts = [];
+
+    for (const [groupId, count] of sortedTotalCounts) {
+      const group = await Group.findById(groupId);
+      const { title, thumbnail } = group;
+      const rank =
+        previousCount === count
+          ? rankedTotalCounts[rankedTotalCounts.length - 1].rank
+          : currentRank;
+
+      rankedTotalCounts.push({
+        rank,
         groupId,
         count,
-      };
-    });
+        title,
+        thumbnail,
+      });
 
-    return rankedTotalCounts;
+      previousCount = count;
+      currentRank++;
+    }
+
+    const topThreeCounts = rankedTotalCounts.slice(0, 3);
+
+    return topThreeCounts;
   }
 }
 
