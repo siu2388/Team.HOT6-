@@ -26,19 +26,31 @@ class Group {
     return mygroup;
   }
 
-  //그룹 목록 조회
-  static async findAndCountAll(skip, limit) {
-    const groups = await GroupModel.find().skip(skip).limit(limit).exec();
-    const count = await GroupModel.countDocuments();
-    return { groups, count };
-  }
+  // //그룹 목록 조회
+  // static async findAndCountAll(skip, limit) {
+  //   const groups = await GroupModel.find().skip(skip).limit(limit).exec();
+  //   const count = await GroupModel.countDocuments();
+  //   console.log('여기',groups, count);
+  //   return { groups, count };
+  // }
+  // 그룹 목록 조회
+static async findAndCountAll(skip, limit) {
+  const groups = await GroupModel.find().sort({ _id: -1 }).skip(skip).limit(limit).exec();
+  const count = await GroupModel.countDocuments();
+  console.log('여기', groups, count);
+  return { groups, count };
+}
 
   //그룹명 검색
-  static async findByTitle({ title }) {
-    const search = await GroupModel.find({});
-    const filterSearch = search.filter(group => group.title.includes(title.slice(0, -1)));
-    console.log(filterSearch);
-    return filterSearch;
+  static async findByTitle({ title }, skip, limit) {
+    console.log('0', title, skip, limit);
+    const search = await GroupModel.find({}).skip(skip).limit(limit).exec();
+    const filteredSearch = search.filter(group => group.title.includes(title.slice(0, -1)));
+    // const count = await GroupModel.countDocuments(filteredSearch);
+    const count = filteredSearch.length;
+    console.log('1', filteredSearch);
+    console.log('123', count);
+    return { groups: filteredSearch, count };
   }
 
   //대기자조회

@@ -28,11 +28,17 @@ class groupService {
     return group;
   }
 
-  //그룹의 목록 조회
-  static async getGroups(skip, limit) {
-    const { groups, count } = await Group.findAndCountAll(skip, limit);
-    return { groups, count };
-  }
+  // //그룹의 목록 조회
+  // static async getGroups(skip, limit) {
+  //   const { groups, count } = await Group.findAndCountAll(skip, limit);
+  //   return { groups, count };
+  // }
+  // 그룹의 목록 조회
+static async getGroups(page, limit) {
+  const skip = (page - 1) * limit;
+  const { groups, count } = await Group.findAndCountAll(skip, limit);
+  return { groups, count };
+}
 
   // 그룹의 상세페이지 조회
   static async getMyGroup(groupId) {
@@ -40,15 +46,16 @@ class groupService {
     return myGroup;
   }
   //그룹명 검색
-  static async searchGroup(title) {
-    const group = await Group.findByTitle(title);
-
-    if (!group) {
+  static async searchGroup({ title }, skip, limit) {
+    const { filteredSearch, count } = await Group.findByTitle({ title }, skip, limit);
+    console.log('group', filteredSearch);
+    console.log('서비스쪽title', title);
+    if (!filteredSearch) {
       const errorMessage =
         '그룹명 조회: 해당 이름을 가진 그룹이 없습니다. 다시 한 번 확인해 주세요.';
       throw new Error(errorMessage);
     }
-    return group;
+    return { filteredSearch, count };
   }
 
   //그룹 삭제

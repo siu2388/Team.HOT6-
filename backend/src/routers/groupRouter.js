@@ -54,22 +54,44 @@ groupRouter.get('/groups', async (req, res, next) => {
   try {
     const page = parseInt(req.query.page || 1);
     const limit = 9;
-    const skip = (page - 1) * limit;
     console.log('page : ', page);
-    console.log('skip : ', skip);
 
-    const { groups, count } = await groupService.getGroups(skip, limit);
+    const { groups, count } = await groupService.getGroups(page, limit);
     const sortedGroups = groups.sort().reverse();
+
+    const totalPages = Math.ceil(count / limit);
+    const currentPage = Math.min(page, totalPages);
+
     res.status(200).json({
-      currentPage: page,
-      totalPages: Math.ceil(count / limit),
-      sortedGroups: sortedGroups,
+      currentPage: currentPage,
+      totalPages: totalPages,
+      groups: sortedGroups,
     });
     return;
   } catch (error) {
     next(error);
   }
 });
+// groupRouter.get('/groups', async (req, res, next) => {
+//   try {
+//     const page = parseInt(req.query.page || 1);
+//     const limit = 9;
+//     const skip = (page - 1) * limit;
+//     console.log('page : ', page);
+//     console.log('skip : ', skip);
+
+//     const { groups, count } = await groupService.getGroups(skip, limit);
+//     const sortedGroups = groups.sort().reverse();
+//     res.status(200).json({
+//       currentPage: page,
+//       totalPages: Math.ceil(count / limit),
+//       groups: sortedGroups,
+//     });
+//     return;
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
 //그룹 상세 조회
 groupRouter.get('/groups/:groupId', async (req, res, next) => {
@@ -87,17 +109,28 @@ groupRouter.get('/groups/:groupId', async (req, res, next) => {
 // 그룹명 검색
 groupRouter.get('/searchgroups', async (req, res, next) => {
   try {
-    // console.log('req.query', req.query);
-    // const page = parseInt(req.query.page || 1);
-    // const limit = 9;
-    // const skip = (page - 1) * limit;
-    // console.log('page : ', page);
-    // console.log('skip : ', skip);
+    console.log('req.query', req.query);
+    const page = parseInt(req.query.page || 1);
+    const limit = 9;
+    const skip = (page - 1) * limit;
+    console.log('page : ', page);
+    console.log('skip : ', skip);
 
     const { title } = req.query;
-    const result = await groupService.searchGroup({ title });
-    console.log('result : ', result);
-    res.status(200).json({ groups: result });
+    //
+    const decodedTitle = decodeURIComponent(title);
+    console.log('decodedTitle : ', decodedTitle);
+    const { filteredSearch, count } = await groupService.searchGroup(
+      { title: decodedTitle },
+      skip,
+      limit,
+    );
+    console.log('result : ', filteredSearch);
+    res.status(200).json({
+      currentPage: page,
+      totalPages: Math.ceil(count / limit),
+      filteredSearch,
+    });
     return;
   } catch (error) {
     next(error);
