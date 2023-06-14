@@ -9,6 +9,8 @@ import { Link } from 'react-router-dom';
 import { ROUTE } from '../../constants/routes/routeData';
 import * as Api from '../../api/index';
 import { res } from '../../styles/responsive';
+import { isErrorModalState } from '../../stores';
+import { useRecoilState } from 'recoil';
 
 export default function GroupList() {
   const [groupList, setGroupList] = useState([]);
@@ -17,6 +19,7 @@ export default function GroupList() {
   const [searchPage, setSearchPage] = useState(1);
   const [search, setSearch] = useState('');
   const [groupRanks, setGroupRanks] = useState([]);
+  const [, setIsErrorModal] = useRecoilState(isErrorModalState);
 
   useEffect(() => {
     const getGroups = async () => {
@@ -44,7 +47,24 @@ export default function GroupList() {
 
   const onClickSearch = async () => {
     try {
-      const result = await Api.get(`/searchgroups?title=${search}&page=${page}`);
+      if (search.length >= 2) {
+        const result = await Api.get(`/searchgroups?title=${search}&page=${page}`);
+        setSearchGroupList(result?.data);
+        setSearch('');
+      } else {
+        setIsErrorModal({
+          state: true,
+          message: '두 글자 이상 입력해주세요.',
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onClickGroupReload = async () => {
+    try {
+      const result = await Api.get('/groups?page=1');
       setSearchGroupList(result?.data);
     } catch (err) {
       console.log(err);
@@ -87,6 +107,9 @@ export default function GroupList() {
             onChangeSearch={onChangeSearch}
             onClickSearch={onClickSearch}
           />
+          <Button variant="contained" onClick={onClickGroupReload}>
+            <Link>검색 초기화</Link>
+          </Button>
           <Button variant="contained">
             <Link to={ROUTE.GROUP_WRITE.link}>그룹등록</Link>
           </Button>
