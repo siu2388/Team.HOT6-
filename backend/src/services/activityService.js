@@ -162,35 +162,29 @@ class activityService {
       totalCountsByGroup[groupId] = totalCount;
     }
 
-    const sortedTotalCounts = Object.entries(totalCountsByGroup).sort((a, b) => b[1] - a[1]);
+    const sortedTotalCounts = Object.entries(totalCountsByGroup)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3);
 
     let currentRank = 1;
-    let previousCount = null;
     const rankedTotalCounts = [];
 
     for (const [groupId, count] of sortedTotalCounts) {
-      const group = await Group.findById(groupId);
+      const group = await Group.findBygroupId(groupId);
       const { title, thumbnail } = group;
-      const rank =
-        previousCount === count
-          ? rankedTotalCounts[rankedTotalCounts.length - 1].rank
-          : currentRank;
 
       rankedTotalCounts.push({
-        rank,
+        rank: currentRank,
         groupId,
         count,
         title,
         thumbnail,
       });
 
-      previousCount = count;
       currentRank++;
     }
 
-    const topThreeCounts = rankedTotalCounts.slice(0, 3);
-
-    return topThreeCounts;
+    return rankedTotalCounts;
   }
 }
 
