@@ -136,7 +136,7 @@ export default function GroupWritePage() {
               }
               onClick={onClickAddGroup}
             >
-              등록
+              <Link>등록</Link>
             </Button>
             <Button variant="outlined" color="success">
               <Link to={'/groups'}>취소</Link>
@@ -163,29 +163,6 @@ const WriteContainer = styled.div`
 
 const Form = styled.form`
   width: 100%;
-  .css-1u3bzj6-MuiFormControl-root-MuiTextField-root {
-    width: 100%;
-    label {
-      font-size: 1.4rem;
-    }
-    .css-dpjnhs-MuiInputBase-root-MuiOutlinedInput-root {
-      width: 100%;
-      min-height: 6rem;
-      textarea {
-        font-size: 1.4rem;
-        line-height: 1.3;
-        overflow-y: auto;
-      }
-    }
-    .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
-      font-size: 1.4rem;
-    }
-  }
-
-  .css-1aznpnh-MuiSlider-root {
-    width: 80%;
-    margin-left: 10px;
-  }
 
   p {
     font-size: 1.5rem;
@@ -229,9 +206,11 @@ const BtnBox = styled.div`
   margin-top: 3rem;
   button {
     font-size: 1.7rem;
-    padding: 1rem 5rem;
     a {
+      width: 100%;
+      height: 100%;
       font-size: 1.7rem;
+      padding: 1rem 5rem;
     }
   }
 `;

@@ -336,23 +336,6 @@ const JoinImgBox = styled.div`
 const Form = styled.form`
   width: 100%;
 
-  .css-1u3bzj6-MuiFormControl-root-MuiTextField-root {
-    width: 100%;
-  }
-  .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
-    width: 100%;
-  }
-  .css-r47a1p-MuiFormControl-root {
-    width: 100%;
-    margin: 0;
-  }
-
-  .css-1jy569b-MuiFormLabel-root-MuiInputLabel-root,
-  .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input,
-  .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
-    font-size: 1.5rem;
-  }
-
   button {
     width: 100%;
     padding: 1.3rem 0;

@@ -174,36 +174,6 @@ const InputBox = styled.div`
 
 const ActiveForm = styled.form`
   width: 100%;
-  .css-1u3bzj6-MuiFormControl-root-MuiTextField-root {
-    width: 100%;
-  }
-  .css-1x51dt5-MuiInputBase-input-MuiInput-input {
-    font-size: 1.6rem;
-    font-weight: 400;
-    color: #111;
-  }
-
-  .css-1c2i806-MuiFormLabel-root-MuiInputLabel-root {
-    font-size: 1.7rem;
-    font-weight: 400;
-    color: #111;
-  }
-
-  .css-1x51dt5-MuiInputBase-input-MuiInput-input.Mui-disabled {
-    -webkit-text-fill-color: #111;
-  }
-
-  #demo-row-radio-buttons-group-label {
-    font-size: 1.5rem;
-  }
-
-  .css-j204z7-MuiFormControlLabel-root .MuiFormControlLabel-label {
-    font-size: 1.4rem;
-  }
-
-  .css-vqmohf-MuiButtonBase-root-MuiRadio-root.Mui-checked {
-    color: rgb(1, 136, 28);
-  }
 `;
 
 const FileBox = styled.div`
