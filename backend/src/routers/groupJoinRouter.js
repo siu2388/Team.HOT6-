@@ -21,7 +21,11 @@ groupJoinRouter.post('/mygroups/:groupId', loginRequired, async (req, res, next)
     }
 
     const result = await groupJoinService.groupJoin({ groupId, userId, state });
-    res.json({ result, message: '등록 성공' });
+    if (result) {
+      res.status(200).json({ result,  message: '등록 성공' });
+    } else {
+      res.status(400).json({ message: '그룹장이 아니신가요? 그룹은 하나만 가입할 수 있어요!' });
+    }
     return;
   } catch (error) {
     next(error);

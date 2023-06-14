@@ -6,7 +6,12 @@ class groupJoinService {
   // 유저의 그룹 가입
   static async groupJoin({ groupId, userId, state }) {
     // const group = await Group.findById({ groupId });
-    // const user = await User.findById({ userId });
+    const user = await User.findByGroupId({ groupId });
+    if (user) {
+      const errorMessage =
+        '그룹장이 아니신가요? 그룹은 하나만 가입할 수 있어요.';
+      throw new Error(errorMessage);
+    }
     const newGroupJoin = {
       groupId,
       userId,

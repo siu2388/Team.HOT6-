@@ -54,10 +54,11 @@ groupRouter.get('/groups', async (req, res, next) => {
   try {
     const page = parseInt(req.query.page || 1);
     const limit = 9;
+    const skip = (page - 1) * limit;
     console.log('page : ', page);
+    console.log('skip : ', skip);
 
     const { groups, count } = await groupService.getGroups(page, limit);
-    // const sortedGroups = groups.sort().reverse();
 
     const totalPages = Math.ceil(count / limit);
     const currentPage = Math.min(page, totalPages);
@@ -72,26 +73,6 @@ groupRouter.get('/groups', async (req, res, next) => {
     next(error);
   }
 });
-// groupRouter.get('/groups', async (req, res, next) => {
-//   try {
-//     const page = parseInt(req.query.page || 1);
-//     const limit = 9;
-//     const skip = (page - 1) * limit;
-//     console.log('page : ', page);
-//     console.log('skip : ', skip);
-
-//     const { groups, count } = await groupService.getGroups(skip, limit);
-//     const sortedGroups = groups.sort().reverse();
-//     res.status(200).json({
-//       currentPage: page,
-//       totalPages: Math.ceil(count / limit),
-//       groups: sortedGroups,
-//     });
-//     return;
-//   } catch (error) {
-//     next(error);
-//   }
-// });
 
 //그룹 상세 조회
 groupRouter.get('/groups/:groupId', async (req, res, next) => {
@@ -111,7 +92,7 @@ groupRouter.get('/searchgroups', async (req, res, next) => {
   try {
     console.log('req.query', req.query);
     const page = parseInt(req.query.page || 1);
-    const limit = 9;
+    const limit = 6;
     const skip = (page - 1) * limit;
     console.log('page : ', page);
     console.log('skip : ', skip);
@@ -129,7 +110,7 @@ groupRouter.get('/searchgroups', async (req, res, next) => {
     res.status(200).json({
       currentPage: page,
       totalPages: Math.ceil(count / limit),
-      filteredSearch,
+      groups: filteredSearch,
     });
     return;
   } catch (error) {

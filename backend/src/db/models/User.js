@@ -30,6 +30,11 @@ class User {
     return group;
   }
 
+  //방장이 그룹 가입 못하게 하기
+  static async findByGroupId({ groupId }) {
+    const user = await UserModel.findOne({ groupId });
+    return user;
+  }
   // groupId 같은 멤버 조회용
   static async findGroupMembers({ groupId }) {
     const foundMembers = await UserModel.find(
