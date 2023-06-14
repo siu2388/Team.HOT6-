@@ -2,19 +2,23 @@ import React from 'react';
 import styled from 'styled-components';
 import Avatar from '@mui/material/Avatar';
 import { res } from '../../../styles/responsive';
+import * as API from '../../../api/index';
 
-export default function RankProfile() {
+export default function RankProfile({ group }) {
+  console.log(group);
   return (
     <ProfileBox>
       <ProfileContainer>
-        <Avatar src="/images/commons/logo.png" sx={{ width: '6.8rem', height: '6.8rem' }} />
+        <Avatar
+          src={`${API.imgUrl}${group?.thumbnail}`}
+          sx={{ width: '6.8rem', height: '6.8rem' }}
+        />
         <ProfileInfoBox>
-          <ProfileName>깜장이</ProfileName>
-          <ProfileId>cjt3591</ProfileId>
+          <GroupTitle>{group?.title}</GroupTitle>
         </ProfileInfoBox>
       </ProfileContainer>
       <RankBox>
-        <RankInfo>TOP1</RankInfo>
+        <RankInfo>TOP{group?.rank}</RankInfo>
       </RankBox>
     </ProfileBox>
   );
@@ -40,17 +44,11 @@ const ProfileContainer = styled.div`
 
 const ProfileInfoBox = styled.div``;
 
-const ProfileName = styled.p`
+const GroupTitle = styled.p`
   font-size: 1.8rem;
   font-weight: 400;
   color: #111;
   margin-bottom: 1.2rem;
-`;
-
-const ProfileId = styled.p`
-  font-size: 1.3rem;
-  font-weight: 400;
-  color: #d6d6d6;
 `;
 
 const RankBox = styled.div`

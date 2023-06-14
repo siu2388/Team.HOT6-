@@ -61,9 +61,9 @@ export default function GroupList() {
           <RankTitle>그룹 TOP 3</RankTitle>
         </Ranking>
         <RankProfileContainer>
-          <RankProfile />
-          <RankProfile />
-          <RankProfile />
+          {groupRanks?.map(group => (
+            <RankProfile key={group?.groupId} group={group} />
+          ))}
         </RankProfileContainer>
       </RankingBox>
       <GroupListContainer>
