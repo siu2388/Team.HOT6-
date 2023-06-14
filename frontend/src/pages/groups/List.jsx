@@ -50,7 +50,6 @@ export default function GroupList() {
       if (search.length >= 2) {
         const result = await Api.get(`/searchgroups?title=${search}&page=${page}`);
         setSearchGroupList(result?.data);
-        setSearch('');
       } else {
         setIsErrorModal({
           state: true,
