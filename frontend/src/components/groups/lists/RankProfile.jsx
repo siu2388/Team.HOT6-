@@ -5,7 +5,6 @@ import { res } from '../../../styles/responsive';
 import * as API from '../../../api/index';
 
 export default function RankProfile({ group }) {
-  console.log(group);
   return (
     <ProfileBox>
       <ProfileContainer>
