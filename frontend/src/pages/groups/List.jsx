@@ -9,12 +9,17 @@ import { Link } from 'react-router-dom';
 import { ROUTE } from '../../constants/routes/routeData';
 import * as Api from '../../api/index';
 import { res } from '../../styles/responsive';
+import { isErrorModalState } from '../../stores';
+import { useRecoilState } from 'recoil';
 
 export default function GroupList() {
   const [groupList, setGroupList] = useState([]);
+  const [searchGroupList, setSearchGroupList] = useState([]);
   const [page, setPage] = useState(1);
+  const [searchPage, setSearchPage] = useState(1);
   const [search, setSearch] = useState('');
   const [groupRanks, setGroupRanks] = useState([]);
+  const [, setIsErrorModal] = useRecoilState(isErrorModalState);
 
   useEffect(() => {
     const getGroups = async () => {
@@ -32,8 +37,6 @@ export default function GroupList() {
     getRanks();
   }, []);
 
-  console.log(groupRanks);
-
   const onChangeSearch = e => {
     setSearch(e.target.value);
   };
@@ -44,8 +47,35 @@ export default function GroupList() {
 
   const onClickSearch = async () => {
     try {
-      const result = await Api.get(`/searchgroups?title=${search}`);
-      setGroupList(result?.data);
+      if (search.length >= 2) {
+        const result = await Api.get(`/searchgroups?title=${search}&page=${page}`);
+        setSearchGroupList(result?.data);
+        setSearch('');
+      } else {
+        setIsErrorModal({
+          state: true,
+          message: '두 글자 이상 입력해주세요.',
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onClickGroupReload = async () => {
+    try {
+      const result = await Api.get('/groups?page=1');
+      setSearchGroupList(result?.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onClickSearchPagination = async (_, page) => {
+    try {
+      setSearchPage(page);
+      const result = await Api.get(`/searchgroups?title=${search}&page=${page}`);
+      setSearchGroupList(result?.data);
     } catch (err) {
       console.log(err);
     }
@@ -61,9 +91,11 @@ export default function GroupList() {
           <RankTitle>그룹 TOP 3</RankTitle>
         </Ranking>
         <RankProfileContainer>
-          {groupRanks?.map(group => (
-            <RankProfile key={group?.groupId} group={group} />
-          ))}
+          {groupRanks?.length > 0 ? (
+            groupRanks?.map(group => <RankProfile key={group?.groupId} group={group} />)
+          ) : (
+            <RankText>그룹 랭킹이 존재하지 않습니다.</RankText>
+          )}
         </RankProfileContainer>
       </RankingBox>
       <GroupListContainer>
@@ -75,24 +107,38 @@ export default function GroupList() {
             onChangeSearch={onChangeSearch}
             onClickSearch={onClickSearch}
           />
+          <Button variant="contained" onClick={onClickGroupReload}>
+            <Link>검색 초기화</Link>
+          </Button>
           <Button variant="contained">
             <Link to={ROUTE.GROUP_WRITE.link}>그룹등록</Link>
           </Button>
         </SearchContainer>
         <GroupLists>
-          {groupList?.groups?.map(group => (
-            <ListBox key={group.id} group={group} />
-          ))}
+          {searchGroupList?.groups?.length > 0
+            ? searchGroupList?.groups?.map(group => <ListBox key={group.id} group={group} />)
+            : groupList?.groups?.map(group => <ListBox key={group.id} group={group} />)}
         </GroupLists>
         <PagenationBox>
-          <Pagination
-            count={groupList?.totalPages}
-            page={page}
-            size="large"
-            variant="outlined"
-            color="primary"
-            onChange={onChangePage}
-          />
+          {searchGroupList?.groups?.length > 0 ? (
+            <Pagination
+              count={searchGroupList?.totalPages}
+              page={searchPage}
+              size="large"
+              variant="outlined"
+              color="primary"
+              onChange={onClickSearchPagination}
+            />
+          ) : (
+            <Pagination
+              count={groupList?.totalPages}
+              page={page}
+              size="large"
+              variant="outlined"
+              color="primary"
+              onChange={onChangePage}
+            />
+          )}
         </PagenationBox>
       </GroupListContainer>
     </GroupListWrap>
@@ -197,4 +243,12 @@ const Rankimage = styled.div`
     padding-bottom: 4rem;
     width: 120px;
   }
+`;
+
+const RankText = styled.p`
+  font-size: 2.4rem;
+  font-weight: 400;
+  color: #fff;
+  text-align: center;
+  margin: 0 auto;
 `;

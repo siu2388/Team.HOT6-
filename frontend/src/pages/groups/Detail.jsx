@@ -25,8 +25,6 @@ export default function GroupDetailPage() {
     getGroupData();
   }, []);
 
-  console.log(groupData);
-
   const handleGroupJoin = async () => {
     try {
       await API.post(`/mygroups/${groupId}`);
@@ -76,17 +74,19 @@ export default function GroupDetailPage() {
                 </UserBox>
                 <GroupDescription>{groupData?.myGroup?.description}</GroupDescription>
               </div>
-              <div>
-                <Button
-                  style={{ width: '180px', height: '40px', fontSize: '2.2rem' }}
-                  variant="contained"
-                  color="success"
-                  onClick={handleGroupJoin}
-                  disabled={groupData?.myGroup?.groupOwnerId?._id === userInfo?.user?._id}
-                >
-                  그룹신청
-                </Button>
-              </div>
+              {sessionStorage.getItem('userToken') && (
+                <div>
+                  <Button
+                    style={{ width: '180px', height: '40px', fontSize: '2.2rem' }}
+                    variant="contained"
+                    color="success"
+                    onClick={handleGroupJoin}
+                    disabled={groupData?.myGroup?.groupOwnerId?._id === userInfo?.user?._id}
+                  >
+                    그룹신청
+                  </Button>
+                </div>
+              )}
             </DetailInfo>
           </DetailInfoBox>
           <GroupMemberBox>

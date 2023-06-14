@@ -42,7 +42,6 @@ export default function Mypage() {
       setMyGroup(result.data);
     };
     if (userInfo?.user?.groupId) {
-      console.log(getMyGroup);
       getMyGroup();
     }
   }, [userInfo, update]);
@@ -78,6 +77,22 @@ export default function Mypage() {
 
   const handleMenuItemClick = menuItem => {
     setActiveMenuItem(menuItem);
+  };
+
+  const onClickDelGroup = async () => {
+    try {
+      await API.delete(`/groups/${myGroup?.result[0]?.groupId?._id}`);
+      setUpdate(prev => prev + 1);
+      setIsScucessModal({
+        state: true,
+        message: '그룹을 삭제하였습니다.',
+      });
+    } catch (err) {
+      setIsErrorModal({
+        state: true,
+        message: err.response.data.message,
+      });
+    }
   };
 
   const onClickDeleteGroup = async () => {
@@ -203,7 +218,7 @@ export default function Mypage() {
               </GroupInfo>
               <GroupButton>
                 {myGroup?.result?.[0]?.groupId?.groupOwnerId?._id === userInfo?.user?._id ? (
-                  <GroupLeaveButton onClick={onClickDeleteGroup}>그룹삭제</GroupLeaveButton>
+                  <GroupLeaveButton onClick={onClickDelGroup}>그룹삭제</GroupLeaveButton>
                 ) : (
                   <GroupLeaveButton onClick={onClickDeleteGroup}>그룹탈퇴</GroupLeaveButton>
                 )}

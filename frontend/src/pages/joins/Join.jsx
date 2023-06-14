@@ -32,14 +32,28 @@ export default function JoinPage({ page }) {
   const navigate = useNavigate();
 
   const [formDatas, setFormData] = useState({
-    userId: userInfo?.user?.userId || '',
+    userId: '',
     password: '',
     passwordConfirm: '',
-    name: userInfo?.user?.name || '',
-    nickname: userInfo?.user?.nickname || '',
-    phone: userInfo?.user?.phone || '',
-    addressDetail: userInfo?.user?.addressDetail || '',
+    name: '',
+    nickname: '',
+    phone: '',
+    addressDetail: '',
   });
+
+  useEffect(() => {
+    if (userInfo) {
+      setFormData({
+        userId: userInfo?.user?.userId,
+        password: '',
+        passwordConfirm: '',
+        name: userInfo?.user?.name,
+        nickname: userInfo?.user?.nickname,
+        phone: userInfo?.user?.phone,
+        addressDetail: userInfo?.user?.addressDetail,
+      });
+    }
+  }, [userInfo]);
 
   useEffect(() => {
     if (page === 'join' && userInfo) {
@@ -335,23 +349,6 @@ const JoinImgBox = styled.div`
 
 const Form = styled.form`
   width: 100%;
-
-  .css-1u3bzj6-MuiFormControl-root-MuiTextField-root {
-    width: 100%;
-  }
-  .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
-    width: 100%;
-  }
-  .css-r47a1p-MuiFormControl-root {
-    width: 100%;
-    margin: 0;
-  }
-
-  .css-1jy569b-MuiFormLabel-root-MuiInputLabel-root,
-  .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input,
-  .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
-    font-size: 1.5rem;
-  }
 
   button {
     width: 100%;

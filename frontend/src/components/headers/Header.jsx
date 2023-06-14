@@ -60,8 +60,6 @@ export default function Header() {
     }
   };
 
-  console.log(userInfo);
-
   return (
     <HeaderWrap>
       <HeaderContainer>
@@ -80,10 +78,28 @@ export default function Header() {
                   <Link to={ROUTE.GROUP_LIST.link}>Group</Link>
                 </MenuList>
                 <MenuList>
-                  <Link to={'/'}>Challenge</Link>
+                  <Link
+                    onClick={() => {
+                      setIsErrorModal({
+                        state: true,
+                        message: 'Comming Soon',
+                      });
+                    }}
+                  >
+                    Challenge
+                  </Link>
                 </MenuList>
                 <MenuList>
-                  <Link to={'/'}>Community</Link>
+                  <Link
+                    onClick={() => {
+                      setIsErrorModal({
+                        state: true,
+                        message: 'Comming Soon',
+                      });
+                    }}
+                  >
+                    Community
+                  </Link>
                 </MenuList>
               </NavMenu>
             </Navigation>
