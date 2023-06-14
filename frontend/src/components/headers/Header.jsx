@@ -60,8 +60,6 @@ export default function Header() {
     }
   };
 
-  console.log(userInfo);
-
   return (
     <HeaderWrap>
       <HeaderContainer>

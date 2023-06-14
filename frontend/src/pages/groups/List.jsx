@@ -34,8 +34,6 @@ export default function GroupList() {
     getRanks();
   }, []);
 
-  console.log(searchGroupList);
-
   const onChangeSearch = e => {
     setSearch(e.target.value);
   };

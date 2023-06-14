@@ -25,8 +25,6 @@ export default function GroupDetailPage() {
     getGroupData();
   }, []);
 
-  console.log(groupData);
-
   const handleGroupJoin = async () => {
     try {
       await API.post(`/mygroups/${groupId}`);

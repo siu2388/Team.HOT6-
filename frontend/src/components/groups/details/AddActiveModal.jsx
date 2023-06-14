@@ -29,8 +29,6 @@ export default function AddActiveModal({ onClickToggleModal, selectedDate }) {
   const [, setIsScucessModal] = useRecoilState(isSuccessModalState);
   const [, setIsErrorModal] = useRecoilState(isErrorModalState);
 
-  console.log(userInfo);
-
   const groupId = useParams().id;
 
   const onChangeActivity = e => {
@@ -68,7 +66,6 @@ export default function AddActiveModal({ onClickToggleModal, selectedDate }) {
         state: true,
         message: err.response.data,
       });
-      // console.log(err);
     }
   };
 
