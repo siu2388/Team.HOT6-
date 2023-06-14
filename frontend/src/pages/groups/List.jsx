@@ -71,9 +71,11 @@ export default function GroupList() {
           <RankTitle>그룹 TOP 3</RankTitle>
         </Ranking>
         <RankProfileContainer>
-          {groupRanks?.map(group => (
-            <RankProfile key={group?.groupId} group={group} />
-          ))}
+          {groupRanks?.length > 0 ? (
+            groupRanks?.map(group => <RankProfile key={group?.groupId} group={group} />)
+          ) : (
+            <RankText>그룹 랭킹이 존재하지 않습니다.</RankText>
+          )}
         </RankProfileContainer>
       </RankingBox>
       <GroupListContainer>
@@ -218,4 +220,12 @@ const Rankimage = styled.div`
     padding-bottom: 4rem;
     width: 120px;
   }
+`;
+
+const RankText = styled.p`
+  font-size: 2.4rem;
+  font-weight: 400;
+  color: #fff;
+  text-align: center;
+  margin: 0 auto;
 `;
