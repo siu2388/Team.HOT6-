@@ -41,11 +41,16 @@ class Activity {
   }
 
   // 유저 활동 목록 조회
-  static async findByUserId(userId) {
-    const activities = await ActivityModel.find({ userId, state: '승인' }).select(
-      'usedDate category',
-    );
-    return activities;
+  static async findByUserId(userId, skip, limit) {
+    const activities = await ActivityModel.find({ userId, state: '승인' })
+      .sort({ usedDate: -1 })
+      .select('usedDate category')
+      .skip(skip)
+      .limit(limit);
+
+    const count = await ActivityModel.countDocuments({ userId, state: '승인' });
+
+    return { activities, count };
   }
 
   // 그룹 랭킹

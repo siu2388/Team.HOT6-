@@ -134,10 +134,10 @@ class activityService {
   }
 
   // 유저 활동 목록 조회
-  static async getActivities(userId) {
+  static async getActivities(userId, skip, limit) {
     try {
-      const activities = await Activity.findByUserId(userId);
-      return activities;
+      const { activities, count } = await Activity.findByUserId(userId, skip, limit);
+      return { activities, count };
     } catch (error) {
       throw error;
     }
