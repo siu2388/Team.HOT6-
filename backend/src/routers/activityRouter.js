@@ -125,7 +125,7 @@ activityRouter.get('/activities', loginRequired, async (req, res, next) => {
 });
 
 // 그룹 활동 랭킹
-activityRouter.get('/activities/totalCount', loginRequired, async (req, res, next) => {
+activityRouter.get('/activities/totalCount', async (req, res, next) => {
   try {
     const totalCounts = await activityService.getTotalCounts();
     res.status(200).json({ totalCounts });
