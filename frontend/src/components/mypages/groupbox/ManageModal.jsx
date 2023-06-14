@@ -6,6 +6,7 @@ import * as API from '../../../api/index';
 export default function ManageModal({
   setIsManageModalOpen,
   waitingMembers,
+  // waitingActivity,
   onClickAcceptMember,
   onClickRefuseMember,
 }) {

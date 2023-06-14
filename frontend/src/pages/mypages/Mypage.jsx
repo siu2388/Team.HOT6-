@@ -58,16 +58,16 @@ export default function Mypage() {
 
   useEffect(() => {
     const getWaitingActivity = async () => {
-      const result = await API.get(`/activities/${myGroup?.result[0]?.groupId?._id}/waiting`);
+      const result = await API.get(`/activities/${myGroup?.result?.[0]?.groupId?._id}/waiting`);
       setWaitingActivity(result.data);
     };
     console.log(getWaitingActivity);
-    // if (myGroup?.groupId?._id) {
-    //   getWaitingActivity();
-    // }
+    if (myGroup?.result?.[0]?.groupId?._id) {
+      getWaitingActivity();
+    }
   }, [myGroup]);
 
-  console.log(waitingActivity);
+  console.log('waitingActivity!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',waitingActivity);
 
   const navigate = useNavigate();
 
@@ -233,6 +233,7 @@ export default function Mypage() {
           <ManageModal
             setIsManageModalOpen={setIsManageModalOpen}
             waitingMembers={waitingMembers}
+            waitingActivity={waitingActivity}
             onClickAcceptMember={onClickAcceptMember}
             onClickRefuseMember={onClickRefuseMember}
           />
