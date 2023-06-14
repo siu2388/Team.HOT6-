@@ -8,8 +8,6 @@ export default function FileUpload({ profileImg }) {
   const [imageSrc, setImageSrc] = useState(profileImg ? `${API.imgUrl}${profileImg}` : null);
   const [, setImgFile] = useRecoilState(imgFileState);
 
-  console.log(imageSrc);
-
   useEffect(() => {
     return () => {
       setImgFile(null);
