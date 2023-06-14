@@ -12,7 +12,9 @@ import { res } from '../../styles/responsive';
 
 export default function GroupList() {
   const [groupList, setGroupList] = useState([]);
+  const [searchGroupList, setSearchGroupList] = useState([]);
   const [page, setPage] = useState(1);
+  const [searchPage, setSearchPage] = useState(1);
   const [search, setSearch] = useState('');
   const [groupRanks, setGroupRanks] = useState([]);
 
@@ -32,7 +34,7 @@ export default function GroupList() {
     getRanks();
   }, []);
 
-  console.log(groupRanks);
+  console.log(searchGroupList);
 
   const onChangeSearch = e => {
     setSearch(e.target.value);
@@ -44,8 +46,18 @@ export default function GroupList() {
 
   const onClickSearch = async () => {
     try {
-      const result = await Api.get(`/searchgroups?title=${search}`);
-      setGroupList(result?.data);
+      const result = await Api.get(`/searchgroups?title=${search}&page=${page}`);
+      setSearchGroupList(result?.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onClickSearchPagination = async (_, page) => {
+    try {
+      setSearchPage(page);
+      const result = await Api.get(`/searchgroups?title=${search}&page=${page}`);
+      setSearchGroupList(result?.data);
     } catch (err) {
       console.log(err);
     }
@@ -80,19 +92,30 @@ export default function GroupList() {
           </Button>
         </SearchContainer>
         <GroupLists>
-          {groupList?.groups?.map(group => (
-            <ListBox key={group.id} group={group} />
-          ))}
+          {searchGroupList?.groups?.length > 0
+            ? searchGroupList?.groups?.map(group => <ListBox key={group.id} group={group} />)
+            : groupList?.groups?.map(group => <ListBox key={group.id} group={group} />)}
         </GroupLists>
         <PagenationBox>
-          <Pagination
-            count={groupList?.totalPages}
-            page={page}
-            size="large"
-            variant="outlined"
-            color="primary"
-            onChange={onChangePage}
-          />
+          {searchGroupList?.groups?.length > 0 ? (
+            <Pagination
+              count={searchGroupList?.totalPages}
+              page={searchPage}
+              size="large"
+              variant="outlined"
+              color="primary"
+              onChange={onClickSearchPagination}
+            />
+          ) : (
+            <Pagination
+              count={groupList?.totalPages}
+              page={page}
+              size="large"
+              variant="outlined"
+              color="primary"
+              onChange={onChangePage}
+            />
+          )}
         </PagenationBox>
       </GroupListContainer>
     </GroupListWrap>
