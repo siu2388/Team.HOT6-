@@ -32,14 +32,28 @@ export default function JoinPage({ page }) {
   const navigate = useNavigate();
 
   const [formDatas, setFormData] = useState({
-    userId: userInfo?.user?.userId || '',
+    userId: '',
     password: '',
     passwordConfirm: '',
-    name: userInfo?.user?.name || '',
-    nickname: userInfo?.user?.nickname || '',
-    phone: userInfo?.user?.phone || '',
-    addressDetail: userInfo?.user?.addressDetail || '',
+    name: '',
+    nickname: '',
+    phone: '',
+    addressDetail: '',
   });
+
+  useEffect(() => {
+    if (userInfo) {
+      setFormData({
+        userId: userInfo?.user?.userId,
+        password: '',
+        passwordConfirm: '',
+        name: userInfo?.user?.name,
+        nickname: userInfo?.user?.nickname,
+        phone: userInfo?.user?.phone,
+        addressDetail: userInfo?.user?.addressDetail,
+      });
+    }
+  }, [userInfo]);
 
   useEffect(() => {
     if (page === 'join' && userInfo) {

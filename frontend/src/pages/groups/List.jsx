@@ -9,6 +9,8 @@ import { Link } from 'react-router-dom';
 import { ROUTE } from '../../constants/routes/routeData';
 import * as Api from '../../api/index';
 import { res } from '../../styles/responsive';
+import { isErrorModalState } from '../../stores';
+import { useRecoilState } from 'recoil';
 
 export default function GroupList() {
   const [groupList, setGroupList] = useState([]);
@@ -17,6 +19,7 @@ export default function GroupList() {
   const [searchPage, setSearchPage] = useState(1);
   const [search, setSearch] = useState('');
   const [groupRanks, setGroupRanks] = useState([]);
+  const [, setIsErrorModal] = useRecoilState(isErrorModalState);
 
   useEffect(() => {
     const getGroups = async () => {
@@ -44,7 +47,23 @@ export default function GroupList() {
 
   const onClickSearch = async () => {
     try {
-      const result = await Api.get(`/searchgroups?title=${search}&page=${page}`);
+      if (search.length >= 2) {
+        const result = await Api.get(`/searchgroups?title=${search}&page=${page}`);
+        setSearchGroupList(result?.data);
+      } else {
+        setIsErrorModal({
+          state: true,
+          message: '두 글자 이상 입력해주세요.',
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onClickGroupReload = async () => {
+    try {
+      const result = await Api.get('/groups?page=1');
       setSearchGroupList(result?.data);
     } catch (err) {
       console.log(err);
@@ -71,9 +90,11 @@ export default function GroupList() {
           <RankTitle>그룹 TOP 3</RankTitle>
         </Ranking>
         <RankProfileContainer>
-          {groupRanks?.map(group => (
-            <RankProfile key={group?.groupId} group={group} />
-          ))}
+          {groupRanks?.length > 0 ? (
+            groupRanks?.map(group => <RankProfile key={group?.groupId} group={group} />)
+          ) : (
+            <RankText>그룹 랭킹이 존재하지 않습니다.</RankText>
+          )}
         </RankProfileContainer>
       </RankingBox>
       <GroupListContainer>
@@ -85,6 +106,9 @@ export default function GroupList() {
             onChangeSearch={onChangeSearch}
             onClickSearch={onClickSearch}
           />
+          <Button variant="contained" onClick={onClickGroupReload}>
+            <Link>검색 초기화</Link>
+          </Button>
           <Button variant="contained">
             <Link to={ROUTE.GROUP_WRITE.link}>그룹등록</Link>
           </Button>
@@ -218,4 +242,12 @@ const Rankimage = styled.div`
     padding-bottom: 4rem;
     width: 120px;
   }
+`;
+
+const RankText = styled.p`
+  font-size: 2.4rem;
+  font-weight: 400;
+  color: #fff;
+  text-align: center;
+  margin: 0 auto;
 `;

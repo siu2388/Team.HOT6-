@@ -5,11 +5,10 @@ import { Group } from '../db/models/Group.js';
 class groupJoinService {
   // 유저의 그룹 가입
   static async groupJoin({ groupId, userId, state }) {
-    // const group = await Group.findById({ groupId });
-    const user = await User.findByGroupId({ groupId });
-    if (user) {
-      const errorMessage =
-        '그룹장이 아니신가요? 그룹은 하나만 가입할 수 있어요.';
+    // 그룹장이 다른 그룹 가입 방지
+    const user = await User.findGroupOwner({ userId });
+    if (user.groupId) {
+      const errorMessage = '그룹장이 아니신가요? 그룹은 하나만 가입할 수 있어요.';
       throw new Error(errorMessage);
     }
     const newGroupJoin = {
@@ -21,16 +20,11 @@ class groupJoinService {
     return groupJoin;
   }
   // 그룹 가입 시 중복가입 방지 조회용
-  static async getUserGroup({ userId }) {
+  static async getJoinedGroup({ userId }) {
     const group = await GroupJoin.findByUserId({ userId });
+    return group;
+  }
 
-    return group;
-  }
-  //나의 그룹 조회
-  static async getMyGroup({ userId }) {
-    const group = await GroupJoin.findMyGroup({ userId });
-    return group;
-  }
   // 그룹 가입 대기자 리스트 - 관리자용
   static async getWaitingList({ groupId }) {
     const waitingList = await GroupJoin.findByGroupId({ groupId });
@@ -55,7 +49,7 @@ class groupJoinService {
     return { status: '가입거절완료' };
   }
 
-  // 유저의 그룹 탈퇴 - 완
+  // 유저의 그룹 탈퇴
   static async deleteMyGroup({ userId }) {
     const isDataDeleted = await GroupJoin.deleteByUserId({ userId });
 
