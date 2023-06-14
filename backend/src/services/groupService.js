@@ -29,11 +29,11 @@ class groupService {
   }
 
   // 그룹의 목록 조회
-static async getGroups(page, limit) {
-  const skip = (page - 1) * limit;
-  const { groups, count } = await Group.findAndCountAll(skip, limit);
-  return { groups, count };
-}
+  static async getGroups(page, limit) {
+    const skip = (page - 1) * limit;
+    const { groups, count } = await Group.findAndCountAll(skip, limit);
+    return { groups, count };
+  }
 
   // 그룹의 상세페이지 조회
   static async getMyGroup(groupId) {
@@ -41,37 +41,15 @@ static async getGroups(page, limit) {
     return myGroup;
   }
   //그룹명 검색
-  // static async searchGroup({ title }, skip, limit) {
-  //   const { filteredSearch, count } = await Group.findByTitle({ title }, skip, limit);
-  //   console.log('group', filteredSearch);
-  //   console.log('서비스쪽title', title);
-  //   if (!filteredSearch) {
-  //     const errorMessage =
-  //       '그룹명 조회: 해당 이름을 가진 그룹이 없습니다. 다시 한 번 확인해 주세요.';
-  //     throw new Error(errorMessage);
-  //   }
-  //   return { filteredSearch, count };
-  // }
-  static async searchGroup({ title }, skip, limit) {
+  static async searchGroup({ title }) {
     const { groups: filteredSearch, count } = await Group.findByTitle({ title });
-    console.log('group', filteredSearch);
-    console.log('서비스쪽count', count);
-    console.log('서비스쪽title', title);
     if (!filteredSearch) {
-      const errorMessage = '그룹명 조회: 해당 이름을 가진 그룹이 없습니다. 다시 한 번 확인해 주세요.';
+      const errorMessage =
+        '그룹명 조회: 해당 이름을 가진 그룹이 없습니다. 다시 한 번 확인해 주세요.';
       throw new Error(errorMessage);
     }
-
-    const paginatedGroups = this.paginate(filteredSearch, skip, limit);
-    return { filteredSearch: paginatedGroups, count };
+    return { groups: filteredSearch, count };
   }
-
-  // 페이지네이션 함수
-  static paginate(array, skip, limit) {
-    return array.slice(skip, skip + limit);
-  }
-
-
   //그룹 삭제
   static async deleteGroup({ groupId }) {
     const isDataDeleted = await Group.deleteById({ groupId });

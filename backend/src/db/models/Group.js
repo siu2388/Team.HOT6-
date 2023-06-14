@@ -34,24 +34,10 @@ class Group {
   }
 
   //그룹명 검색
-  // static async findByTitle({ title }, skip, limit) {
-  //   console.log('0', title, skip, limit);
-  //   const search = await GroupModel.find({}).skip(skip).limit(limit).exec();
-  //   const filteredSearch = search.filter(group => group.title.includes(title.slice(0, -1)));
-  //   // const count = await GroupModel.countDocuments(filteredSearch);
-  //   const count = filteredSearch.length;
-  //   console.log('1', filteredSearch);
-  //   console.log('123', count);
-  //   return { groups: filteredSearch, count };
-  // }
   static async findByTitle({ title }) {
-    console.log('0', title);
-    const search = await GroupModel.find({}).exec();
+    const search = await GroupModel.find({}).sort({ _id: -1 }).exec();
     const filteredSearch = search.filter(group => group.title.includes(title.slice(0, -1)));
     const count = filteredSearch.length;
-    console.log('count', count);
-    console.log('1', filteredSearch);
-    console.log('123', filteredSearch.length);
     return { groups: filteredSearch, count };
   }
 

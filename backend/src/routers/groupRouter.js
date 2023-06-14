@@ -62,7 +62,6 @@ groupRouter.get('/groups', async (req, res, next) => {
 
     const totalPages = Math.ceil(count / limit);
     const currentPage = Math.min(page, totalPages);
-
     res.status(200).json({
       currentPage: currentPage,
       totalPages: totalPages,
@@ -90,27 +89,26 @@ groupRouter.get('/groups/:groupId', async (req, res, next) => {
 // 그룹명 검색
 groupRouter.get('/searchgroups', async (req, res, next) => {
   try {
-    console.log('req.query', req.query);
     const page = parseInt(req.query.page || 1);
-    const limit = 6;
-    const skip = (page - 1) * limit;
-    console.log('page : ', page);
-    console.log('skip : ', skip);
+    const limit = 9;
 
     const { title } = req.query;
     //
-    const decodedTitle = decodeURIComponent(title);
-    console.log('decodedTitle : ', decodedTitle);
-    const { filteredSearch, count } = await groupService.searchGroup(
-      { title: decodedTitle },
-      skip,
-      limit,
-    );
-    console.log('result : ', filteredSearch);
+    const { groups: filteredSearch, count } = await groupService.searchGroup({
+      title,
+    });
+    const totalPages = Math.ceil(count / limit);
+    const currentPage = Math.min(page, totalPages);
+
+    const startIndex = (currentPage - 1) * limit;
+    const endIndex = startIndex + limit;
+    const paginatedGroups = filteredSearch.slice(startIndex, endIndex);
+
     res.status(200).json({
-      currentPage: page,
-      totalPages: Math.ceil(count / limit),
-      groups: filteredSearch,
+      currentPage,
+      totalPages,
+      filteredSearch,
+      groups: paginatedGroups,
     });
     return;
   } catch (error) {
