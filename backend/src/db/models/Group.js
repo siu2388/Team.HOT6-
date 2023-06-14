@@ -34,7 +34,7 @@ class Group {
 
   //그룹명 검색
   static async findByTitle({ title }) {
-    const search = await GroupModel.find({}).sort({ _id: -1 }).exec();
+    const search = await GroupModel.find({}).populate('groupOwnerId').sort({ _id: -1 }).exec();
     const filteredSearch = search.filter(group => group.title.includes(title.slice(0, -1)));
     const count = filteredSearch.length;
     return { groups: filteredSearch, count };
