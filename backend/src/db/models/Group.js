@@ -22,7 +22,12 @@ class Group {
 
   // 그룹 목록 조회
   static async findAndCountAll(skip, limit) {
-    const groups = await GroupModel.find().populate('groupOwnerId').sort({ _id: -1 }).skip(skip).limit(limit).exec();
+    const groups = await GroupModel.find()
+      .populate('groupOwnerId')
+      .sort({ _id: -1 })
+      .skip(skip)
+      .limit(limit)
+      .exec();
     const count = await GroupModel.countDocuments();
     return { groups, count };
   }
@@ -57,6 +62,10 @@ class Group {
     const deleteResult = await GroupModel.deleteOne({ _id: groupId });
     const isDataDeleted = deleteResult.deletedCount === 1;
     return isDataDeleted;
+  }
+  static async findAll() {
+    const groups = await GroupModel.find();
+    return groups;
   }
 }
 
