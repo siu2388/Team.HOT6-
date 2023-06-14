@@ -104,7 +104,7 @@ export default function GroupDetailPage() {
             </GroupMembers>
           </GroupMemberBox>
         </DetailContent01>
-        <GroupCalendar />
+        <GroupCalendar userInfo={userInfo} />
       </GroupDetailContainer>
       <AdditionalBox>
         <ProgressContainer>
