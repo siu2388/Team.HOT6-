@@ -7,6 +7,12 @@ class User {
     return createdNewUser;
   }
 
+  // 회원가입 체크
+  static async findByDuplicateFields(fields) {
+    const user = await UserModel.findOne({ $or: fields });
+    return user;
+  }
+
   // 회원가입(아이디 체크), 로그인
   static async findByUserId({ userId }) {
     const user = await UserModel.findOne({ userId });
