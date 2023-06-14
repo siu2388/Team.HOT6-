@@ -33,8 +33,8 @@ class User {
   }
 
   //방장이 그룹 가입 못하게 하기
-  static async findByGroupId({ groupId }) {
-    const user = await UserModel.findOne({ groupId });
+  static async findGroupOwner({ userId }) {
+    const user = await UserModel.findOne({ _id: userId });
     return user;
   }
   // groupId 같은 멤버 조회용
@@ -72,6 +72,7 @@ class User {
     const option = { returnOriginal: false };
 
     const updatedGroup = await UserModel.findOneAndUpdate(filter, update, option);
+    console.log('123', updatedGroup);
     if (!updatedGroup) {
       return false;
     }
