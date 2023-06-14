@@ -9,18 +9,20 @@ import { res } from '../../../styles/responsive';
 import { useParams } from 'react-router-dom';
 import * as api from '../../../api.js';
 
-export default function GroupCalendar() {
+export default function GroupCalendar({ userInfo }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
   const [calendarData, setCalendarData] = useState([]);
   const groupId = useParams().id;
 
-  const fetchCalendarData = async (date) => {
+  const fetchCalendarData = async date => {
     try {
-      const formattedDate = new Date(date.getTime() + (24 * 60 * 60 * 1000)).toISOString().slice(0, 10);
+      const formattedDate = new Date(date.getTime() + 24 * 60 * 60 * 1000)
+        .toISOString()
+        .slice(0, 10);
       const res = await api.get(`/activities/${groupId}/${formattedDate}`);
       const data = res.data.activityInfo;
-  
+
       setCalendarData(data || []);
     } catch (error) {
       console.log('Error fetching calendar data:', error);
@@ -31,8 +33,6 @@ export default function GroupCalendar() {
     fetchCalendarData(selectedDate);
   }, [selectedDate, groupId]);
 
-
-  
   const tileContent = ({ date }) => {
     const formattedDate = date.toISOString().slice(0, 10);
     const tileData = calendarData.filter(data => data.date === formattedDate);
@@ -63,19 +63,19 @@ export default function GroupCalendar() {
     return date.getDay() === 6 ? 'saturday' : null;
   };
 
-  const handleDateChange = (date) => {
+  const handleDateChange = date => {
     setSelectedDate(date);
     fetchCalendarData(date);
   };
 
-  const onClickMonth = async(date) => {
+  const onClickMonth = async date => {
     try {
       const currentMonth = date.getMonth();
       const nextMonth = currentMonth + 1;
       const formattedNextMonth = nextMonth < 10 ? `0${nextMonth}` : nextMonth;
       const year = date.getFullYear();
       const monthDate = `${year}-${formattedNextMonth}`;
-    
+
       const res = await api.get(`/activities/${groupId}/${monthDate}`);
       const data = res.data.activityInfo;
       setCalendarData(data || []);
@@ -84,7 +84,6 @@ export default function GroupCalendar() {
     }
   };
 
-  
   return (
     <CalendarWrap>
       <CalendarBox>
@@ -107,9 +106,11 @@ export default function GroupCalendar() {
             <TodayDate>{getDate(selectedDate)}</TodayDate>
             <TodayDw>{getDayOfWeek(selectedDate)}</TodayDw>
           </div>
-          <AddBtn onClick={onClickToggleModal}>
-            <img src="/images/groups/details/addBtn.png" alt="" />
-          </AddBtn>
+          {groupId === userInfo?.user?.groupId && (
+            <AddBtn onClick={onClickToggleModal}>
+              <img src="/images/groups/details/addBtn.png" alt="" />
+            </AddBtn>
+          )}
         </TodayDateBox>
         <MemberProfilies>
           {calendarData.map(activity => (
@@ -123,8 +124,6 @@ export default function GroupCalendar() {
     </CalendarWrap>
   );
 }
-
-
 
 const CalendarWrap = styled.div`
   width: 100%;

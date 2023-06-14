@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import { ActivityModel } from '../db/schemas/activity.js';
 
 class userAuthService {
+  // 회원가입
   static async addUser({
     userId,
     password,
@@ -37,7 +38,7 @@ class userAuthService {
 
     return User.create({ newUser });
   }
-
+  //로그인
   static async getUser({ userId, password }) {
     const user = await User.findByUserId({ userId });
     if (!user) {
@@ -74,12 +75,12 @@ class userAuthService {
     };
     return loginUser;
   }
-
+  // 유저 목록
   static async getUsers() {
     const users = await User.findAll();
     return users;
   }
-
+  // 정보 수정
   static async setUser({ loginedId, toUpdate }) {
     let user = await User.findById({ loginedId });
 
@@ -170,7 +171,7 @@ class userAuthService {
 
     return count;
   }
-
+  // 유저 정보 조회
   static async getUserInfo({ loginedId }) {
     try {
       const user = await User.findById({ loginedId });

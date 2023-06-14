@@ -43,7 +43,7 @@ class activityService {
           date: dateKey,
           tumbler: 0,
           multipleContainers: 0,
-          member: [],
+          members: [],
         };
       }
 
@@ -52,8 +52,18 @@ class activityService {
         [activity],
         'multipleContainers',
       );
-      if (activityDataByDate[dateKey].member.indexOf(activity.userId._id) === -1) {
-        activityDataByDate[dateKey].member.push(activity.userId._id);
+
+      const member = {
+        userId: activity.userId._id,
+        name: activity.userId.name,
+        nickname: activity.userId.nickname,
+      };
+
+      const existingMember = activityDataByDate[dateKey].members.find(
+        existing => existing.userId === member.userId,
+      );
+      if (!existingMember) {
+        activityDataByDate[dateKey].members.push(member);
       }
     });
 
@@ -154,17 +164,33 @@ class activityService {
 
     const sortedTotalCounts = Object.entries(totalCountsByGroup).sort((a, b) => b[1] - a[1]);
 
-    const rankedTotalCounts = sortedTotalCounts.map(([groupId, count], index) => {
-      const group = groups.find(group => group._id.toString() === groupId.toString());
-      const groupName = group ? group.name : '';
-      return {
-        rank: index + 1,
+    let currentRank = 1;
+    let previousCount = null;
+    const rankedTotalCounts = [];
+
+    for (const [groupId, count] of sortedTotalCounts) {
+      const group = await Group.findById(groupId);
+      const { title, thumbnail } = group;
+      const rank =
+        previousCount === count
+          ? rankedTotalCounts[rankedTotalCounts.length - 1].rank
+          : currentRank;
+
+      rankedTotalCounts.push({
+        rank,
         groupId,
         count,
-      };
-    });
+        title,
+        thumbnail,
+      });
 
-    return rankedTotalCounts;
+      previousCount = count;
+      currentRank++;
+    }
+
+    const topThreeCounts = rankedTotalCounts.slice(0, 3);
+
+    return topThreeCounts;
   }
 }
 

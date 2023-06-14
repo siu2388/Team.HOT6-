@@ -1,13 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Avatar } from '@mui/material';
+import * as API from '../../../api/index';
 
 export default function MyProfile({ userInfo }) {
   return (
     <ProfileBox>
       <Avatar
         alt="내 프로필"
-        src={`http://localhost:5001/uploads/${userInfo?.user?.profileImg}`}
+        src={`${API.imgUrl}${userInfo?.user?.profileImg}`}
         sx={{ width: 60, height: 60 }}
       />
       <UserName>{userInfo?.user?.name}</UserName>

@@ -29,6 +29,8 @@ export default function AddActiveModal({ onClickToggleModal, selectedDate }) {
   const [, setIsScucessModal] = useRecoilState(isSuccessModalState);
   const [, setIsErrorModal] = useRecoilState(isErrorModalState);
 
+  console.log(userInfo);
+
   const groupId = useParams().id;
 
   const onChangeActivity = e => {
@@ -36,27 +38,37 @@ export default function AddActiveModal({ onClickToggleModal, selectedDate }) {
   };
 
   const handleAddActivity = async () => {
-    const formData = new FormData();
-    console.log(userInfo);
-    formData.append('name', userInfo.user.name);
-    formData.append('groupId', groupId);
-    formData.append('usedDate', selectedDate);
-    formData.append('category', activity);
-    formData.append('proofImg', imgFile);
-
-    console.log(formData);
-
     try {
-      await API.formPost('/activities', formData);
-      setIsScucessModal({
-        state: true,
-        message: '인증요청에 성공하였습니다. 인증 완료 후 포인트가 적립됩니다.',
-      });
+      if (!activity) {
+        setIsErrorModal({
+          state: true,
+          message: '카테고리를 선택해주세요.',
+        });
+      } else if (!imgFile) {
+        setIsErrorModal({
+          state: true,
+          message: '활동 이미지를 등록해주세요.',
+        });
+      } else {
+        const formData = new FormData();
+        formData.append('name', userInfo?.user?.name);
+        formData.append('groupId', groupId);
+        formData.append('usedDate', selectedDate);
+        formData.append('category', activity);
+        formData.append('proofImg', imgFile);
+
+        await API.formPost('/activities', formData);
+        setIsScucessModal({
+          state: true,
+          message: '인증요청에 성공하였습니다. 인증 완료 후 포인트가 적립됩니다.',
+        });
+      }
     } catch (err) {
       setIsErrorModal({
         state: true,
         message: err.response.data,
       });
+      // console.log(err);
     }
   };
 

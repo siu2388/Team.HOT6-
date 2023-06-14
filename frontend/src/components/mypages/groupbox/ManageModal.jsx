@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Avatar } from '@mui/material';
+import * as API from '../../../api/index';
 
-export default function ManageModal({ setIsManageModalOpen, waitingMembers }) {
+export default function ManageModal({
+  setIsManageModalOpen,
+  waitingMembers,
+  onClickAcceptMember,
+  onClickRefuseMember,
+}) {
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(true);
 
   const closeManageModal = () => {
@@ -39,17 +45,14 @@ export default function ManageModal({ setIsManageModalOpen, waitingMembers }) {
                 waitingMembers?.map(el => (
                   <MemberItem key={el._id}>
                     <MemberNameBox>
-                      <Avatar
-                        alt="멤버 이미지"
-                        src={`http://localhost:5001/uploads/${el.userId.profileImg}`}
-                      />
+                      <Avatar alt="멤버 이미지" src={`${API.imgUrl}${el.userId.profileImg}`} />
                       <MemberText>
                         {el.userId.name}({el.userId.nickname})
                       </MemberText>
                     </MemberNameBox>
                     <ManageButton>
-                      <AcceptButton>수락</AcceptButton>
-                      <RejectButton>거절</RejectButton>
+                      <AcceptButton onClick={onClickAcceptMember(el.userId._id)}>수락</AcceptButton>
+                      <RejectButton onClick={onClickRefuseMember(el.userId._id)}>거절</RejectButton>
                     </ManageButton>
                   </MemberItem>
                 ))

@@ -1,21 +1,23 @@
 import { UserModel } from '../schemas/user.js';
 
 class User {
+  // 회원가입
   static async create({ newUser }) {
     const createdNewUser = await UserModel.create(newUser);
     return createdNewUser;
   }
 
+  // 회원가입(아이디 체크), 로그인
   static async findByUserId({ userId }) {
     const user = await UserModel.findOne({ userId });
     return user;
   }
-
+  // 정보 수정, 유저 정보 조회
   static async findById({ loginedId }) {
     const user = await UserModel.findById(loginedId);
     return user;
   }
-
+  // 유저 목록
   static async findAll() {
     const users = await UserModel.find({});
     return users;
@@ -43,7 +45,7 @@ class User {
     );
     return foundMembers;
   }
-
+  // 정보 수정
   static async update({ loginedId, fieldToUpdate, newValue }) {
     const filter = { _id: loginedId };
     const update = { [fieldToUpdate]: newValue };

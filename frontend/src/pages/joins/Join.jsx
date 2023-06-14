@@ -17,6 +17,7 @@ import {
   userInfoState,
 } from '../../stores';
 import axios from 'axios';
+import * as API from '../../api/index';
 import { ROUTE } from '../../constants/routes/routeData';
 
 export default function JoinPage({ page }) {
@@ -137,7 +138,7 @@ export default function JoinPage({ page }) {
 
     try {
       if (page === 'join') {
-        await axios.post('http://localhost:5001/users', formData, {
+        await axios.post(`${API.serverUrl}/users`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -150,7 +151,7 @@ export default function JoinPage({ page }) {
 
         navigate(ROUTE.HOME.link);
       } else {
-        await axios.put(`http://localhost:5001/users/${userInfo?.user?._id}`, formData, {
+        await axios.put(`${API.serverUrl}/users/${userInfo?.user?._id}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${sessionStorage.getItem('userToken')}`,

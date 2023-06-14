@@ -14,6 +14,7 @@ export default function GroupList() {
   const [groupList, setGroupList] = useState([]);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
+  const [groupRanks, setGroupRanks] = useState([]);
 
   useEffect(() => {
     const getGroups = async () => {
@@ -23,7 +24,15 @@ export default function GroupList() {
     getGroups();
   }, [page]);
 
-  console.log(groupList);
+  useEffect(() => {
+    const getRanks = async () => {
+      const result = await Api.get('/activities/totalCount');
+      setGroupRanks(result.data.totalCounts);
+    };
+    getRanks();
+  }, []);
+
+  console.log(groupRanks);
 
   const onChangeSearch = e => {
     setSearch(e.target.value);
@@ -52,9 +61,9 @@ export default function GroupList() {
           <RankTitle>그룹 TOP 3</RankTitle>
         </Ranking>
         <RankProfileContainer>
-          <RankProfile />
-          <RankProfile />
-          <RankProfile />
+          {groupRanks?.map(group => (
+            <RankProfile key={group?.groupId} group={group} />
+          ))}
         </RankProfileContainer>
       </RankingBox>
       <GroupListContainer>
