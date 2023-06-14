@@ -14,12 +14,6 @@ class Group {
     return group;
   }
 
-  //유저의 그룹 가입
-  static async findById({ groupId }) {
-    const group = await GroupModel.findOne({ id: groupId });
-    return group;
-  }
-
   //그룹 상세조회
   static async findBygroupId(id) {
     const mygroup = await GroupModel.findById(id).populate('groupOwnerId');
@@ -63,11 +57,6 @@ class Group {
     const deleteResult = await GroupModel.deleteOne({ _id: groupId });
     const isDataDeleted = deleteResult.deletedCount === 1;
     return isDataDeleted;
-  }
-
-  static async findAll() {
-    const groups = await GroupModel.find();
-    return groups;
   }
 }
 

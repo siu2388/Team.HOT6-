@@ -32,7 +32,7 @@ groupJoinRouter.post('/mygroups/:groupId', loginRequired, async (req, res, next)
   }
 });
 
-//유저가 가입한 그룹 조회
+//유저가 가입한 그룹 조회 (나의 그룹 조회)
 groupJoinRouter.get('/mygroups/:groupId', loginRequired, async (req, res, next) => {
   try {
     const userId = req.currentUserId;
@@ -113,7 +113,7 @@ groupJoinRouter.delete(
   },
 );
 
-// 유저가 가입한 그룹 탈퇴 - 완
+// 유저가 가입한 그룹 탈퇴 
 groupJoinRouter.delete('/mygroups/:groupId', loginRequired, async (req, res) => {
   try {
     const groupId = req.params.groupId;

@@ -26,11 +26,7 @@ class groupJoinService {
 
     return group;
   }
-  //나의 그룹 조회
-  static async getMyGroup({ userId }) {
-    const group = await GroupJoin.findMyGroup({ userId });
-    return group;
-  }
+
   // 그룹 가입 대기자 리스트 - 관리자용
   static async getWaitingList({ groupId }) {
     const waitingList = await GroupJoin.findByGroupId({ groupId });
@@ -55,7 +51,7 @@ class groupJoinService {
     return { status: '가입거절완료' };
   }
 
-  // 유저의 그룹 탈퇴 - 완
+  // 유저의 그룹 탈퇴 
   static async deleteMyGroup({ userId }) {
     const isDataDeleted = await GroupJoin.deleteByUserId({ userId });
 
