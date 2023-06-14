@@ -60,6 +60,7 @@ export default function AddActiveModal({ onClickToggleModal, selectedDate }) {
           state: true,
           message: '인증요청에 성공하였습니다. 인증 완료 후 포인트가 적립됩니다.',
         });
+        onClickToggleModal();
       }
     } catch (err) {
       setIsErrorModal({
