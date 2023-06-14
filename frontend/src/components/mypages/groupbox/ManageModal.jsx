@@ -6,10 +6,14 @@ import * as API from '../../../api/index';
 export default function ManageModal({
   setIsManageModalOpen,
   waitingMembers,
+  waitingActivity,
   onClickAcceptMember,
   onClickRefuseMember,
+  onClickAcceptActivity,
+  onClickRefuseActivity,
 }) {
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(true);
+  const [selectedActivity, setSelectedActivity] = useState(null);
 
   const closeManageModal = () => {
     setIsManageModalOpen(false);
@@ -21,6 +25,24 @@ export default function ManageModal({
 
   const openActModal = () => {
     setIsJoinModalOpen(false);
+    console.log(waitingActivity, '들어왓다 ㅋ');
+    console.log(waitingMembers, 'hi');
+  };
+
+  const onClickTumblerText = (index) => {
+    const activity = waitingActivity.result[index];
+  
+    if (selectedActivity && selectedActivity._id === activity._id) {
+      setSelectedActivity(null);
+    } else {
+      setSelectedActivity(activity);
+      console.log(`backend/uploads/${activity.proofImg}`);
+    }
+  };
+  
+
+  const resetSelectedActivity = () => {
+    setSelectedActivity(null);
   };
 
   return (
@@ -42,7 +64,7 @@ export default function ManageModal({
           {isJoinModalOpen ? (
             <MembersInfo>
               {waitingMembers.length > 0 ? (
-                waitingMembers?.map(el => (
+                waitingMembers?.map((el) => (
                   <MemberItem key={el._id}>
                     <MemberNameBox>
                       <Avatar alt="멤버 이미지" src={`${API.imgUrl}${el.userId.profileImg}`} />
@@ -62,50 +84,37 @@ export default function ManageModal({
             </MembersInfo>
           ) : (
             <MembersInfo>
-              <MemberItem>
-                <MemberNameBox>
-                  <Avatar alt="멤버 이미지" src="/images/commons/kkam.png" />
-                  <MemberText>깜장이</MemberText>
-                  <TumblerText>📷 텀블러</TumblerText>
-                </MemberNameBox>
-                <ManageButton>
-                  <AcceptButton>수락</AcceptButton>
-                  <RejectButton>거절</RejectButton>
-                </ManageButton>
-              </MemberItem>
-              <MemberItem>
-                <MemberNameBox>
-                  <Avatar alt="멤버 이미지" src="/images/commons/kkam.png" />
-                  <MemberText>깜장이</MemberText>
-                  <ContainerText>📷 다회용기</ContainerText>
-                </MemberNameBox>
-                <ManageButton>
-                  <AcceptButton>수락</AcceptButton>
-                  <RejectButton>거절</RejectButton>
-                </ManageButton>
-              </MemberItem>
-              <MemberItem>
-                <MemberNameBox>
-                  <Avatar alt="멤버 이미지" src="/images/commons/kkam.png" />
-                  <MemberText>깜장이</MemberText>
-                  <TumblerText>📷 텀블러</TumblerText>
-                </MemberNameBox>
-                <ManageButton>
-                  <AcceptButton>수락</AcceptButton>
-                  <RejectButton>거절</RejectButton>
-                </ManageButton>
-              </MemberItem>
-              <MemberItem>
-                <MemberNameBox>
-                  <Avatar alt="멤버 이미지" src="/images/commons/kkam.png" />
-                  <MemberText>깜장이</MemberText>
-                  <ContainerText>📷 다회용기</ContainerText>
-                </MemberNameBox>
-                <ManageButton>
-                  <AcceptButton>수락</AcceptButton>
-                  <RejectButton>거절</RejectButton>
-                </ManageButton>
-              </MemberItem>
+              {waitingActivity.result.length > 0 ? (
+                waitingActivity.result.map((activity, index) => (
+                  <MemberItem key={activity._id}>
+                    <MemberNameBox>
+                      <Avatar alt="멤버 이미지" src={`${API.imgUrl}${activity.userId.profileImg}`} />
+                      <MemberText>
+                        {activity.userId.name}({activity.userId.nickname})
+                      </MemberText>
+                      <TumblerText onClick={() => onClickTumblerText(index)}>
+                        {activity.category === 'tumbler' ? '📷 텀블러' : '📷다회용기'}
+                      </TumblerText>
+                    </MemberNameBox>
+                    <ManageButton>
+                      <AcceptButton onClick={() => onClickAcceptActivity(index)}>수락</AcceptButton>
+                      <RejectButton onClick={() => onClickRefuseActivity(index)}>거절</RejectButton>
+                    </ManageButton>
+                  </MemberItem>
+                ))
+              ) : waitingActivity.result.length === 0 ? (
+                <ErrorText>활동 체크 대기 중인 멤버가 없습니다.</ErrorText>
+              ) : (
+                <ErrorText>데이터를 불러오는 중에 오류가 발생했습니다.</ErrorText>
+              )}
+              {selectedActivity && (
+                <ImgBox>
+                  <CloseButton onClick={resetSelectedActivity}>X</CloseButton>
+                  <ImageWrapper>
+                    <img src={`${API.imgUrl}${selectedActivity.proofImg}`} alt="Proof Image" />
+                  </ImageWrapper>
+                </ImgBox>
+              )}
             </MembersInfo>
           )}
         </ModalBody>
@@ -113,6 +122,43 @@ export default function ManageModal({
     </Modal>
   );
 }
+
+const ImgBox = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(3);
+  text-align: center;
+  z-index: 999;
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #ffffff;
+  border: none;
+  color: #777777;
+  font-size: 10px;
+  width:10px;
+  cursor: pointer;
+`;
+
+const ImageWrapper = styled.div`
+  width: 100px;
+  height: 100px;
+  background-color: #ffffff;
+  border-radius: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+
+  img {
+    width: 80px;
+    height: 80px;
+  }
+`;
 
 const Modal = styled.div`
   position: fixed;
@@ -128,6 +174,7 @@ const Modal = styled.div`
 `;
 
 const ModalContent = styled.div`
+  position: relative;
   width: 35%;
   background-color: #ffffff;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -267,11 +314,11 @@ const TumblerText = styled.button`
   color: #999999;
 `;
 
-const ContainerText = styled.button`
-  font-size: 10px;
-  margin-left: 10px;
-  color: #999999;
-`;
+// const ContainerText = styled.button`
+//   font-size: 10px;
+//   margin-left: 10px;
+//   color: #999999;
+// `;
 
 const ErrorText = styled.p`
   font-size: 1.6rem;
