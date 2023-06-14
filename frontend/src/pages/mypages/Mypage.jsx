@@ -42,7 +42,6 @@ export default function Mypage() {
       setMyGroup(result.data);
     };
     if (userInfo?.user?.groupId) {
-      console.log(getMyGroup);
       getMyGroup();
     }
   }, [userInfo, update]);
