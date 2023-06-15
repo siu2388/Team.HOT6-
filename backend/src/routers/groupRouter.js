@@ -4,6 +4,7 @@ import { groupJoinService } from '../services/groupJoinService.js';
 import { userAuthService } from '../services/userService.js';
 import { upload } from '../middlewares/imageUploadMiddleware.js';
 import { loginRequired } from '../middlewares/loginRequired.js';
+import { activityService } from '../services/activityService.js';
 import moment from 'moment';
 
 const date = moment().format('YYYY.MM.DD');
@@ -123,6 +124,8 @@ groupRouter.delete('/groups/:groupId/', loginRequired, async (req, res, next) =>
   try {
     const userId = req.currentUserId;
     const groupId = req.params.groupId;
+
+    await activityService.deleteUserActivity({ userId });
     const result = await groupService.deleteGroup({ groupId, userId });
     res.status(200).send({ result });
     return;
