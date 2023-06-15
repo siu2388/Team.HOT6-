@@ -51,8 +51,13 @@ export default function GroupCalendar({ title, userInfo }) {
 
   const tileContent = ({ date }) => {
     const formattedDate = date.toISOString().slice(0, 10);
-    const tileData = calendarData.filter(data => data.date === formattedDate);
-
+    const tileData = calendarData.filter(data => {
+      const dataDate = new Date(data.date);
+      dataDate.setDate(dataDate.getDate() - 1); 
+      const formattedDataDate = dataDate.toISOString().slice(0, 10);
+      return formattedDataDate === formattedDate;
+    });
+  
     if (tileData.length > 0) {
       return tileData.map((activity, index) => (
         <CalendarContent key={index}>
@@ -60,7 +65,7 @@ export default function GroupCalendar({ title, userInfo }) {
         </CalendarContent>
       ));
     }
-
+  
     return null;
   };
 
@@ -124,7 +129,7 @@ export default function GroupCalendar({ title, userInfo }) {
   
       if (data && Array.isArray(data)) {
         const selectedDateCopy = new Date(formattedDate);
-        selectedDateCopy.setDate(selectedDateCopy.getDate());
+        selectedDateCopy.setDate(selectedDateCopy.getDate()+1);
         const selectedDateData = data.filter(
           (member) => member.date === selectedDateCopy.toISOString().slice(0, 10)
         );
