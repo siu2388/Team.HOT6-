@@ -25,6 +25,8 @@ const GroupSchema = new Schema(
     },
     thumbnail: {
       type: String,
+      default: '기본이미지.jpg',
+      required:false,
     },
   },
   { strictPopulate: false },

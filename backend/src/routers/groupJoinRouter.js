@@ -38,9 +38,10 @@ groupJoinRouter.get('/mygroups/:groupId', loginRequired, async (req, res, next) 
     const userId = req.currentUserId;
     const groupId = req.params.groupId;
     const members = await userAuthService.getMembers({ groupId });
+    const membersCount = members.length;
 
     const result = await userAuthService.getMyGroup({ userId });
-    res.status(200).json({ result, members });
+    res.status(200).json({ result, members, membersCount });
     return;
   } catch (error) {
     next(error);

@@ -62,6 +62,11 @@ class GroupJoin {
     const isDataDeleted = deletedGroup.deletedCount === 1;
     return isDataDeleted;
   }
+  // 그룹 삭제로 멤버들 모든 기록 삭제
+  static async deleteData({groupId}) {
+    const deletedGroup = await GroupJoinModel.deleteMany({ groupId });
+    return deletedGroup;
+  }
 }
 
 export { GroupJoin };
