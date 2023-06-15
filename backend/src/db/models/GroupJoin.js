@@ -19,6 +19,12 @@ class GroupJoin {
     });
     return group;
   }
+
+  // groupId로 찾기 
+  static async findGroupMembers({groupId}) {
+    const groupMembers = await GroupJoinModel.find({groupId});
+    return groupMembers;
+  }
   // 그룹 가입 승인 대기자 조회 - 관리자용
   static async findByGroupId({ groupId }) {
     const waitingList = await GroupJoinModel.find({ groupId: groupId, state: '대기' }).populate(
