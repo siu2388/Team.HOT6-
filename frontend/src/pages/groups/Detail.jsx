@@ -95,7 +95,9 @@ export default function GroupDetailPage() {
               <GroupMemberTitle>그룹 명단</GroupMemberTitle>
               <MemberNumBox>
                 <img src="/images/commons/user.png" alt="" />
-                <MemberNum>{groupData?.members?.length} / 15</MemberNum>
+                <MemberNum>
+                  {groupData?.members?.length} / {groupData?.myGroup?.totalNumOfMembers}
+                </MemberNum>
               </MemberNumBox>
             </GroupMemberTitleBox>
             <GroupMembers>

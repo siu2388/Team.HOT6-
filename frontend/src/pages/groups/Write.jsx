@@ -159,6 +159,9 @@ const WriteContainer = styled.div`
   padding: 3rem;
   background-color: #fff;
   border-radius: 1rem;
+  @media (max-width: 767px) {
+    width: 100%;
+  }
 `;
 
 const Form = styled.form`
@@ -182,6 +185,9 @@ const Title = styled.h2`
 const FileContainer = styled.div`
   width: 35rem;
   margin: 0 auto 3rem;
+  @media (max-width: 767px) {
+    width: 90%;
+  }
 `;
 
 const InputBox = styled.div`

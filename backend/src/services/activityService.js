@@ -57,7 +57,10 @@ class activityService {
         userId: activity.userId._id,
         name: activity.userId.name,
         nickname: activity.userId.nickname,
+        profileImg: activity.userId.profileImg,
       };
+
+      console.log(member);
 
       const existingMember = activityDataByDate[dateKey].members.find(
         existing => existing.userId === member.userId,
@@ -131,6 +134,17 @@ class activityService {
     } catch (error) {
       throw error;
     }
+  }
+
+  // 그룹 탈퇴 시 활동 삭제
+  static async deleteUserActivity({ userId }) {
+    const isDataDeleted = await Activity.deleteByUserId({ userId });
+
+    if (!isDataDeleted) {
+      const errorMessage = 'Activity 삭제: 해당 user의 활동이 없습니다. 다시 한 번 확인해 주세요.';
+      throw new Error(errorMessage);
+    }
+    return { status: 'ok' };
   }
 
   // 유저 활동 목록 조회

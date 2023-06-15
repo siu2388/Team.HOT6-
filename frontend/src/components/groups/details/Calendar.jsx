@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import MemberProfileBox from '../../commons/box/MemberProfileBox';
+import CalendarProfile from '../../commons/box/ProfileforCalendar';
 import { getDate, getDayOfWeek } from '../../../commons/utils/getDate';
 import AddActiveModal from './AddActiveModal';
 import { res } from '../../../styles/responsive';
@@ -13,8 +13,9 @@ export default function GroupCalendar({ userInfo }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
   const [calendarData, setCalendarData] = useState([]);
+  const [memberNames, setMemberNames] = useState([]); 
   const groupId = useParams().id;
-
+  console.log(selectedDate,'!!!!!!!');
   const fetchCalendarData = async date => {
     try {
       const formattedDate = new Date(date.getTime() + 24 * 60 * 60 * 1000)
@@ -78,11 +79,52 @@ export default function GroupCalendar({ userInfo }) {
 
       const res = await api.get(`/activities/${groupId}/${monthDate}`);
       const data = res.data.activityInfo;
+
       setCalendarData(data || []);
     } catch (error) {
       console.log('Error fetching calendar data:', error);
     }
   };
+
+
+  const fetchMemberProfile = async () => {
+    try {
+      const selectedDateCopy = new Date(selectedDate);
+      selectedDateCopy.setDate(selectedDateCopy.getDate() + 1);
+      const formattedDate = selectedDateCopy.toISOString().slice(0, 10);
+      const response = await api.get(`/activities/${groupId}/${formattedDate}`);
+      const data = response.data.activityInfo;
+  
+      if (data && Array.isArray(data)) {
+        const selectedDateCopy = new Date(formattedDate);
+        selectedDateCopy.setDate(selectedDateCopy.getDate() - 1);
+        const selectedDateData = data.filter(
+          (member) => member.date === selectedDateCopy.toISOString().slice(0, 10)
+        );
+          console.log('data!!!!1',selectedDateData);
+        const filteredMembers = selectedDateData.reduce((acc, member) => {
+          const existingMember = acc.find(
+            (item) => item.nickname === member.nickname
+          );
+          if (!existingMember) {
+            acc.push(member);
+          }
+          return acc;
+        }, []);
+        console.log('data!!!!2',filteredMembers);
+        setMemberNames(filteredMembers);
+      } else {
+        setMemberNames([]);
+      }
+  
+    } catch (error) {
+      console.log('Error fetching member profile:', error);
+    }
+  };
+  
+  useEffect(() => {
+    fetchMemberProfile();
+  }, [selectedDate, groupId]);
 
   return (
     <CalendarWrap>
@@ -113,8 +155,11 @@ export default function GroupCalendar({ userInfo }) {
           )}
         </TodayDateBox>
         <MemberProfilies>
-          {calendarData.map(activity => (
-            <MemberProfileBox key={activity.date} />
+        {memberNames.map((member, index) => (
+            <CalendarProfile
+              key={index}
+              member={member.members}
+            />
           ))}
         </MemberProfilies>
       </CalendarDetailBox>

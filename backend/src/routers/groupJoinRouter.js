@@ -3,10 +3,10 @@ import { groupJoinService } from '../services/groupJoinService.js';
 import { upload } from '../middlewares/imageUploadMiddleware.js';
 import { loginRequired } from '../middlewares/loginRequired.js';
 import { userAuthService } from '../services/userService.js';
-
+import { activityService } from '../services/activityService.js';
 const groupJoinRouter = Router();
 
-//유저의 그룹 가입 
+//유저의 그룹 가입
 groupJoinRouter.post('/mygroups/:groupId', loginRequired, async (req, res, next) => {
   try {
     const userId = req.currentUserId;
@@ -121,6 +121,9 @@ groupJoinRouter.delete('/mygroups/:groupId', loginRequired, async (req, res, nex
 
     //유저스키마에 groupId 정보 삭제
     const updatedUser = await userAuthService.deleteGroupId({ groupId, userId });
+
+    await activityService.deleteUserActivity({ userId });
+
     const result = await groupJoinService.deleteMyGroup({ userId });
     res.status(200).json({ result, updatedUser });
     return;

@@ -30,15 +30,16 @@ export default function Mypage() {
   const [, setIsErrorModal] = useRecoilState(isErrorModalState);
   const [update, setUpdate] = useRecoilState(updateState);
   const [activities, setActivities] = useState([]);
+  const [actPage, setActPage] = useState(1);
 
   useEffect(() => {
     const getActivities = async () => {
-      const result = await API.get('/activities');
-      setActivities(result);
+      const result = await API.get(`/activities?page=${actPage}`);
+      setActivities(result.data);
     };
 
     getActivities();
-  }, []);
+  }, [actPage]);
 
   console.log(activities);
 
@@ -79,8 +80,8 @@ export default function Mypage() {
     }
   }, [myGroup]);
 
-  console.log('waitingActivity!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',waitingActivity);
-  console.log('mygroup!!!!!!!!!!!!!',myGroup);
+  console.log('waitingActivity!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', waitingActivity);
+  console.log('mygroup!!!!!!!!!!!!!', myGroup);
   const navigate = useNavigate();
 
   const openManageModal = () => {
@@ -155,7 +156,7 @@ export default function Mypage() {
     }
   };
 
-  const onClickAcceptActivity = async (index) => {
+  const onClickAcceptActivity = async index => {
     try {
       await API.put(`/${waitingActivity?.result[index]?._id}`);
       setUpdate(prev => prev + 1);
@@ -171,7 +172,7 @@ export default function Mypage() {
     }
   };
 
-  const onClickRefuseActivity = async (index) => {
+  const onClickRefuseActivity = async index => {
     try {
       await API.delete(`/${waitingActivity?.result[index]?._id}`);
       setUpdate(prev => prev + 1);
@@ -285,7 +286,7 @@ export default function Mypage() {
         {activeMenuItem === '그룹관리' && <GroupManagement></GroupManagement>}
         {activeMenuItem === '적립조회' && (
           <PointInquiry>
-            <RewardPoints activities={activities} />
+            <RewardPoints activities={activities} actPage={actPage} setActPage={setActPage} />
           </PointInquiry>
         )}
         {activeMenuItem === '내정보수정' && <ProfileModification></ProfileModification>}
@@ -328,11 +329,9 @@ const GroupMembers = styled.div`
   padding-top: 3rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   @media (max-width: 1080px) {
-    width: 30%;
+    width: 80%;
   }
-  @media (max-width: 840px) {
-    width: 35%;
-  }
+
   @media (max-width: 767px) {
     height: 42rem;
   }
@@ -395,19 +394,20 @@ const MenuItem = styled.li`
   font-size: 1.6rem;
   font-weight: 500;
   color: #333;
+  @media (max-width: 767px) {
+    font-size: 2.2rem;
+  }
 `;
 
 const LargeBox = styled.div`
   width: 85rem;
-  height: 30rem;
   background-color: #ffff;
   border: 1px solid #d9d9d9;
   border-radius: 8px;
   display: flex;
   align-items: center;
-  flex-direction: column;
   justify-content: space-between;
-  padding: 1rem;
+  padding: 2rem 1rem;
   margin-top: 3rem;
   position: relative;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -427,20 +427,27 @@ const GroupInfo = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
+  gap: 3rem;
   @media ${res.tablet} {
     justify-content: space-evenly;
   }
   @media ${res.mobile} {
+    flex-direction: column;
     gap: 2rem;
   }
 `;
 
 const GroupImage = styled.img`
   width: 22rem;
-  height: 22rem;
   margin-left: 3rem;
   margin-right: 3rem;
   margin-top: -1rem;
+
+  @media ${res.mobile} {
+    width: 70%;
+    flex-direction: column;
+    gap: 2rem;
+  }
 `;
 
 const GroupDetails = styled.div`
@@ -456,31 +463,42 @@ const GroupName = styled.p`
   color: #333;
   margin-top: -2rem;
   margin-bottom: 2rem;
+  @media ${res.mobile} {
+    font-size: 4rem;
+  }
 `;
 
 const GroupRole = styled.p`
   display: flex;
   flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
 `;
 const GroupRoleText = styled.p`
   font-size: 2rem;
   font-weight: 400;
   color: #777;
-  margin-top: 1rem;
-  margin-right: 4rem;
+  @media ${res.mobile} {
+    font-size: 3rem;
+  }
 `;
 
 const GroupRoleName = styled.p`
   font-size: 1.8rem;
   font-weight: 400;
   color: #777;
-  margin-top: 1rem;
+  @media ${res.mobile} {
+    font-size: 2.4rem;
+  }
 `;
 
 const GroupMembersNum = styled.p`
   font-size: 2rem;
   font-weight: 400;
   color: #777;
+  @media ${res.mobile} {
+    font-size: 3rem;
+  }
 `;
 const GroupMembersCount = styled.div`
   display: flex;
@@ -506,26 +524,35 @@ const GroupMembersCountText = styled.p`
   font-size: 1.5rem;
   font-weight: 600;
   color: #777;
+  @media ${res.mobile} {
+    font-size: 2rem;
+  }
 `;
 const GroupCreation = styled.p`
   display: flex;
   flex-direction: row;
   align-items: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
 `;
 
 const GroupCreationText = styled.p`
   font-size: 2rem;
   font-weight: 400;
   color: #777;
-  margin-top: 2rem;
-  margin-right: 4rem;
+
+  @media ${res.mobile} {
+    font-size: 3rem;
+  }
 `;
 
 const GroupCreationDate = styled.p`
   font-size: 1.5rem;
   font-weight: 400;
   color: #777;
-  margin-top: 2rem;
+  @media ${res.mobile} {
+    font-size: 2rem;
+  }
 `;
 
 const GroupButton = styled.div`
@@ -546,6 +573,10 @@ const GroupLeaveButton = styled.button`
   font-weight: 500;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  @media ${res.mobile} {
+    width: 15rem;
+    height: 7rem;
+  }
 `;
 
 const GroupManageButton = styled.button`
@@ -559,6 +590,10 @@ const GroupManageButton = styled.button`
   font-weight: 500;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  @media ${res.mobile} {
+    width: 15rem;
+    height: 7rem;
+  }
 `;
 
 const GroupMoveButton = styled.button`
@@ -572,6 +607,10 @@ const GroupMoveButton = styled.button`
   font-weight: 500;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  @media ${res.mobile} {
+    width: 15rem;
+    height: 7rem;
+  }
 `;
 const GroupManagement = styled.div``;
 
