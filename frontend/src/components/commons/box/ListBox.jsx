@@ -8,6 +8,7 @@ import { res } from '../../../styles/responsive';
 import * as API from '../../../api/index';
 
 export default function ListBox({ group }) {
+  console.log(group);
   return (
     <ListBoxWrap>
       <Link to={`${ROUTE.GROUP_DETAIL.link}/${group._id}`}>
@@ -17,6 +18,7 @@ export default function ListBox({ group }) {
             <ListTitle>{group.title}</ListTitle>
             <ListDate>{group.createdAt}</ListDate>
           </TitleBox>
+          <DescriptionBox>{group.description}</DescriptionBox>
           <ListMemberBox>
             <AvatarGroup max={4}>
               <Avatar
@@ -25,7 +27,7 @@ export default function ListBox({ group }) {
                 sx={{ width: '3rem', height: '3rem' }}
               />
             </AvatarGroup>
-            <MemberNum>모집인원 13 / {group?.totalNumOfMembers}</MemberNum>
+            <MemberNum>{group?.groupOwnerId?.nickname}</MemberNum>
           </ListMemberBox>
         </ListContent>
       </Link>
@@ -83,7 +85,8 @@ const ListDate = styled.p`
 const ListMemberBox = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  margin-top: 1rem;
+  gap: 0.5rem;
   .css-1ytufz-MuiAvatarGroup-root .MuiAvatar-root {
     width: 3.5rem;
     height: 3.5rem;
@@ -100,4 +103,14 @@ const MemberNum = styled.span`
   font-weight: 400;
   color: #333;
   margin-top: 5px;
+`;
+
+const DescriptionBox = styled.p`
+  width: 80%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: #999;
 `;
