@@ -113,7 +113,7 @@ groupJoinRouter.delete(
 );
 
 // 유저가 가입한 그룹 탈퇴
-groupJoinRouter.delete('/mygroups/:groupId', loginRequired, async (req, res) => {
+groupJoinRouter.delete('/mygroups/:groupId', loginRequired, async (req, res, next) => {
   try {
     const groupId = req.params.groupId;
     const userId = req.currentUserId;
