@@ -9,13 +9,23 @@ import { res } from '../../../styles/responsive';
 import { useParams } from 'react-router-dom';
 import * as api from '../../../api.js';
 
-export default function GroupCalendar({ userInfo }) {
+export default function GroupCalendar({ title, userInfo }) {
+  const [tumblerUsage, setTumblerUsage] = useState(0);
+  const [containerUsage, setContainerUsage] = useState(0);
+  const tumblerTotal = 150;
+  const tumblerWidth = (tumblerUsage / tumblerTotal) * 100;
+  const containerTotal = 150;
+  const containerWidth = (containerUsage / containerTotal) * 100;
+
+  const totalUsage = tumblerUsage + containerUsage;
+
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
   const [calendarData, setCalendarData] = useState([]);
   const [memberNames, setMemberNames] = useState([]); 
   const groupId = useParams().id;
   console.log(selectedDate,'!!!!!!!');
+
   const fetchCalendarData = async date => {
     try {
       const formattedDate = new Date(date.getTime() + 24 * 60 * 60 * 1000)
@@ -23,13 +33,17 @@ export default function GroupCalendar({ userInfo }) {
         .slice(0, 10);
       const res = await api.get(`/activities/${groupId}/${formattedDate}`);
       const data = res.data.activityInfo;
-
+      console.log(data);
+      
       setCalendarData(data || []);
+      const tumbler = data?.tumbler || 0;
+      const multipleContainers = data?.multipleContainers || 0;
+      setTumblerUsage(tumbler);
+      setContainerUsage(multipleContainers);
     } catch (error) {
       console.log('Error fetching calendar data:', error);
     }
   };
-
   useEffect(() => {
     fetchCalendarData(selectedDate);
   }, [selectedDate, groupId]);
@@ -76,16 +90,26 @@ export default function GroupCalendar({ userInfo }) {
       const formattedNextMonth = nextMonth < 10 ? `0${nextMonth}` : nextMonth;
       const year = date.getFullYear();
       const monthDate = `${year}-${formattedNextMonth}`;
-
+      console.log(monthDate,'monthdDate');
       const res = await api.get(`/activities/${groupId}/${monthDate}`);
       const data = res.data.activityInfo;
 
+      const response = await api.get(`/activities/${groupId}/${monthDate}/totalCount`);
+      const totaldata = response.data;
+      console.log('total!!!!!!!',totaldata);
       setCalendarData(data || []);
+      const tumbler = totaldata?.tumbler || 0;
+      const multipleContainers = totaldata?.multipleContainers || 0;
+      console.log(tumbler,multipleContainers);
+      setTumblerUsage(tumbler);
+      setContainerUsage(multipleContainers);
     } catch (error) {
       console.log('Error fetching calendar data:', error);
     }
   };
-
+  useEffect(() => {
+    onClickMonth(selectedDate);
+  }, [selectedDate, groupId]);
 
   const fetchMemberProfile = async () => {
     try {
@@ -127,6 +151,7 @@ export default function GroupCalendar({ userInfo }) {
   }, [selectedDate, groupId]);
 
   return (
+    <>
     <CalendarWrap>
       <CalendarBox>
         <Calendar
@@ -167,6 +192,38 @@ export default function GroupCalendar({ userInfo }) {
         <AddActiveModal onClickToggleModal={onClickToggleModal} selectedDate={selectedDate} />
       )}
     </CalendarWrap>
+    <AdditionalBox>
+    <ProgressContainer>
+      <ProgressTitle>
+        <IconContainer>🥤텀블러</IconContainer>
+        <ProgressBar>
+          <FilledProgressBar width={tumblerWidth} />
+        </ProgressBar>
+        <ProgressValue>{tumblerUsage}</ProgressValue>
+      </ProgressTitle>
+      <ProgressTitle>
+        <IconContainer>🫙다회용기</IconContainer>
+        <ProgressBar>
+          <FilledProgressBar width={containerWidth} />
+        </ProgressBar>
+        <ProgressValue>{containerUsage}</ProgressValue>
+      </ProgressTitle>
+    </ProgressContainer>
+    <EarthBox>
+      <LogoImage>
+        <img src="/images/commons/coinearth.png" alt="사랑해 지구야 로고" />
+      </LogoImage>
+      <StatusMessage>
+        <SpeechBubble>
+          <SpeechText>Good!</SpeechText>
+          <Desc>{title} 그룹의 이번 달 텀블러 사용 횟수는 {tumblerUsage}회,</Desc>
+          <Desc>다회용기 사용 횟수는 {containerUsage}회야!</Desc>
+          <SpeechHighlight>우리는 이번달에 ⭐️{totalUsage}회⭐️ 지구를 지켰어!</SpeechHighlight>
+        </SpeechBubble>
+      </StatusMessage>
+    </EarthBox>
+  </AdditionalBox>
+  </>
   );
 }
 
@@ -300,5 +357,122 @@ const AddBtn = styled.button`
   &:hover > img {
     transform: scale(1.1);
     transition: all 0.3s;
+  }
+`;
+const AdditionalBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  margin-bottom: 4rem;
+  margin-top: 20rem;
+  justify-content: center;
+  justify-content: space-around;
+  @media (max-width: 1080px) {
+    flex-direction: column;
+    justify-content: center;
+  }
+`;
+
+const ProgressContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  flex-direction: column;
+`;
+
+const ProgressTitle = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+`;
+
+const IconContainer = styled.div`
+  margin-top: 3rem;
+  width: 10rem;
+  height: 5rem;
+  font-size: 2rem;
+`;
+
+const ProgressBar = styled.div`
+  width: 25rem;
+  height: 1.2rem;
+  background-color: #e0e0e0;
+  border-radius: 0.6rem;
+`;
+
+const FilledProgressBar = styled.div`
+  width: ${props => props.width}%;
+  height: 100%;
+  background-color: #7ed321;
+  border-radius: 0.6rem;
+`;
+
+const ProgressValue = styled.span`
+  font-size: 2.2rem;
+  font-weight: 500;
+  color: #111;
+`;
+const EarthBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+`;
+const StatusMessage = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 3rem;
+  font-weight: 400;
+  color: #111;
+  line-height: 1.5;
+  margin-top: -3rem;
+`;
+
+const SpeechBubble = styled.div`
+  position: relative;
+  background-color: #ffffff;
+  border-radius: 2rem;
+  padding: 3rem;
+  margin-left: 7rem;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 1.4rem;
+    left: -2rem;
+    border: 1.8rem solid transparent;
+    border-bottom-color: #ffffff;
+    border-right-color: #ffffff;
+    transform: rotate(-120deg);
+  }
+`;
+const SpeechText = styled.p`
+  font-size: 4rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #98af47;
+  font-family: 'Comic Sans MS', cursive;
+`;
+
+const Desc = styled.p`
+  font-size: 1.7rem;
+  font-family: 'Comic Sans MS', cursive;
+`;
+
+const SpeechHighlight = styled.h1`
+  font-size: 2.2rem;
+  font-weight: 500;
+  margin-top: 1rem;
+  font-family: 'Comic Sans MS', cursive;
+`;
+
+const LogoImage = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    margin-top: -1rem;
+    width: 30rem;
   }
 `;

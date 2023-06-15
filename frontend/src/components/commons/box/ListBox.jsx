@@ -21,7 +21,7 @@ export default function ListBox({ group }) {
             <AvatarGroup max={4}>
               <Avatar
                 alt="Remy Sharp"
-                src={`${API.imgUrl}${group?.groupOwnerId?.profileImg}`}
+                src={group.groupOwnerId ? `${API.imgUrl}${group.groupOwnerId.profileImg}` : ''}
                 sx={{ width: '3rem', height: '3rem' }}
               />
             </AvatarGroup>
