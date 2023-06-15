@@ -11,7 +11,7 @@ export default function ListBox({ group }) {
   return (
     <ListBoxWrap>
       <Link to={`${ROUTE.GROUP_DETAIL.link}/${group._id}`}>
-        <ListBackImg img={`${API.imgUrl}${group.thumbnail}`} />
+        <ListBackImg img={`${API.imgUrl}${group?.thumbnail}`} />
         <ListContent>
           <TitleBox>
             <ListTitle>{group.title}</ListTitle>
@@ -21,11 +21,11 @@ export default function ListBox({ group }) {
             <AvatarGroup max={4}>
               <Avatar
                 alt="Remy Sharp"
-                src={`${API.imgUrl}${group.groupOwnerId.profileImg}`}
+                src={group.groupOwnerId ? `${API.imgUrl}${group.groupOwnerId.profileImg}` : ''}
                 sx={{ width: '3rem', height: '3rem' }}
               />
             </AvatarGroup>
-            <MemberNum>모집인원 13 / {group.totalNumOfMembers}</MemberNum>
+            <MemberNum>모집인원 13 / {group?.totalNumOfMembers}</MemberNum>
           </ListMemberBox>
         </ListContent>
       </Link>
