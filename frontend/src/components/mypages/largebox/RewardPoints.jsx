@@ -22,7 +22,12 @@ const RewardPoints = ({ activities, actPage, setActPage }) => {
       ))}
 
       <PaginationContainer>
-        <Pagination count={actPage} size="large" onChange={onClickActPage} />
+        <Pagination
+          count={activities?.totalPages}
+          page={actPage}
+          size="large"
+          onChange={onClickActPage}
+        />
       </PaginationContainer>
     </LargeBox>
   );
