@@ -80,7 +80,7 @@ export default function AddActiveModal({ onClickToggleModal, selectedDate }) {
               id="filled-required"
               label="이름"
               variant="standard"
-              value="깜장이"
+              value={userInfo?.user?.name}
               disabled
             />
           </InputBox>

@@ -16,9 +16,23 @@ class userAuthService {
     groupId,
     profileImg,
   }) {
-    const user = await User.findByUserId({ userId });
-    if (user) {
-      const errorMessage = '이 아이디는 현재 사용중입니다. 다른 아이디를 입력해 주세요.';
+    const duplicateFields = [];
+    const existingUser = await User.findByDuplicateFields([{ userId }, { nickname }, { phone }]);
+
+    if (existingUser) {
+      if (existingUser.userId === userId) {
+        duplicateFields.push('userId');
+      }
+
+      if (existingUser.nickname === nickname) {
+        duplicateFields.push('nickname');
+      }
+
+      if (existingUser.phone === phone) {
+        duplicateFields.push('phone');
+      }
+
+      const errorMessage = `이미 사용 중인 ${duplicateFields.join(', ')} 입니다`;
       throw new Error(errorMessage);
     }
 

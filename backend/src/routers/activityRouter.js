@@ -115,10 +115,14 @@ activityRouter.delete('/:activityId', loginRequired, async (req, res, next) => {
 // 유저 활동 목록 조회
 activityRouter.get('/activities', loginRequired, async (req, res, next) => {
   try {
-    const userId = req.currentUserId;
-    const currentActivityInfo = await activityService.getActivities(userId);
+    const page = parseInt(req.query.page || 1);
+    const limit = 6;
+    const skip = (page - 1) * limit;
 
-    res.status(200).send(currentActivityInfo);
+    const userId = req.currentUserId;
+    const { activities, count } = await activityService.getActivities(userId, skip, limit);
+
+    res.status(200).json({ currentPage: page, totalPages: Math.ceil(count / limit), activities });
   } catch (error) {
     next(error);
   }

@@ -58,17 +58,17 @@ export default function Mypage() {
 
   useEffect(() => {
     const getWaitingActivity = async () => {
-      const result = await API.get(`/activities/${myGroup?.result[0]?.groupId?._id}/waiting`);
+      const result = await API.get(`/activities/${myGroup?.result?.[0]?.groupId?._id}/waiting`);
       setWaitingActivity(result.data);
     };
     console.log(getWaitingActivity);
-    // if (myGroup?.groupId?._id) {
-    //   getWaitingActivity();
-    // }
+    if (myGroup?.result?.[0]?.groupId?._id) {
+      getWaitingActivity();
+    }
   }, [myGroup]);
 
-  console.log(waitingActivity);
-
+  console.log('waitingActivity!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',waitingActivity);
+  console.log('mygroup!!!!!!!!!!!!!',myGroup);
   const navigate = useNavigate();
 
   const openManageModal = () => {
@@ -130,6 +130,38 @@ export default function Mypage() {
   const onClickRefuseMember = userId => async () => {
     try {
       await API.delete(`/mygroups/${myGroup?.result[0]?.groupId?._id}/${userId}/rejection`);
+      setUpdate(prev => prev + 1);
+      setIsScucessModal({
+        state: true,
+        message: '거절하였습니다..',
+      });
+    } catch (err) {
+      setIsScucessModal({
+        state: true,
+        message: err.response.data.message,
+      });
+    }
+  };
+
+  const onClickAcceptActivity = async (index) => {
+    try {
+      await API.put(`/${waitingActivity?.result[index]?._id}`);
+      setUpdate(prev => prev + 1);
+      setIsScucessModal({
+        state: true,
+        message: '수락하였습니다.',
+      });
+    } catch (err) {
+      setIsScucessModal({
+        state: true,
+        message: err.response.data.message,
+      });
+    }
+  };
+
+  const onClickRefuseActivity = async (index) => {
+    try {
+      await API.delete(`/${waitingActivity?.result[index]?._id}`);
       setUpdate(prev => prev + 1);
       setIsScucessModal({
         state: true,
@@ -249,8 +281,11 @@ export default function Mypage() {
           <ManageModal
             setIsManageModalOpen={setIsManageModalOpen}
             waitingMembers={waitingMembers}
+            waitingActivity={waitingActivity}
             onClickAcceptMember={onClickAcceptMember}
             onClickRefuseMember={onClickRefuseMember}
+            onClickAcceptActivity={onClickAcceptActivity}
+            onClickRefuseActivity={onClickRefuseActivity}
           />
         )}
       </MenuContainer>
