@@ -4,6 +4,7 @@ import { groupJoinService } from '../services/groupJoinService.js';
 import { userAuthService } from '../services/userService.js';
 import { upload } from '../middlewares/imageUploadMiddleware.js';
 import { loginRequired } from '../middlewares/loginRequired.js';
+import { activityService } from '../services/activityService.js';
 import moment from 'moment';
 
 const date = moment().format('YYYY.MM.DD');
@@ -118,11 +119,40 @@ groupRouter.get('/searchgroups', async (req, res, next) => {
   }
 });
 
+//그룹 수정
+groupRouter.put('/groups/:groupId', loginRequired, imgupload, async (req, res, next) => {
+  try {
+    const groupId = req.params.groupId;
+    const title = req.body.title ?? null;
+    const description = req.body.description ?? null;
+    const totalNumOfMembers = req.body.totalNumOfMembers ?? null;
+    const thumbnail = req.file ? req.file.filename : undefined;
+
+    const toUpdate = {
+      title,
+      description,
+      totalNumOfMembers,
+      thumbnail,
+    };
+    const updatedGroup = await groupService.setGroup({ groupId, toUpdate });
+
+    if (updatedGroup.errorMessage) {
+      throw new Error(updatedGroup.errorMessage);
+    }
+    res.status(200).json(updatedGroup);
+    return;
+  } catch (error) {
+    next(error);
+  }
+});
+
 //그룹 삭제
 groupRouter.delete('/groups/:groupId/', loginRequired, async (req, res, next) => {
   try {
     const userId = req.currentUserId;
     const groupId = req.params.groupId;
+
+    await activityService.deleteUserActivity({ userId });
     const result = await groupService.deleteGroup({ groupId, userId });
     res.status(200).send({ result });
     return;

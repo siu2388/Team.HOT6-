@@ -52,6 +52,44 @@ class groupService {
     }
     return { groups: filteredSearch, count };
   }
+  //그룹 정보 수정
+  static async setGroup({ groupId, toUpdate }) {
+    let updatedGroup = await Group.findGroupId(groupId);
+    console.log('group', updatedGroup);
+    
+    if (!updatedGroup) {
+      const errorMessage = 'Group 조회: 생성한 그룹이 없습니다.';
+      throw new Error(errorMessage);
+    }
+
+    if (toUpdate.title) {
+      const fieldToUpdate = 'title';
+      const newValue = toUpdate.title;
+      updatedGroup = await Group.updateGroup({ _id: groupId, fieldToUpdate, newValue });
+    }
+
+    if (toUpdate.description) {
+      const fieldToUpdate = 'description';
+      const newValue = toUpdate.description;
+      updatedGroup = await Group.updateGroup({ _id: groupId, fieldToUpdate, newValue });
+    }
+
+    if (toUpdate.totalNumOfMembers) {
+      const fieldToUpdate = 'totalNumOfMembers';
+      const newValue = toUpdate.totalNumOfMembers;
+      updatedGroup = await Group.updateGroup({ _id: groupId, fieldToUpdate, newValue });
+    }
+
+    if (toUpdate.thumbnail) {
+      const fieldToUpdate = 'thumbnail';
+      const newValue = toUpdate.thumbnail;
+      updatedGroup = await Group.updateGroup({ _id: groupId, fieldToUpdate, newValue });
+    }
+
+    console.log('new', updatedGroup);
+    return updatedGroup;
+  }
+
   //그룹 삭제
   static async deleteGroup({ groupId, userId }) {
     const isGroupDataDeleted = await Group.deleteById({ groupId });
@@ -63,18 +101,15 @@ class groupService {
     const isGroupJoinDataDeleted = await GroupJoin.deleteData({ groupId });
 
     if (!deleteGroupOwnerGroupId) {
-      const errorMessage =
-        '그룹오너삭제: 해당 id를 가진 그룹장이 없습니다.';
+      const errorMessage = '그룹오너삭제: 해당 id를 가진 그룹장이 없습니다.';
       throw new Error(errorMessage);
     }
     if (!deleteGroupId) {
-      const errorMessage =
-        '멤버들 그룹아이디삭제: 해당 id를 가진 멤버가 없습니다.';
+      const errorMessage = '멤버들 그룹아이디삭제: 해당 id를 가진 멤버가 없습니다.';
       throw new Error(errorMessage);
     }
     if (!isGroupJoinDataDeleted) {
-      const errorMessage =
-        '그룹조인데이터삭제: 해당 id를 가진 데이터가 없습니다.';
+      const errorMessage = '그룹조인데이터삭제: 해당 id를 가진 데이터가 없습니다.';
       throw new Error(errorMessage);
     }
     if (!isGroupDataDeleted) {

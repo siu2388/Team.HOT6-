@@ -54,16 +54,7 @@ const MobileMenu = ({ userInfo }) => {
             </MenuLink>
           </MenuItem>
           <MenuItem>
-            <MenuLink
-              onClick={() => {
-                setIsErrorModal({
-                  state: true,
-                  message: 'Comming Soon',
-                });
-
-                setIsOpen(false);
-              }}
-            >
+            <MenuLink to={ROUTE.BOARDLIST.link} onClick={closeMenu}>
               Community
             </MenuLink>
           </MenuItem>
