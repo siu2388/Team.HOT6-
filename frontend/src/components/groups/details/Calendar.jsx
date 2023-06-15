@@ -13,6 +13,7 @@ export default function GroupCalendar({ userInfo }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
   const [calendarData, setCalendarData] = useState([]);
+  const [memberNames, setMemberNames] = useState([]); 
   const groupId = useParams().id;
 
   const fetchCalendarData = async date => {
@@ -78,11 +79,39 @@ export default function GroupCalendar({ userInfo }) {
 
       const res = await api.get(`/activities/${groupId}/${monthDate}`);
       const data = res.data.activityInfo;
+
       setCalendarData(data || []);
     } catch (error) {
       console.log('Error fetching calendar data:', error);
     }
   };
+
+  const fetchMemberProfile = async () => {
+    try {
+      const selectedDateCopy = new Date(selectedDate);
+      selectedDateCopy.setDate(selectedDateCopy.getDate() + 1);
+      const formattedDate = selectedDateCopy.toISOString().slice(0, 10);
+  
+      console.log(formattedDate, '!!!!!!!!');
+      const response = await api.get(`/activities/${groupId}/${formattedDate}`);
+      const data = response.data.activityInfo;
+      console.log('!!!!!!!data!!!!!!', data);
+      
+      if (data) {
+        setMemberNames(data);
+        console.log('!!!!!!!data!!!!!!', data);
+      } else {
+        setMemberNames([]);
+      }
+  
+    } catch (error) {
+      console.log('Error fetching member profile:', error);
+    }
+  };
+  
+  useEffect(() => {
+    fetchMemberProfile(selectedDate);
+  }, [selectedDate, groupId]);
 
   return (
     <CalendarWrap>
@@ -113,9 +142,30 @@ export default function GroupCalendar({ userInfo }) {
           )}
         </TodayDateBox>
         <MemberProfilies>
-          {calendarData.map(activity => (
-            <MemberProfileBox key={activity.date} />
+        {memberNames.map((member, index) => (
+            <MemberProfileBox
+              key={index}
+              member={member.members}
+            />
           ))}
+{/* export default function MemberProfileBox({ member }) {
+  if (!Array.isArray(member)) {
+    return null; // member가 배열이 아닌 경우, 아무것도 렌더링하지 않음
+  }
+
+  return (
+    <ProfileWrap>
+      {member.map((item, index) => (
+        <div key={index}>
+          <UserName>
+            {item?.name} ({item?.nickname})
+          </UserName>
+          <UserName>유진</UserName>
+        </div>
+      ))}
+    </ProfileWrap>
+  );
+} */}
         </MemberProfilies>
       </CalendarDetailBox>
       {isOpen && (
