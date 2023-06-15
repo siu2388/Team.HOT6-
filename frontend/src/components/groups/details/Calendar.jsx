@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import MemberProfileBox from '../../commons/box/MemberProfileBox';
+import CalendarProfile from '../../commons/box/ProfileforCalendar';
 import { getDate, getDayOfWeek } from '../../../commons/utils/getDate';
 import AddActiveModal from './AddActiveModal';
 import { res } from '../../../styles/responsive';
@@ -15,7 +15,7 @@ export default function GroupCalendar({ userInfo }) {
   const [calendarData, setCalendarData] = useState([]);
   const [memberNames, setMemberNames] = useState([]); 
   const groupId = useParams().id;
-
+  console.log(selectedDate,'!!!!!!!');
   const fetchCalendarData = async date => {
     try {
       const formattedDate = new Date(date.getTime() + 24 * 60 * 60 * 1000)
@@ -86,20 +86,33 @@ export default function GroupCalendar({ userInfo }) {
     }
   };
 
+
   const fetchMemberProfile = async () => {
     try {
       const selectedDateCopy = new Date(selectedDate);
       selectedDateCopy.setDate(selectedDateCopy.getDate() + 1);
       const formattedDate = selectedDateCopy.toISOString().slice(0, 10);
-  
-      console.log(formattedDate, '!!!!!!!!');
       const response = await api.get(`/activities/${groupId}/${formattedDate}`);
       const data = response.data.activityInfo;
-      console.log('!!!!!!!data!!!!!!', data);
-      
-      if (data) {
-        setMemberNames(data);
-        console.log('!!!!!!!data!!!!!!', data);
+  
+      if (data && Array.isArray(data)) {
+        const selectedDateCopy = new Date(formattedDate);
+        selectedDateCopy.setDate(selectedDateCopy.getDate() - 1);
+        const selectedDateData = data.filter(
+          (member) => member.date === selectedDateCopy.toISOString().slice(0, 10)
+        );
+          console.log('data!!!!1',selectedDateData);
+        const filteredMembers = selectedDateData.reduce((acc, member) => {
+          const existingMember = acc.find(
+            (item) => item.nickname === member.nickname
+          );
+          if (!existingMember) {
+            acc.push(member);
+          }
+          return acc;
+        }, []);
+        console.log('data!!!!2',filteredMembers);
+        setMemberNames(filteredMembers);
       } else {
         setMemberNames([]);
       }
@@ -110,7 +123,7 @@ export default function GroupCalendar({ userInfo }) {
   };
   
   useEffect(() => {
-    fetchMemberProfile(selectedDate);
+    fetchMemberProfile();
   }, [selectedDate, groupId]);
 
   return (
@@ -143,29 +156,11 @@ export default function GroupCalendar({ userInfo }) {
         </TodayDateBox>
         <MemberProfilies>
         {memberNames.map((member, index) => (
-            <MemberProfileBox
+            <CalendarProfile
               key={index}
               member={member.members}
             />
           ))}
-{/* export default function MemberProfileBox({ member }) {
-  if (!Array.isArray(member)) {
-    return null; // member가 배열이 아닌 경우, 아무것도 렌더링하지 않음
-  }
-
-  return (
-    <ProfileWrap>
-      {member.map((item, index) => (
-        <div key={index}>
-          <UserName>
-            {item?.name} ({item?.nickname})
-          </UserName>
-          <UserName>유진</UserName>
-        </div>
-      ))}
-    </ProfileWrap>
-  );
-} */}
         </MemberProfilies>
       </CalendarDetailBox>
       {isOpen && (
