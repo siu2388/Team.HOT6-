@@ -25,6 +25,7 @@ class groupService {
   // 그룹 중복 생성 방지용
   static async getGroupByOwnerId(groupOwnerId) {
     const group = await Group.findByGroupOwnerId(groupOwnerId);
+    console.log('678',groupOwnerId, group);
     return group;
   }
 

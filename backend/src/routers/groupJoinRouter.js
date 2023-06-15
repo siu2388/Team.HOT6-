@@ -6,7 +6,7 @@ import { userAuthService } from '../services/userService.js';
 
 const groupJoinRouter = Router();
 
-//유저의 그룹 가입 -
+//유저의 그룹 가입 
 groupJoinRouter.post('/mygroups/:groupId', loginRequired, async (req, res, next) => {
   try {
     const userId = req.currentUserId;

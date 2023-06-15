@@ -159,6 +159,7 @@ class userAuthService {
   // 유저의 groupId값 삭제
   static async deleteGroupId({ groupId, userId }) {
     const deleteGroupId = await User.deleteGroupId({ groupId, userId });
+    console.log('222',deleteGroupId);
     return deleteGroupId;
   }
 

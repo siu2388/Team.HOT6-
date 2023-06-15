@@ -5,6 +5,11 @@ import { Group } from '../db/models/Group.js';
 class groupJoinService {
   // 유저의 그룹 가입
   static async groupJoin({ groupId, userId, state }) {
+    // 모집인원 다 찼을 때 가입 방지 
+    const members = await Group.findTotMemsByGroupId({groupId});
+    console.log(members);
+    
+
     // 그룹장이 다른 그룹 가입 방지
     const user = await User.findGroupOwner({ userId });
     if (user.groupId) {
