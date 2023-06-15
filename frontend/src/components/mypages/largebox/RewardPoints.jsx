@@ -3,11 +3,13 @@ import styled from 'styled-components';
 import { Pagination } from '@mui/material';
 import { res } from '../../../styles/responsive';
 
-const RewardPoints = ({ activities }) => {
-  console.log(activities);
+const RewardPoints = ({ activities, actPage, setActPage }) => {
+  const onClickActPage = (_, page) => {
+    setActPage(page);
+  };
   return (
     <LargeBox>
-      {activities?.data?.map(item => (
+      {activities?.activities?.map(item => (
         <SmallBox key={item._id}>
           <TumblerContent>
             <p>
@@ -20,7 +22,7 @@ const RewardPoints = ({ activities }) => {
       ))}
 
       <PaginationContainer>
-        <Pagination count={5} size="large" />
+        <Pagination count={actPage} size="large" onChange={onClickActPage} />
       </PaginationContainer>
     </LargeBox>
   );

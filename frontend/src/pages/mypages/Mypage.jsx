@@ -30,11 +30,12 @@ export default function Mypage() {
   const [, setIsErrorModal] = useRecoilState(isErrorModalState);
   const [update, setUpdate] = useRecoilState(updateState);
   const [activities, setActivities] = useState([]);
+  const [actPage, setActPage] = useState(1);
 
   useEffect(() => {
     const getActivities = async () => {
-      const result = await API.get('/activities');
-      setActivities(result);
+      const result = await API.get(`/activities?page=${actPage}`);
+      setActivities(result.data);
     };
 
     getActivities();
@@ -79,8 +80,8 @@ export default function Mypage() {
     }
   }, [myGroup]);
 
-  console.log('waitingActivity!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',waitingActivity);
-  console.log('mygroup!!!!!!!!!!!!!',myGroup);
+  console.log('waitingActivity!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', waitingActivity);
+  console.log('mygroup!!!!!!!!!!!!!', myGroup);
   const navigate = useNavigate();
 
   const openManageModal = () => {
@@ -155,7 +156,7 @@ export default function Mypage() {
     }
   };
 
-  const onClickAcceptActivity = async (index) => {
+  const onClickAcceptActivity = async index => {
     try {
       await API.put(`/${waitingActivity?.result[index]?._id}`);
       setUpdate(prev => prev + 1);
@@ -171,7 +172,7 @@ export default function Mypage() {
     }
   };
 
-  const onClickRefuseActivity = async (index) => {
+  const onClickRefuseActivity = async index => {
     try {
       await API.delete(`/${waitingActivity?.result[index]?._id}`);
       setUpdate(prev => prev + 1);
@@ -285,7 +286,7 @@ export default function Mypage() {
         {activeMenuItem === '그룹관리' && <GroupManagement></GroupManagement>}
         {activeMenuItem === '적립조회' && (
           <PointInquiry>
-            <RewardPoints activities={activities} />
+            <RewardPoints activities={activities} actPage={actPage} setActPage={setActPage} />
           </PointInquiry>
         )}
         {activeMenuItem === '내정보수정' && <ProfileModification></ProfileModification>}
@@ -405,7 +406,6 @@ const LargeBox = styled.div`
   border-radius: 8px;
   display: flex;
   align-items: center;
-  flex-direction: column;
   justify-content: space-between;
   padding: 1rem;
   margin-top: 3rem;
