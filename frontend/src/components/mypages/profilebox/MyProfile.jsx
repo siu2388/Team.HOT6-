@@ -37,7 +37,8 @@ export default function MyProfile({ userInfo }) {
   );
 }
 
-const ProfileBox = styled.p`
+const ProfileBox = styled.div`
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -49,6 +50,9 @@ const UserName = styled.p`
   font-weight: 400;
   color: #777;
   margin-top: 2rem;
+  @media (max-width: 767px) {
+    font-size: 3.2rem;
+  }
 `;
 
 const Email = styled.p`
@@ -56,6 +60,9 @@ const Email = styled.p`
   font-weight: 400;
   color: #777;
   margin-top: 1.3rem;
+  @media (max-width: 767px) {
+    font-size: 2.4rem;
+  }
 `;
 
 const InfoRow = styled.div`
@@ -75,6 +82,9 @@ const InfoLabel = styled.p`
   font-size: 1.2rem;
   font-weight: 400;
   color: #777;
+  @media (max-width: 767px) {
+    font-size: 2rem;
+  }
 `;
 
 const InfoValue = styled.p`
@@ -82,6 +92,9 @@ const InfoValue = styled.p`
   font-weight: 600;
   color: #777;
   margin-left: 0.7rem;
+  @media (max-width: 767px) {
+    font-size: 2rem;
+  }
 `;
 
 const Separator = styled.div`
@@ -105,12 +118,18 @@ const EmojiItem = styled.div`
 
 const Emoji = styled.span`
   font-size: 1.8rem;
+  @media (max-width: 767px) {
+    font-size: 3rem;
+  }
 `;
 
 const EmojiCount = styled.span`
   font-size: 1.8rem;
   margin-left: 0.2rem;
   color: #777777;
+  @media (max-width: 767px) {
+    font-size: 3rem;
+  }
 `;
 
 const Credit = styled.div`

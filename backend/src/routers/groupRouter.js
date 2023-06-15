@@ -121,7 +121,6 @@ groupRouter.delete('/groups/:groupId/', loginRequired, async (req, res, next) =>
   try {
     const userId = req.currentUserId;
     const groupId = req.params.groupId;
-
     //그룹장의 groupId도 삭제
     const updatedUser = await userAuthService.deleteGroupId({ groupId, userId });
 

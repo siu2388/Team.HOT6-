@@ -57,7 +57,10 @@ class activityService {
         userId: activity.userId._id,
         name: activity.userId.name,
         nickname: activity.userId.nickname,
+        profileImg: activity.userId.profileImg,
       };
+
+      console.log(member);
 
       const existingMember = activityDataByDate[dateKey].members.find(
         existing => existing.userId === member.userId,

@@ -13,6 +13,11 @@ class Group {
     const group = await GroupModel.findOne({ groupOwnerId });
     return group;
   }
+  // 그룹 모집인원 확인 - 모집인원 이상 가입 제한용
+  static async findTotNumOfMems(groupId) {
+    const groupJoin = await GroupModel.findById({ _id: groupId });
+    return groupJoin; 
+  }
 
   //그룹 상세조회
   static async findBygroupId(id) {

@@ -1,48 +1,33 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Pagination } from '@mui/material';
+import { res } from '../../../styles/responsive';
 
-const RewardPoints = () => {
+const RewardPoints = ({ activities, actPage, setActPage }) => {
+  const onClickActPage = (_, page) => {
+    setActPage(page);
+  };
   return (
     <LargeBox>
-        <SmallBox>
+      {activities?.activities?.map(item => (
+        <SmallBox key={item._id}>
           <TumblerContent>
-            <div>2023.06.08 텀블러 사용</div>
-            <div>🥤+1</div>
+            <p>
+              {item?.usedDate?.slice(0, 10)}{' '}
+              {item?.category === 'multipleContainers' ? '다회용기' : '텀블러'} 사용
+            </p>
+            <p>{item?.category === 'multipleContainers' ? '♻️' : '🥤'}+1</p>
           </TumblerContent>
         </SmallBox>
-        <SmallBox>
-            <ContainerContent>
-                <div>2023.06.08 다회용기 사용</div>
-                <div>♻️+1</div>
-            </ContainerContent>
-        </SmallBox>
-        <SmallBox>
-          <TumblerContent>
-            <div>2023.06.08 텀블러 사용</div>
-            <div>🥤+1</div>
-          </TumblerContent>
-        </SmallBox>
-        <SmallBox>
-            <ContainerContent>
-                <div>2023.06.08 다회용기 사용</div>
-                <div>♻️+1</div>
-            </ContainerContent>
-        </SmallBox>
-        <SmallBox>
-          <TumblerContent>
-            <div>2023.06.08 텀블러 사용</div>
-            <div>🥤+1</div>
-          </TumblerContent>
-        </SmallBox>
-        <SmallBox>
-            <ContainerContent>
-                <div>2023.06.08 다회용기 사용</div>
-                <div>♻️+1</div>
-            </ContainerContent>
-        </SmallBox>
+      ))}
+
       <PaginationContainer>
-        <Pagination count={5} size="large" />
+        <Pagination
+          count={activities?.totalPages}
+          page={actPage}
+          size="large"
+          onChange={onClickActPage}
+        />
       </PaginationContainer>
     </LargeBox>
   );
@@ -56,7 +41,7 @@ const LargeBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
+  padding: 2rem 1rem;
   margin-top: 3rem;
   padding-bottom: 3rem;
   padding-top: 3rem;
@@ -73,24 +58,33 @@ const SmallBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
+  padding: 2rem 1rem;
   margin: 0.7rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+  @media ${res.tablet} {
+    width: 100%;
+  }
 `;
 
 const TumblerContent = styled.div`
-    width:100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-`;
-
-const ContainerContent = styled.div`
-  width:100%;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  p {
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: #111;
+  }
 `;
+
+// const ContainerContent = styled.div`
+//   width: 100%;
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+// `;
 
 const PaginationContainer = styled.div`
   display: flex;

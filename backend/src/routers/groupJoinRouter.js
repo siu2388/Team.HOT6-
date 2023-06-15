@@ -6,7 +6,7 @@ import { userAuthService } from '../services/userService.js';
 
 const groupJoinRouter = Router();
 
-//유저의 그룹 가입 -
+//유저의 그룹 가입 
 groupJoinRouter.post('/mygroups/:groupId', loginRequired, async (req, res, next) => {
   try {
     const userId = req.currentUserId;
@@ -53,7 +53,6 @@ groupJoinRouter.get('/mygroups/:groupId/waiting', loginRequired, async (req, res
     const groupId = req.params.groupId;
 
     const result = await groupJoinService.getWaitingList({ groupId });
-    console.log('result', result);
     res.status(200).json(result);
     return;
   } catch (error) {
@@ -114,7 +113,7 @@ groupJoinRouter.delete(
 );
 
 // 유저가 가입한 그룹 탈퇴
-groupJoinRouter.delete('/mygroups/:groupId', loginRequired, async (req, res) => {
+groupJoinRouter.delete('/mygroups/:groupId', loginRequired, async (req, res, next) => {
   try {
     const groupId = req.params.groupId;
     const userId = req.currentUserId;

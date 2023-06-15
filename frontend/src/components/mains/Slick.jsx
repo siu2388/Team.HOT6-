@@ -4,6 +4,9 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Link } from 'react-router-dom';
+import { ROUTE } from '../../constants/routes/routeData';
+import { isErrorModalState } from '../../stores';
+import { useRecoilState } from 'recoil';
 
 const settings = {
   className: 'center',
@@ -29,27 +32,47 @@ const settings = {
 };
 
 export default function Slick() {
+  const [, setIsErrorModal] = useRecoilState(isErrorModalState);
+
   return (
     <SlickContainer>
       <Slider {...settings}>
         <div>
-          <SlideBox back={'/images/main/slick01.png'}>
+          <SlideBox back={'/images/main/main03_sub01.png'}>
             <SlideHoverBox>
-              <Link>바로가기</Link>
+              <Link to={ROUTE.GROUP_LIST.link}>GROUP</Link>
+            </SlideHoverBox>
+          </SlideBox>
+        </div>
+        <div>
+          <SlideBox back={'/images/main/main03_sub02.png'}>
+            <SlideHoverBox>
+              <Link
+                onClick={() => {
+                  setIsErrorModal({
+                    state: true,
+                    message: 'Comming Soon',
+                  });
+                }}
+              >
+                COMMUNITY
+              </Link>
             </SlideHoverBox>
           </SlideBox>
         </div>
         <div>
           <SlideBox back={'/images/main/slick02.png'}>
             <SlideHoverBox>
-              <Link>바로가기</Link>
-            </SlideHoverBox>
-          </SlideBox>
-        </div>
-        <div>
-          <SlideBox back={'/images/main/slick01.png'}>
-            <SlideHoverBox>
-              <Link>바로가기</Link>
+              <Link
+                onClick={() => {
+                  setIsErrorModal({
+                    state: true,
+                    message: 'Comming Soon',
+                  });
+                }}
+              >
+                CHALLENGE
+              </Link>
             </SlideHoverBox>
           </SlideBox>
         </div>
@@ -72,6 +95,7 @@ const SlideBox = styled.div`
   /* background: url('/images/main/slick01.png'); */
   border-radius: 4rem;
   position: relative;
+  background-size: cover;
 
   @media (min-width: 1700px) {
     width: 750px;

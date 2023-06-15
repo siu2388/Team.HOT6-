@@ -78,7 +78,6 @@ class User {
     const option = { returnOriginal: false };
 
     const updatedGroup = await UserModel.findOneAndUpdate(filter, update, option);
-    console.log('123', updatedGroup);
     if (!updatedGroup) {
       return false;
     }
