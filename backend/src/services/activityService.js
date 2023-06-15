@@ -1,9 +1,13 @@
 import { Activity } from '../db/models/Activity.js';
 import { Group } from '../db/models/Group.js';
+import { DateTime } from 'luxon';
 
 class activityService {
   // 활동 등록
   static async addActivity({ userId, groupId, state, name, usedDate, category, proofImg }) {
+    console.log(usedDate);
+    usedDate = DateTime.fromJSDate(new Date(usedDate)).setZone('Asia/Seoul').toISODate();
+    console.log(usedDate, '2');
     const newActivity = {
       userId,
       groupId,
