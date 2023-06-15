@@ -28,9 +28,10 @@ export const TitleUl = styled.ul`
   width: 100%;
   display: flex;
   padding: 3.6rem 0;
-  border-top: 2px solid #111;
+  border-top: 1px solid #111;
   border-bottom: 2px solid #d9d9d9;
   margin-bottom: 0;
+  background-color: #fff;
 `;
 
 export const ListLiNum = styled.li`
@@ -97,6 +98,7 @@ export const ContentUl = styled.ul`
   padding: 2.4rem 0;
   border-bottom: 1px solid #d9d9d9;
   margin-bottom: 0;
+  background-color: #fff;
 `;
 export const Write = styled.span`
   width: 80px;
@@ -251,4 +253,11 @@ export const BoardBtn = styled.button`
   }
   background-color: #01881c;
   border-radius: 4px;
+`;
+
+export const PaginationBox = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

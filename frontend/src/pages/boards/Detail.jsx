@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import * as S from './detail.styled';
 import * as API from '../../api/index';
-import { isErrorModalState, isSuccessModalState } from '../../stores';
+import { isErrorModalState, isSuccessModalState, userInfoState } from '../../stores';
 import { useRecoilState } from 'recoil';
 import { ROUTE } from '../../constants/routes/routeData';
 
@@ -10,6 +10,7 @@ export default function BoardDetail() {
   const [boardData, setBoardData] = useState([]);
   const [, setIsScucessModal] = useRecoilState(isSuccessModalState);
   const [, setIsErrorModal] = useRecoilState(isErrorModalState);
+  const [userInfo] = useRecoilState(userInfoState);
 
   const boardId = useParams().id;
   const navigate = useNavigate();
@@ -81,10 +82,21 @@ export default function BoardDetail() {
           <Link to="/boards">
             <S.BoardDefaultBtn>목록으로</S.BoardDefaultBtn>
           </Link>
-          <S.BoardDefaultBtn onClick={() => navigate(`${ROUTE.BOARDEDIT.link}/${boardData?._id}`)}>
-            수정하기
-          </S.BoardDefaultBtn>
-          <S.BoardDefaultBtn onClick={onClickDelete}>삭제하기</S.BoardDefaultBtn>
+          {userInfo?.user?._id === boardData?.user?._id && (
+            <>
+              <S.BoardDefaultBtn
+                onClick={() => navigate(`${ROUTE.BOARDEDIT.link}/${boardData?._id}`)}
+              >
+                수정하기
+              </S.BoardDefaultBtn>
+              <S.BoardDefaultBtn
+                style={{ backgroundColor: '#fff', color: '#01881c', border: '1px solid #01881c' }}
+                onClick={onClickDelete}
+              >
+                삭제하기
+              </S.BoardDefaultBtn>
+            </>
+          )}
         </S.BoardBtnContainer>
         <S.CommentTitleBox>
           <div>

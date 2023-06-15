@@ -3,17 +3,25 @@ import * as S from './list.styled';
 import { ROUTE } from '../../constants/routes/routeData';
 import { Link } from 'react-router-dom';
 import * as API from '../../api/index';
+import { Pagination } from '@mui/material';
 
 export default function BoardList() {
   const [boardList, setBoardList] = useState([]);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     const getBoard = async () => {
-      const result = await API.get('/boards');
+      const result = await API.get(`/boards?page=${page}`);
       setBoardList(result.data);
     };
     getBoard();
-  }, []);
+  }, [page]);
+
+  const onChangePage = (_, page) => {
+    setPage(page);
+  };
+
+  console.log(boardList);
 
   return (
     <S.Wrapper>
@@ -59,6 +67,16 @@ export default function BoardList() {
             <Link to={ROUTE.BOARDWRITE.link}>글쓰기</Link>
           </S.BoardBtn>
         </S.BtnBox>
+        <S.PaginationBox>
+          <Pagination
+            count={boardList?.totalPages}
+            page={page}
+            size="large"
+            variant="outlined"
+            color="primary"
+            onChange={onChangePage}
+          />
+        </S.PaginationBox>
       </S.Container>
     </S.Wrapper>
   );

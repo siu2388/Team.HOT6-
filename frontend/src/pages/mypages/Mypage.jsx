@@ -19,7 +19,6 @@ import { Avatar, AvatarGroup } from '@mui/material';
 
 export default function Mypage() {
   const [userInfo] = useRecoilState(userInfoState);
-
   const [isManageModalOpen, setIsManageModalOpen] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState('나의그룹');
   const [myGroup, setMyGroup] = useState([]);

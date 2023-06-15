@@ -193,11 +193,11 @@ export const BoardBtnContainer = styled.div`
 export const BoardDefaultBtn = styled.button`
   width: 185px;
   height: 45px;
-  border: 1px solid #bdbdbd;
   font-size: 1.6rem;
   font-weight: 500;
-  color: #000;
-  background: none;
+  color: #fff;
+  background: #01881c;
+  border-radius: 0.4rem;
   cursor: pointer;
 `;
 
@@ -297,7 +297,7 @@ export const CommentSubmit = styled.button`
   width: 91px;
   height: 52px;
   border: none;
-  background: #000;
+  background: #01881c;
   font-size: 1.6rem;
   font-weight: 500;
   color: #fff;
