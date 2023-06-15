@@ -38,6 +38,7 @@ const userSchema = new Schema(
     },
     profileImg: {
       type: String,
+      dafault: '1686823001485.png'
     },
   },
   { strictPopulate: false },

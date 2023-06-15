@@ -26,7 +26,7 @@ userAuthRouter.post('/users', imgUpload, async (req, res, next) => {
       phone,
       address,
       addressDetail,
-      profileImg: req.file ? req.file.filename : '',
+      profileImg: req.file ? req.file.filename : undefined,
     });
 
     if (newUser.errorMessage) {
