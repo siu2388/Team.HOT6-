@@ -12,6 +12,7 @@ import * as api from '../../../api.js';
 export default function GroupCalendar({ title, userInfo }) {
   const [tumblerUsage, setTumblerUsage] = useState(0);
   const [containerUsage, setContainerUsage] = useState(0);
+  const [monthDateTotal, setMonthDateTotal] = useState(0);
   const tumblerTotal = 150;
   const tumblerWidth = (tumblerUsage / tumblerTotal) * 100;
   const containerTotal = 150;
@@ -90,6 +91,7 @@ export default function GroupCalendar({ title, userInfo }) {
       const formattedNextMonth = nextMonth < 10 ? `0${nextMonth}` : nextMonth;
       const year = date.getFullYear();
       const monthDate = `${year}-${formattedNextMonth}`;
+      const month = Number(monthDate.split('-')[1]).toString();
       console.log(monthDate,'monthdDate');
       const res = await api.get(`/activities/${groupId}/${monthDate}`);
       const data = res.data.activityInfo;
@@ -103,6 +105,7 @@ export default function GroupCalendar({ title, userInfo }) {
       console.log(tumbler,multipleContainers);
       setTumblerUsage(tumbler);
       setContainerUsage(multipleContainers);
+      setMonthDateTotal(month);
     } catch (error) {
       console.log('Error fetching calendar data:', error);
     }
@@ -114,14 +117,14 @@ export default function GroupCalendar({ title, userInfo }) {
   const fetchMemberProfile = async () => {
     try {
       const selectedDateCopy = new Date(selectedDate);
-      selectedDateCopy.setDate(selectedDateCopy.getDate() + 1);
+      selectedDateCopy.setDate(selectedDateCopy.getDate());
       const formattedDate = selectedDateCopy.toISOString().slice(0, 10);
       const response = await api.get(`/activities/${groupId}/${formattedDate}`);
       const data = response.data.activityInfo;
   
       if (data && Array.isArray(data)) {
         const selectedDateCopy = new Date(formattedDate);
-        selectedDateCopy.setDate(selectedDateCopy.getDate() - 1);
+        selectedDateCopy.setDate(selectedDateCopy.getDate());
         const selectedDateData = data.filter(
           (member) => member.date === selectedDateCopy.toISOString().slice(0, 10)
         );
@@ -216,9 +219,9 @@ export default function GroupCalendar({ title, userInfo }) {
       <StatusMessage>
         <SpeechBubble>
           <SpeechText>Good!</SpeechText>
-          <Desc>{title} 그룹의 이번 달 텀블러 사용 횟수는 {tumblerUsage}회,</Desc>
+          <Desc>{title} 그룹의 {monthDateTotal}월 텀블러 사용 횟수는 {tumblerUsage}회,</Desc>
           <Desc>다회용기 사용 횟수는 {containerUsage}회야!</Desc>
-          <SpeechHighlight>우리는 이번달에 ⭐️{totalUsage}회⭐️ 지구를 지켰어!</SpeechHighlight>
+          <SpeechHighlight>우리는 {monthDateTotal}월에 ⭐️{totalUsage}회⭐️ 지구를 지켰어!</SpeechHighlight>
         </SpeechBubble>
       </StatusMessage>
     </EarthBox>
