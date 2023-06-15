@@ -11,15 +11,12 @@ class Group {
   // 그룹 중복 생성 확인
   static async findByGroupOwnerId(groupOwnerId) {
     const group = await GroupModel.findOne({ groupOwnerId });
-    console.log('9', groupOwnerId, group);
     return group;
   }
-  // 그룹 모집인원 확인 - 모집인원 이상 가입 제한
-  static async findTotMemsByGroupId(groupId) {
-    const groupJoin = await GroupModel.find({ groupId });
-    console.log('findTotMemsByGroupId의 groupId: ' , groupId);
-    console.log('groupJoin', groupJoin);
-    return groupJoin; //
+  // 그룹 모집인원 확인 - 모집인원 이상 가입 제한용
+  static async findTotNumOfMems(groupId) {
+    const groupJoin = await GroupModel.findById({ _id: groupId });
+    return groupJoin; 
   }
 
   //그룹 상세조회

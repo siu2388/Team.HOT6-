@@ -53,7 +53,6 @@ groupJoinRouter.get('/mygroups/:groupId/waiting', loginRequired, async (req, res
     const groupId = req.params.groupId;
 
     const result = await groupJoinService.getWaitingList({ groupId });
-    console.log('result', result);
     res.status(200).json(result);
     return;
   } catch (error) {

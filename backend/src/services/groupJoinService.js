@@ -6,9 +6,20 @@ class groupJoinService {
   // 유저의 그룹 가입
   static async groupJoin({ groupId, userId, state }) {
     // 모집인원 다 찼을 때 가입 방지 
-    const members = await Group.findTotMemsByGroupId({groupId});
-    console.log(members);
+    //그룹의 총 인원 검색
+    const totMembers = await Group.findTotNumOfMems(groupId);
+    const totalNums = totMembers.totalNumOfMembers;
+    console.log('총인원:',totalNums);
+    //그룹가입 인원 배열의 갯수 
+    const members = await User.findGroupMembers({ groupId });
+    const membersCount =  members.length;
+    console.log('현재인원:',membersCount);
     
+    //같으면 err  -> 그룹원 모집 마감
+    if (totalNums == membersCount) {
+      const errorMessage = '모집인원이 마감되었습니다ㅜㅜ';
+      throw new Error(errorMessage);
+    }
 
     // 그룹장이 다른 그룹 가입 방지
     const user = await User.findGroupOwner({ userId });

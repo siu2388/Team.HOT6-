@@ -77,9 +77,7 @@ class User {
     const update = { $set: { groupId: null } };
     const option = { returnOriginal: false };
 
-    console.log('4',groupId,userId);
     const updatedGroup = await UserModel.findOneAndUpdate(filter, update, option);
-    console.log('123', updatedGroup);
     if (!updatedGroup) {
       return false;
     }

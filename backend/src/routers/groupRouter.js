@@ -19,7 +19,6 @@ groupRouter.post('/groups', loginRequired, imgupload, async (req, res, next) => 
 
     //그룹 중복 생성 방지
     const isGroupexisted = await groupService.getGroupByOwnerId(groupOwnerId);
-    console.log('777',groupOwnerId,isGroupexisted);
     if (isGroupexisted) {
       res.status(401).json({ message: '생성한 그룹이 존재합니다.' });
       return;
@@ -122,12 +121,10 @@ groupRouter.delete('/groups/:groupId/', loginRequired, async (req, res, next) =>
   try {
     const userId = req.currentUserId;
     const groupId = req.params.groupId;
-console.log('123', userId, groupId);
     //그룹장의 groupId도 삭제
     const updatedUser = await userAuthService.deleteGroupId({ groupId, userId });
 
     const result = await groupService.deleteGroup({ groupId });
-    console.log(updatedUser, result);
     res.status(200).send({ result, updatedUser });
     return;
   } catch (error) {
