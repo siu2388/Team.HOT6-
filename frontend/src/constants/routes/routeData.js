@@ -6,6 +6,9 @@ import GroupWritePage from '../../pages/groups/Write';
 import Mypage from '../../pages/mypages/Mypage';
 import LoginPage from '../../pages/logins/Login';
 import JoinPage from '../../pages/joins/Join';
+import BoardList from '../../pages/boards/List';
+import BoardDetail from '../../pages/boards/Detail';
+import BoardWrite from '../../pages/boards/Write';
 
 export const ROUTE = {
   HOME: {
@@ -47,6 +50,21 @@ export const ROUTE = {
     path: '/changeinfo',
     link: '/changeinfo',
     element: <JoinPage page="changeInfo" />,
+  },
+  BOARDLIST: {
+    path: '/boards',
+    link: '/boards',
+    element: <BoardList />,
+  },
+  BOARDDETAIL: {
+    path: '/boards/:id',
+    link: '/boards',
+    element: <BoardDetail />,
+  },
+  BOARDWRITE: {
+    path: '/boards/write',
+    link: '/boards/write',
+    element: <BoardWrite />,
   },
 };
 

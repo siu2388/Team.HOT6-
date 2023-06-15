@@ -90,16 +90,7 @@ export default function Header() {
                   </Link>
                 </MenuList>
                 <MenuList>
-                  <Link
-                    onClick={() => {
-                      setIsErrorModal({
-                        state: true,
-                        message: 'Comming Soon',
-                      });
-                    }}
-                  >
-                    Community
-                  </Link>
+                  <Link to={ROUTE.BOARDLIST.link}>Community</Link>
                 </MenuList>
               </NavMenu>
             </Navigation>

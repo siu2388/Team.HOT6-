@@ -117,7 +117,8 @@ const SlideBox = styled.div`
 
   &:hover {
     & > div {
-      display: block;
+      /* display: block; */
+      background-color: rgba(0, 0, 0, 0.5);
     }
   }
 `;
@@ -125,12 +126,11 @@ const SlideBox = styled.div`
 const SlideHoverBox = styled.div`
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.2);
   border-radius: 4rem;
   position: absolute;
   top: 0;
   left: 0;
-  display: none;
 
   a {
     display: flex;
