@@ -22,10 +22,13 @@ export const DetailWriterAndDateBox = styled.div`
   align-items: center;
 `;
 export const DetailProfileImg = styled.div`
-  width: 47px;
-  height: 47px;
+  width: 5rem;
+  height: 5rem;
   border-radius: 50%;
-  background: #bdbdbd;
+  background: ${({ img }) => `url(${img})`};
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #fff;
 `;
 export const DetailTitleAndDate = styled.div`
   display: flex;
@@ -454,5 +457,8 @@ export const BoardContent = styled.div`
     font-size: 1.7rem;
     font-weight: 400;
     color: #111;
+    overflow: auto;
+    white-space: pre-wrap;
+    line-height: 1.6;
   }
 `;

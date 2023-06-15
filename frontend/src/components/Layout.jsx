@@ -18,8 +18,6 @@ export default function LayoutComponent({ children }) {
 
   const location = useLocation();
 
-  console.log(location);
-
   return (
     <>
       <Header />

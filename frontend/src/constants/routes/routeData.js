@@ -64,7 +64,12 @@ export const ROUTE = {
   BOARDWRITE: {
     path: '/boards/write',
     link: '/boards/write',
-    element: <BoardWrite />,
+    element: <BoardWrite isEdit={false} />,
+  },
+  BOARDEDIT: {
+    path: '/boards/edit/:boardId',
+    link: '/boards/edit',
+    element: <BoardWrite isEdit={true} />,
   },
 };
 
