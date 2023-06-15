@@ -341,6 +341,7 @@ const MenuContainer = styled.div`
   width: 100rem;
   display: flex;
   justify-content: center;
+  margin-top: 2rem;
   align-items: center;
   @media ${res.tablet} {
     width: 90%;
@@ -374,7 +375,6 @@ const Menu = styled.ul`
 
 const Menubox = styled.button`
   width: 25%;
-
   padding: 1rem 0.3rem;
   margin: 0.5rem;
   transition: background-color 0.3s;
@@ -409,6 +409,7 @@ const LargeBox = styled.div`
   justify-content: space-between;
   padding: 2rem 1rem;
   margin-top: 3rem;
+  padding-top: 4rem;
   position: relative;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 

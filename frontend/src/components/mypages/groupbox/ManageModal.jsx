@@ -25,8 +25,6 @@ export default function ManageModal({
 
   const openActModal = () => {
     setIsJoinModalOpen(false);
-    console.log(waitingActivity, '들어왓다 ㅋ');
-    console.log(waitingMembers, 'hi');
   };
 
   const onClickTumblerText = (index) => {

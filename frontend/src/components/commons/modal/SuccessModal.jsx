@@ -6,18 +6,24 @@ const SuccessModal = ({ message, onClose }) => {
     <SuccessModalWrapper>
       <SuccessModalContent>
         <BlueSection>
-          <Circle />
+          <Circle>
           <XButton onClick={onClose}>X</XButton>
+          </Circle>
         </BlueSection>
         <WhiteSection>
           <LeftCircle>
-            <BlueInitial>i</BlueInitial>
+            <BlueInitial>
+            <img src="/images/commons/success.png" alt="Success" />
+            </BlueInitial>
           </LeftCircle>
           <Message>{message}</Message>
         </WhiteSection>
         <Okbox>
           <SmallBox onClick={onClose}>OK</SmallBox>
         </Okbox>
+        <LoImage>
+            <img src="/images/commons/mainearth.png" alt="사랑해 지구야 로고" />
+        </LoImage>
       </SuccessModalContent>
     </SuccessModalWrapper>
   );
@@ -25,6 +31,17 @@ const SuccessModal = ({ message, onClose }) => {
 
 export default SuccessModal;
 
+
+const LoImage = styled.div`
+display:flex;
+justify-content: right;  
+margin-top:-10rem;
+margin-right:-10rem;
+img{
+    width:20rem;
+    
+  };
+`;
 const SuccessModalWrapper = styled.div`
   position: fixed;
   top: 0;
@@ -41,14 +58,15 @@ const SuccessModalWrapper = styled.div`
 const SuccessModalContent = styled.div`
   width: 35rem;
   height: 25rem;
-  border: 12px solid #a6a2a2;
+  padding-bottom: 10rem;
+  border: 0.8rem solid #a6a2a2;
   border-radius: 5px;
   background-color: white;
 `;
 
 const BlueSection = styled.div`
-  height: 25%;
-  background-color: 657DD2;
+  height: 5rem;
+  background-color: #657DD2;
   display: flex;
   align-items: center;
   padding: 0 10px;
@@ -57,21 +75,19 @@ const BlueSection = styled.div`
 `;
 
 const BlueInitial = styled.div`
-  color: #657DD2;
-  font-size: 9rem;
-  font-weight: bold;
-  font-family: 'Your preferred font', sans-serif;
   position: absolute;
-  top: 0.4rem;
-  left: 2.8rem;
+  img{
+    width:7rem;
+  }
+  
 `;
 
 const Circle = styled.div`
-  width: 30px;
-  height: 30px;
+  width: 3rem;
+  height: 3rem;
   background-color: #87ceeb;
   border-radius: 50%;
-  margin-right: 10px;
+  margin-right: 0.5rem;
   position: absolute;
   right: 1rem;
 `;
@@ -80,11 +96,10 @@ const XButton = styled.button`
   border: none;
   background-color: transparent;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 2.5rem;
   color: #657DD2;
   position: absolute;
-  right: 1rem;
-  right: 2.9rem;
+  margin-left: 0.7rem;
   font-weight: bold;
 `;
 
@@ -93,34 +108,36 @@ const WhiteSection = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  gap:2.2rem;
 `;
 
 const LeftCircle = styled.div`
   width: 8rem;
   height: 8rem;
-  background-color: #87ceeb;
-  border-radius: 50%;
-  margin-right: 10px;
   position: relative;
   margin-left: 1.2rem;
   margin-top: 1rem;
 `;
 
 const Message = styled.p`
+  margin-top: 2rem;
   max-width: 65%;
   line-height: 1.2;
   font-size: 1.5rem;
 `;
 
 const SmallBox = styled.button`
-  width: 80px;
-  height: 40px;
+  width: 8rem;
+  height: 4rem;
   background-color: lightblue;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 14px;
+  font-size:2rem;
+  &:hover {
+    background-color: #657DD2;
+  }
 `;
 
 const Okbox = styled.div`
