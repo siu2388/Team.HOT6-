@@ -456,14 +456,12 @@ const SpeechText = styled.p`
 
 const Desc = styled.p`
   font-size: 1.7rem;
-  font-family: 'Comic Sans MS', cursive;
 `;
 
 const SpeechHighlight = styled.h1`
   font-size: 2.2rem;
   font-weight: 500;
   margin-top: 1rem;
-  font-family: 'Comic Sans MS', cursive;
 `;
 
 const LogoImage = styled.div`

@@ -60,7 +60,8 @@ export const MentText = styled.h2`
   font-size: 16rem;
   font-weight: 600;
   color: #22b0f1;
-  -webkit-text-stroke: 5px #31348d;
+  -webkit-text-stroke: 2px #31348d;
+  transform: scaleX(1.1);
   @media ${res.tablet} {
     font-size: 13rem;
   }
@@ -93,7 +94,7 @@ export const PositionBox = styled.span`
   font-size: 16rem;
   font-weight: 600;
   color: #22b0f1;
-  -webkit-text-stroke: 5px #31348d;
+  -webkit-text-stroke: 2px #31348d;
 
   @media ${res.tablet} {
     font-size: 13rem;
@@ -102,28 +103,28 @@ export const PositionBox = styled.span`
 
 export const PositionImg01 = styled.img`
   position: absolute;
-  top: 1rem;
-  right: -0.5rem;
+  top: -5rem;
+  right: -5rem;
   @media ${res.tablet} {
-    top: 0rem;
+    top: -4rem;
     right: -1rem;
   }
   @media ${res.mobile} {
-    top: -2.5rem;
+    top: -6rem;
     right: -3.4rem;
   }
 `;
 
-export const PositionImg02 = styled.img`
-  width: 8rem;
-  position: absolute;
-  left: 0.3rem;
-  bottom: 5.6rem;
-  @media ${res.tablet} {
-    left: -0.3rem;
-    bottom: 4rem;
-  }
-`;
+// export const PositionImg02 = styled.img`
+//   width: 8rem;
+//   position: absolute;
+//   left: 0.3rem;
+//   bottom: 5.6rem;
+//   @media ${res.tablet} {
+//     left: -0.3rem;
+//     bottom: 4rem;
+//   }
+// `;
 
 export const MainWrap02 = styled.div`
   width: 100%;

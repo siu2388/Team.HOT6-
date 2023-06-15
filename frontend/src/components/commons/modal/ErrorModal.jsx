@@ -7,12 +7,13 @@ export default function ErrorModal({ onClose, message }) {
     <ErrorModalWrapper>
       <ErrorModalContent>
         <RedSection>
-          <Circle />
+          <Circle>
           <EButton onClick={onClose}>X</EButton>
+          </Circle>
         </RedSection>
         <WhiteSection>
           <LeftCircle>
-            <RedInitial>e</RedInitial>
+            <RedInitial><img src="/images/commons/error.png" alt="사랑해 지구야 로고" /></RedInitial>
           </LeftCircle>
           <Message>{message}</Message>
         </WhiteSection>
@@ -20,7 +21,7 @@ export default function ErrorModal({ onClose, message }) {
           <SmallBox onClick={onClose}>OK</SmallBox>
         </Okbox>
         <LoImage>
-            <img src="/images/commons/mainearth.png" alt="사랑해 지구야 로고" />
+            <img src="/images/commons/errorearth.png" alt="사랑해 지구야 로고" />
         </LoImage>
       </ErrorModalContent>
     </ErrorModalWrapper>
@@ -41,35 +42,30 @@ const WhiteSection = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  gap:2.2rem;
 `;
 
 const LeftCircle = styled.div`
   width: 7rem;
   height: 7rem;
-  background-color: #87ceeb;
-  border-radius: 50%;
-  margin-right: 10px;
   position: relative;
   margin-left: 1.4rem;
   margin-top: 1.3rem;
 `;
 
 const RedInitial = styled.div`
-  color: #D26565;
-  font-size: 8rem;
-  font-weight: bold;
-  font-family: 'Your preferred font', sans-serif;
   position: absolute;
-  top: -0.8rem;
-  left: 1.3rem;
+  img{
+    width:7rem;
+  }
 `;
 
 const Circle = styled.div`
-  width: 30px;
-  height: 30px;
-  background-color: #87ceeb;
+  width: 3rem;
+  height: 3rem;
+  background-color: #DFC1D9;
   border-radius: 50%;
-  margin-right: 10px;
+  margin-right: 0.5rem;
   position: absolute;
   right: 1rem;
 `;
@@ -82,15 +78,21 @@ const Message = styled.p`
 `;
 
 const SmallBox = styled.button`
-  width: 80px;
-  height: 40px;
-  background-color: #87ceeb;
+  width: 8rem;
+  height: 4rem;
+  background-color: #DFC1D9;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   font-size: 14px;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #D26565;
+  }
 `;
+
 
 const ErrorModalWrapper = styled.div`
   position: fixed;
@@ -108,13 +110,13 @@ const ErrorModalWrapper = styled.div`
 const ErrorModalContent = styled.div`
   width: 35rem;
   height: 25rem;
-  border: 12px solid #a6a2a2;
+  border: 0.8rem solid #a6a2a2;
   border-radius: 5px;
   background-color: white;
 `;
 
 const RedSection = styled.div`
-  height: 25%;
+  height: 5rem;
   background-color: #D26565;
   display: flex;
   align-items: center;
@@ -127,10 +129,10 @@ const EButton = styled.button`
   border: none;
   background-color: transparent;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 2.5rem;
   color: #D26565;
   position: absolute;
-  right: 2.9rem;
+  margin-left: 0.7rem;
   font-weight: bold;
 `;
 
