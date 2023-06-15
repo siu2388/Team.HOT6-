@@ -128,10 +128,6 @@ export default function BoardWrite({ isEdit }) {
                 <div style={{ width: '20rem' }}>
                   <FileUpload boardImg={boardData?.boardImage} />
                 </div>
-
-                {/* <S.PhotoClipBtnBox>
-                  <S.FileLabel htmlFor="file01">+</S.FileLabel>
-                </S.PhotoClipBtnBox> */}
               </S.PhotoContainer>
             </S.PhotoClipBox>
             <S.cancleBtnBox>

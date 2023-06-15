@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from './headers/Header';
 import SuccessModal from './commons/modal/SuccessModal';
 import ErrorModal from './commons/modal/ErrorModal';
@@ -11,12 +11,16 @@ export default function LayoutComponent({ children }) {
   const [isSuccessModal, setIsScucessModal] = useRecoilState(isSuccessModalState);
   const [isErrorModal, setIsErrorModal] = useRecoilState(isErrorModalState);
 
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0); // 스크롤 맨 위로 이동
+  }, [location]);
+
   const onClose = () => {
     setIsScucessModal({ state: false, message: '' });
     setIsErrorModal({ state: false, message: '' });
   };
-
-  const location = useLocation();
 
   return (
     <>
