@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { res } from '../../../styles/responsive';
 
 export default function Footer() {
   return (
     <FooterWrap>
       <FooterContainer>
         <FooterInfo>
-          <InfoMent>COPYRIGHT 2023 TEAM06(HOT6) ALL RIGHTS RESERVED. | hot06@gmail.com</InfoMent>
+          <InfoMent>COPYRIGHT 2023 TEAM06(HOT6)</InfoMent>
           <FooterMenu>
             <li>
               <Link>개인정보 처리방침</Link>
@@ -34,7 +35,6 @@ const FooterWrap = styled.footer`
   width: 100%;
   background-color: #f1f5f0;
   padding: 3rem 0;
-  text-align: center;
 `;
 const FooterContainer = styled.div`
   width: 1300px;
@@ -42,6 +42,10 @@ const FooterContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media ${res.tablet} {
+    width: 90%;
+  }
 `;
 
 const FooterInfo = styled.div``;
