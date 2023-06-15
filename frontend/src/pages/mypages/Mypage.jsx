@@ -29,6 +29,18 @@ export default function Mypage() {
   const [, setIsScucessModal] = useRecoilState(isSuccessModalState);
   const [, setIsErrorModal] = useRecoilState(isErrorModalState);
   const [update, setUpdate] = useRecoilState(updateState);
+  const [activities, setActivities] = useState([]);
+
+  useEffect(() => {
+    const getActivities = async () => {
+      const result = await API.get('/activities');
+      setActivities(result);
+    };
+
+    getActivities();
+  }, []);
+
+  console.log(activities);
 
   useEffect(() => {
     if (!sessionStorage.getItem('userToken')) {
@@ -246,26 +258,26 @@ export default function Mypage() {
                       {myGroup?.result?.[0]?.groupId?.createdAt}
                     </GroupCreationDate>
                   </GroupCreation>
+                  <GroupButton>
+                    {myGroup?.result?.[0]?.groupId?.groupOwnerId?._id === userInfo?.user?._id ? (
+                      <GroupLeaveButton onClick={onClickDelGroup}>그룹삭제</GroupLeaveButton>
+                    ) : (
+                      <GroupLeaveButton onClick={onClickDeleteGroup}>그룹탈퇴</GroupLeaveButton>
+                    )}
+                    {myGroup?.result?.[0]?.groupId?.groupOwnerId?._id === userInfo?.user?._id && (
+                      <GroupManageButton onClick={openManageModal}>그룹관리</GroupManageButton>
+                    )}
+
+                    <GroupMoveButton
+                      onClick={() =>
+                        navigate(`${ROUTE.GROUP_DETAIL.link}/${myGroup?.result?.[0]?.groupId?._id}`)
+                      }
+                    >
+                      이동
+                    </GroupMoveButton>
+                  </GroupButton>
                 </GroupDetails>
               </GroupInfo>
-              <GroupButton>
-                {myGroup?.result?.[0]?.groupId?.groupOwnerId?._id === userInfo?.user?._id ? (
-                  <GroupLeaveButton onClick={onClickDelGroup}>그룹삭제</GroupLeaveButton>
-                ) : (
-                  <GroupLeaveButton onClick={onClickDeleteGroup}>그룹탈퇴</GroupLeaveButton>
-                )}
-                {myGroup?.result?.[0]?.groupId?.groupOwnerId?._id === userInfo?.user?._id && (
-                  <GroupManageButton onClick={openManageModal}>그룹관리</GroupManageButton>
-                )}
-
-                <GroupMoveButton
-                  onClick={() =>
-                    navigate(`${ROUTE.GROUP_DETAIL.link}/${myGroup?.result?.[0]?.groupId?._id}`)
-                  }
-                >
-                  이동
-                </GroupMoveButton>
-              </GroupButton>
             </LargeBox>
           ) : (
             <ErrorText>가입한 그룹이 없습니다.</ErrorText>
@@ -273,7 +285,7 @@ export default function Mypage() {
         {activeMenuItem === '그룹관리' && <GroupManagement></GroupManagement>}
         {activeMenuItem === '적립조회' && (
           <PointInquiry>
-            <RewardPoints />
+            <RewardPoints activities={activities} />
           </PointInquiry>
         )}
         {activeMenuItem === '내정보수정' && <ProfileModification></ProfileModification>}
@@ -335,13 +347,11 @@ const MenuContainer = styled.div`
     width: 90%;
   }
   @media ${res.mobile} {
-    flex-direction: column;
     gap: 2rem;
   }
 `;
 const Card = styled.div`
   width: 52rem;
-  height: 6rem;
   background-color: #9fdf9f;
   border-radius: 8px;
   display: flex;
@@ -349,9 +359,14 @@ const Card = styled.div`
   justify-content: space-between;
   padding: 0 1rem;
   margin-top: 3rem;
+
+  @media ${res.mobile} {
+    width: 90%;
+  }
 `;
 
 const Menu = styled.ul`
+  width: 100%;
   display: flex;
   list-style-type: none;
   margin: 0.5rem;
@@ -359,10 +374,10 @@ const Menu = styled.ul`
 `;
 
 const Menubox = styled.button`
-  width: 9rem;
-  height: 4rem;
-  padding: 0.3rem;
-  margin: 1.5rem;
+  width: 25%;
+
+  padding: 1rem 0.3rem;
+  margin: 0.5rem;
   transition: background-color 0.3s;
   &:hover {
     background-color: #fff;
@@ -390,6 +405,7 @@ const LargeBox = styled.div`
   border-radius: 8px;
   display: flex;
   align-items: center;
+  flex-direction: column;
   justify-content: space-between;
   padding: 1rem;
   margin-top: 3rem;
@@ -402,22 +418,20 @@ const LargeBox = styled.div`
   }
   @media ${res.mobile} {
     flex-direction: column;
-    width: 65rem;
+    width: 100%;
     gap: 2rem;
   }
 `;
 
 const GroupInfo = styled.div`
+  width: 100%;
   display: flex;
   align-items: center;
   @media ${res.tablet} {
-    justify-content: left;
-    width: 75rem;
+    justify-content: space-evenly;
   }
   @media ${res.mobile} {
-    width: 65rem;
     gap: 2rem;
-    justify-content: left;
   }
 `;
 
@@ -514,12 +528,14 @@ const GroupCreationDate = styled.p`
   margin-top: 2rem;
 `;
 
-const GroupButton = styled.button``;
+const GroupButton = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-top: 4rem;
+  justify-content: flex-end;
+`;
 
 const GroupLeaveButton = styled.button`
-  position: absolute;
-  right: 20rem;
-  bottom: 3rem;
   width: 8rem;
   height: 3rem;
   background-color: #949494;
@@ -533,9 +549,6 @@ const GroupLeaveButton = styled.button`
 `;
 
 const GroupManageButton = styled.button`
-  position: absolute;
-  right: 11.5rem;
-  bottom: 3rem;
   width: 8rem;
   height: 3rem;
   background-color: #478a77;
@@ -549,9 +562,6 @@ const GroupManageButton = styled.button`
 `;
 
 const GroupMoveButton = styled.button`
-  position: absolute;
-  right: 3rem;
-  bottom: 3rem;
   width: 8rem;
   height: 3rem;
   background-color: #478a77;
