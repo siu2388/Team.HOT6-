@@ -14,11 +14,9 @@ class Group {
     return group;
   }
   // 그룹 모집인원 확인 - 모집인원 이상 가입 제한용
-  static async findTotNumOfMems(groupId) {
-    const groupJoin = await GroupModel.findById({ _id: groupId });
-    console.log('groupJoin', groupJoin);
-    console.log('총몇명',groupJoin.totalNumOfMembers);
-    return groupJoin; 
+  static async findByGroupId(groupId) {
+    const group = await GroupModel.findById({ _id: groupId });
+    return group;
   }
 
   //그룹 상세조회
@@ -56,6 +54,23 @@ class Group {
     return groupJoinready;
   }
 
+  static async findGroupId(groupId) {
+    console.log(groupId);
+    const group = await GroupModel.findById({ _id: groupId });
+    console.log('group', group);
+    return group;
+  }
+  // 그룹 정보 수정
+  static async updateGroup({ _id: groupId, fieldToUpdate, newValue }) {
+    const filter = { _id: groupId };
+    const update = { [fieldToUpdate]: newValue };
+    const option = { returnOriginal: false };
+    console.log('update', update);
+    const updatedGroup = await GroupModel.findOneAndUpdate(filter, update, option);
+    console.log('uu', updatedGroup);
+    return updatedGroup;
+  }
+
   static async update({ groupId }) {
     const filter = { _id: new ObjectId(groupId) };
     const update = { state: '승인' };
@@ -64,6 +79,7 @@ class Group {
     const updatedGroup = await GroupModel.findOneAndUpdate(filter, update, option);
     return updatedGroup;
   }
+
   //그룹장이 그룹 삭제 시
   static async deleteById({ groupId }) {
     const deleteResult = await GroupModel.deleteOne({ _id: groupId });

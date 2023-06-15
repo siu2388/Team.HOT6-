@@ -76,7 +76,7 @@ userAuthRouter.put('/users/:id', imgUpload, loginRequired, async (req, res, next
     const phone = req.body.phone ?? null;
     const address = req.body.address ?? null;
     const addressDetail = req.body.addressDetail ?? null;
-    const profileImg = req.file ? req.file.filename : '';
+    const profileImg = req.file ? req.file.filename : undefined;
 
     const toUpdate = {
       password,

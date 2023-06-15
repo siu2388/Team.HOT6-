@@ -118,6 +118,33 @@ groupRouter.get('/searchgroups', async (req, res, next) => {
   }
 });
 
+//그룹 수정
+groupRouter.put('/groups/:groupId', loginRequired, imgupload, async (req, res, next) => {
+  try {
+    const groupId = req.params.groupId;
+    const title = req.body.title ?? null;
+    const description = req.body.description ?? null;
+    const totalNumOfMembers = req.body.totalNumOfMembers ?? null;
+    const thumbnail = req.file ? req.file.filename : undefined;
+
+    const toUpdate = {
+      title,
+      description,
+      totalNumOfMembers,
+      thumbnail,
+    };
+    const updatedGroup = await groupService.setGroup({ groupId, toUpdate });
+
+    if (updatedGroup.errorMessage) {
+      throw new Error(updatedGroup.errorMessage);
+    }
+    res.status(200).json(updatedGroup);
+    return;
+  } catch (error) {
+    next(error);
+  }
+});
+
 //그룹 삭제
 groupRouter.delete('/groups/:groupId/', loginRequired, async (req, res, next) => {
   try {

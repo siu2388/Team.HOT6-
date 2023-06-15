@@ -7,7 +7,7 @@ class groupJoinService {
   static async groupJoin({ groupId, userId, state }) {
     // 모집인원 다 찼을 때 가입 방지
     //그룹의 총 인원 검색
-    const totMembers = await Group.findTotNumOfMems(groupId);
+    const totMembers = await Group.findByGroupId(groupId);
     const totalNums = totMembers.totalNumOfMembers;
     //그룹가입 인원 배열의 갯수
     const members = await User.findGroupMembers({ groupId });
