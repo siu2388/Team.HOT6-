@@ -47,16 +47,7 @@ export default function Slick() {
         <div>
           <SlideBox back={'/images/main/main03_sub02.png'}>
             <SlideHoverBox>
-              <Link
-                onClick={() => {
-                  setIsErrorModal({
-                    state: true,
-                    message: 'Comming Soon',
-                  });
-                }}
-              >
-                COMMUNITY
-              </Link>
+              <Link to={ROUTE.BOARDLIST.link}>COMMUNITY</Link>
             </SlideHoverBox>
           </SlideBox>
         </div>
