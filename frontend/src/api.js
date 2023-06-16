@@ -3,7 +3,6 @@ import axios from 'axios';
 const backendPort = '5001';
 const serverUrl = 'http://' + window.location.hostname + ':' + backendPort;
 
-
 async function get(endpoint, params = '') {
   return axios.get(serverUrl + endpoint + '/' + params, {
     headers: {
