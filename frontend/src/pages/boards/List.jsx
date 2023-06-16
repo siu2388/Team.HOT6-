@@ -61,9 +61,11 @@ export default function BoardList() {
           ))}
         </S.ReviewListContainer>
         <S.BtnBox>
-          <S.BoardBtn>
-            <Link to={ROUTE.BOARDWRITE.link}>글쓰기</Link>
-          </S.BoardBtn>
+          {sessionStorage.getItem('userToken') && (
+            <S.BoardBtn>
+              <Link to={ROUTE.BOARDWRITE.link}>글쓰기</Link>
+            </S.BoardBtn>
+          )}
         </S.BtnBox>
         <S.PaginationBox>
           <Pagination
