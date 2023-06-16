@@ -522,6 +522,10 @@ const GroupMembersCount = styled.div`
 
 const GroupMembersImgBox = styled.div`
   margin-left: 2rem;
+  .MuiAvatar-root {
+    width: 3rem !important;
+    height: 3rem !important;
+  }
 `;
 
 // const GroupMembersImage = styled.img`
