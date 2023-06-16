@@ -42,7 +42,7 @@ export default function GroupDetailPage() {
     <GroupDetailWrap>
       <GroupDetailContainer>
         <GroupName>
-        <GroupTitle>{groupData?.myGroup?.title}</GroupTitle>
+          <GroupTitle>{groupData?.myGroup?.title}</GroupTitle>
         </GroupName>
         <DetailContent01>
           <DetailInfoBox>
@@ -52,7 +52,7 @@ export default function GroupDetailPage() {
                 <UserProfile>
                   <Avatar
                     alt="내 프로필"
-                    src={`${API.imgUrl}${groupData?.groupOwnerId?.profileImg}`}
+                    src={`${API.imgUrl}${groupData?.myGroup?.groupOwnerId?.profileImg}`}
                     sx={{ width: 40, height: 40 }}
                   />
                   <UserName>{groupData?.myGroup?.groupOwnerId?.name}</UserName>
@@ -70,7 +70,12 @@ export default function GroupDetailPage() {
               {sessionStorage.getItem('userToken') && (
                 <div>
                   <Button
-                    style={{ width: '180px', height: '40px', fontSize: '2.3rem',fontFamily: 'Do Hyeon' }}
+                    style={{
+                      width: '180px',
+                      height: '40px',
+                      fontSize: '2.3rem',
+                      fontFamily: 'Do Hyeon',
+                    }}
                     variant="contained"
                     color="success"
                     onClick={handleGroupJoin}
@@ -101,7 +106,6 @@ export default function GroupDetailPage() {
         </DetailContent01>
         <GroupCalendar title={groupData?.myGroup?.title} userInfo={userInfo} />
       </GroupDetailContainer>
-      
     </GroupDetailWrap>
   );
 }
@@ -218,7 +222,7 @@ const GroupMemberTitle = styled.h4`
   font-size: 2.5rem;
   font-weight: 400;
   color: #111;
-  margin-left:1rem;
+  margin-left: 1rem;
 `;
 
 const MemberNumBox = styled.div`
@@ -231,7 +235,7 @@ const MemberNum = styled.span`
   font-size: 1.8rem;
   font-weight: 400;
   color: #111;
-  margin-right:1.5rem;
+  margin-right: 1.5rem;
 `;
 
 const GroupMembers = styled.div`
@@ -256,4 +260,3 @@ const GroupName = styled.div`
   display: flex;
   justify-content: center;
 `;
-

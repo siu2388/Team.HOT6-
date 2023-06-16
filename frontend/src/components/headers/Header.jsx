@@ -221,8 +221,8 @@ const MenuList = styled.li`
     font-weight: 500;
     color: #111;
     &:hover {
-    color: #f1b24a;
-  }
+      color: #f1b24a;
+    }
   }
 `;
 

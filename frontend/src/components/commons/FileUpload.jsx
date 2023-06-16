@@ -29,11 +29,11 @@ export default function FileUpload({ profileImg, GroupImg, boardImg }) {
   }, []);
 
   useEffect(() => {
-    if(GroupImg){
+    if (GroupImg) {
       setImgFile(GroupImg);
       setImageSrc(`${API.imgUrl}${GroupImg}`);
     }
-  },[GroupImg]);
+  }, [GroupImg]);
 
   const onUpload = e => {
     const file = e.target.files[0];

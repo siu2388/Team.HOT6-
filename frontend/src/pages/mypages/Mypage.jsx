@@ -20,7 +20,7 @@ import GroupWritePage from '../groups/Write';
 
 export default function Mypage() {
   const [userInfo] = useRecoilState(userInfoState);
-  const [isEditModalOpen, setIsEditModalOpen]= useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isManageModalOpen, setIsManageModalOpen] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState('나의그룹');
   const [myGroup, setMyGroup] = useState([]);
@@ -225,8 +225,10 @@ export default function Mypage() {
           (userInfo?.user?.groupId ? (
             <LargeBox>
               {myGroup?.result?.[0]?.groupId?.groupOwnerId?._id === userInfo?.user?._id && (
-                      <EditIcon onClick={openEditModal}><img src="/images/commons/pencil.png" /></EditIcon> 
-                    )}
+                <EditIcon onClick={openEditModal}>
+                  <img src="/images/commons/pencil.png" />
+                </EditIcon>
+              )}
               <GroupInfo>
                 <GroupImage
                   alt="그룹 사진"
@@ -306,13 +308,13 @@ export default function Mypage() {
             onClickRefuseActivity={onClickRefuseActivity}
           />
         )}
-        {isEditModalOpen&& (
+        {isEditModalOpen && (
           <Modal>
             <ModalContent>
-            <GroupWritePage isEdit={true} closeEditModal={closeEditModal} myGroup={myGroup}/>
+              <GroupWritePage isEdit={true} closeEditModal={closeEditModal} myGroup={myGroup} />
             </ModalContent>
           </Modal>
-          )}
+        )}
       </MenuContainer>
     </Container>
   );
@@ -591,7 +593,7 @@ const GroupLeaveButton = styled.button`
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   @media ${res.mobile} {
-    font-size:2.5rem;
+    font-size: 2.5rem;
     width: 15rem;
     height: 7rem;
   }
@@ -609,7 +611,7 @@ const GroupManageButton = styled.button`
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   @media ${res.mobile} {
-    font-size:2.5rem;
+    font-size: 2.5rem;
     width: 15rem;
     height: 7rem;
   }
@@ -627,7 +629,7 @@ const GroupMoveButton = styled.button`
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   @media ${res.mobile} {
-    font-size:2.5rem;
+    font-size: 2.5rem;
     width: 15rem;
     height: 7rem;
   }
@@ -651,14 +653,14 @@ const ErrorText = styled.p`
 `;
 
 const EditIcon = styled.button`
-position:absolute;
-right:2rem;
-top:2rem;
-  img{
+  position: absolute;
+  right: 2rem;
+  top: 2rem;
+  img {
     width: 3rem;
     height: 3rem;
     transform: rotate(25deg);
-    @media (max-width: 768px) { 
+    @media (max-width: 768px) {
       width: 5rem;
       height: 5rem;
     }

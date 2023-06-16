@@ -91,9 +91,9 @@ export default function JoinPage({ page }) {
 
   useEffect(() => {
     return () => {
-      setPostcodeAddress(''); 
+      setPostcodeAddress('');
     };
-  }, [setPostcodeAddress]); 
+  }, [setPostcodeAddress]);
 
   const handleInputChange = e => {
     const { name, value } = e.target;
