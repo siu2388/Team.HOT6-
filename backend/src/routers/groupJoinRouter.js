@@ -16,8 +16,7 @@ groupJoinRouter.post('/mygroups/:groupId', loginRequired, async (req, res, next)
     //다른 그룹 중복 가입 방지
     const isGroupJoined = await groupJoinService.getJoinedGroup({ userId });
     if (isGroupJoined) {
-      res.status(401).json({ message: '가입한 그룹이 존재합니다.' });
-      return;
+      throw new Error('가입한 그룹이 존재합니다.');
     }
 
     const result = await groupJoinService.groupJoin({ groupId, userId, state });
