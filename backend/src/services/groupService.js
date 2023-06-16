@@ -12,6 +12,19 @@ class groupService {
     createdAt,
     thumbnail,
   }) {
+    // 그룹장이 그룹 중복 생성 못하게 방지
+    const group = await Group.findByGroupOwnerId(groupOwnerId);
+    if (group) {
+      const errorMessage = '그룹은 하나만 생성할 수 있어요!';
+      throw new Error(errorMessage);
+    }
+    // 다른 그룹에 가입한 유저인지도 확인 groupJoin에서 데이터 있는지 확인
+    const groupJoin = await GroupJoin.findByGroupUserId( groupOwnerId );
+    if (groupJoin) {
+      const errorMessage = '그룹은 하나만 가입할 수 있어요!';
+      throw new Error(errorMessage);
+    }
+
     const newGroup = {
       groupOwnerId,
       title,
@@ -22,12 +35,6 @@ class groupService {
     };
     const createdGroup = await Group.create({ newGroup });
     return createdGroup;
-  }
-
-  // 그룹 중복 생성 방지용
-  static async getGroupByOwnerId(groupOwnerId) {
-    const group = await Group.findByGroupOwnerId(groupOwnerId);
-    return group;
   }
 
   // 그룹의 목록 조회

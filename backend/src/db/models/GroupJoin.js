@@ -6,6 +6,11 @@ class GroupJoin {
     const createdNewGroupJoin = await GroupJoinModel.create(newGroupJoin);
     return createdNewGroupJoin;
   }
+  //다른 그룹 가입 멤버가 그룹생성시 
+  static async findByGroupUserId( groupOwnerId ) {
+    const groupJoin = await GroupJoinModel.findOne({ userId : groupOwnerId });
+    return groupJoin;
+  }
 
   static async findByUserId({ userId }) {
     const group = await GroupJoinModel.findOne({ userId });
