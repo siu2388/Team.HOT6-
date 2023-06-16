@@ -27,9 +27,9 @@ export default function ManageModal({
     setIsJoinModalOpen(false);
   };
 
-  const onClickTumblerText = (index) => {
+  const onClickTumblerText = index => {
     const activity = waitingActivity.result[index];
-  
+
     if (selectedActivity && selectedActivity._id === activity._id) {
       setSelectedActivity(null);
     } else {
@@ -37,7 +37,6 @@ export default function ManageModal({
       console.log(`backend/uploads/${activity.proofImg}`);
     }
   };
-  
 
   const resetSelectedActivity = () => {
     setSelectedActivity(null);
@@ -62,12 +61,12 @@ export default function ManageModal({
           {isJoinModalOpen ? (
             <MembersInfo>
               {waitingMembers.length > 0 ? (
-                waitingMembers?.map((el) => (
+                waitingMembers?.map(el => (
                   <MemberItem key={el._id}>
                     <MemberNameBox>
                       <Avatar alt="멤버 이미지" src={`${API.imgUrl}${el.userId.profileImg}`} />
                       <MemberText>
-                        {el.userId.name}({el.userId.nickname})
+                        {el.userId.name}({el.createdAt})
                       </MemberText>
                     </MemberNameBox>
                     <ManageButton>
@@ -86,17 +85,22 @@ export default function ManageModal({
                 waitingActivity.result.map((activity, index) => (
                   <MemberItem key={activity._id}>
                     <MemberNameBox>
-                      <Avatar alt="멤버 이미지" src={`${API.imgUrl}${activity.userId.profileImg}`} />
+                      {console.log(activity)}
+                      <Avatar
+                        alt="멤버 이미지"
+                        src={`${API.imgUrl}${activity.userId.profileImg}`}
+                      />
                       <MemberText>
-                        {activity.userId.name}({activity.userId.nickname})
+                        {activity.userId.name}
+                        <span>{activity.usedDate.slice(0, 10)}</span>
                       </MemberText>
                       <TumblerText onClick={() => onClickTumblerText(index)}>
                         {activity.category === 'tumbler' ? '📷 텀블러' : '📷다회용기'}
                       </TumblerText>
                     </MemberNameBox>
                     <ManageButton>
-                      <AcceptButton onClick={() => onClickAcceptActivity(index)}>수락</AcceptButton>
-                      <RejectButton onClick={() => onClickRefuseActivity(index)}>거절</RejectButton>
+                      <AcceptButton onClick={() => onClickAcceptActivity(index)}>인증</AcceptButton>
+                      <RejectButton onClick={() => onClickRefuseActivity(index)}>반려</RejectButton>
                     </ManageButton>
                   </MemberItem>
                 ))
@@ -138,7 +142,7 @@ const CloseButton = styled.button`
   border: none;
   color: #777777;
   font-size: 10px;
-  width:10px;
+  width: 10px;
   cursor: pointer;
 `;
 
@@ -298,6 +302,10 @@ const MemberItem = styled.div`
 const MemberText = styled.span`
   font-size: 16px;
   margin-left: 10px;
+  span {
+    font-size: 1.2rem;
+    margin-left: 1rem;
+  }
 `;
 
 const MemberNameBox = styled.div`

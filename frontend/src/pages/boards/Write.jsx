@@ -120,7 +120,12 @@ export default function BoardWrite({ isEdit }) {
             </S.DefaultInputBox>
             <S.TextareaBox>
               <p>내용</p>
-              <textarea name="description" onChange={onChangeInput} value={description} />
+              <textarea
+                placeholder="내용을 입력해주세요."
+                name="description"
+                onChange={onChangeInput}
+                value={description}
+              />
             </S.TextareaBox>
             <S.PhotoClipBox>
               <p>사진 첨부</p>
