@@ -25,7 +25,6 @@ export default function GroupCalendar({ title, userInfo }) {
   const [calendarData, setCalendarData] = useState([]);
   const [memberNames, setMemberNames] = useState([]);
   const groupId = useParams().id;
-  console.log(selectedDate, '!!!!!!!');
 
   const fetchCalendarData = async date => {
     try {
@@ -34,8 +33,7 @@ export default function GroupCalendar({ title, userInfo }) {
         .slice(0, 10);
       const res = await api.get(`/activities/${groupId}/${formattedDate}`);
       const data = res.data.activityInfo;
-      console.log(data);
-
+      
       setCalendarData(data || []);
       const tumbler = data?.tumbler || 0;
       const multipleContainers = data?.multipleContainers || 0;
@@ -53,11 +51,11 @@ export default function GroupCalendar({ title, userInfo }) {
     const formattedDate = date.toISOString().slice(0, 10);
     const tileData = calendarData.filter(data => {
       const dataDate = new Date(data.date);
-      dataDate.setDate(dataDate.getDate() - 1);
+      dataDate.setDate(dataDate.getDate() - 1); 
       const formattedDataDate = dataDate.toISOString().slice(0, 10);
       return formattedDataDate === formattedDate;
     });
-
+  
     if (tileData.length > 0) {
       return tileData.map((activity, index) => (
         <CalendarContent key={index}>
@@ -65,7 +63,7 @@ export default function GroupCalendar({ title, userInfo }) {
         </CalendarContent>
       ));
     }
-
+  
     return null;
   };
 
@@ -97,17 +95,14 @@ export default function GroupCalendar({ title, userInfo }) {
       const year = date.getFullYear();
       const monthDate = `${year}-${formattedNextMonth}`;
       const month = Number(monthDate.split('-')[1]).toString();
-      console.log(monthDate, 'monthdDate');
       const res = await api.get(`/activities/${groupId}/${monthDate}`);
       const data = res.data.activityInfo;
 
       const response = await api.get(`/activities/${groupId}/${monthDate}/totalCount`);
       const totaldata = response.data;
-      console.log('total!!!!!!!', totaldata);
       setCalendarData(data || []);
       const tumbler = totaldata?.tumbler || 0;
       const multipleContainers = totaldata?.multipleContainers || 0;
-      console.log(tumbler, multipleContainers);
       setTumblerUsage(tumbler);
       setContainerUsage(multipleContainers);
       setMonthDateTotal(month);
@@ -126,113 +121,110 @@ export default function GroupCalendar({ title, userInfo }) {
       const formattedDate = selectedDateCopy.toISOString().slice(0, 10);
       const response = await api.get(`/activities/${groupId}/${formattedDate}`);
       const data = response.data.activityInfo;
-
+  
       if (data && Array.isArray(data)) {
         const selectedDateCopy = new Date(formattedDate);
-        selectedDateCopy.setDate(selectedDateCopy.getDate() + 1);
+        selectedDateCopy.setDate(selectedDateCopy.getDate()+1);
         const selectedDateData = data.filter(
-          member => member.date === selectedDateCopy.toISOString().slice(0, 10),
+          (member) => member.date === selectedDateCopy.toISOString().slice(0, 10)
         );
-        console.log('data!!!!1', selectedDateData);
         const filteredMembers = selectedDateData.reduce((acc, member) => {
-          const existingMember = acc.find(item => item.nickname === member.nickname);
+          const existingMember = acc.find(
+            (item) => item.nickname === member.nickname
+          );
           if (!existingMember) {
             acc.push(member);
           }
           return acc;
         }, []);
-        console.log('data!!!!2', filteredMembers);
         setMemberNames(filteredMembers);
       } else {
         setMemberNames([]);
       }
+  
     } catch (error) {
       console.log('Error fetching member profile:', error);
     }
   };
-
+  
   useEffect(() => {
     fetchMemberProfile();
   }, [selectedDate, groupId]);
 
   return (
     <>
-      <CalendarWrap>
-        <CalendarBox>
-          <Calendar
-            calendarType="US"
-            value={selectedDate}
-            onChange={handleDateChange}
-            tileClassName={[tileClassName, titleSat]}
-            tileContent={tileContent}
-            onActiveStartDateChange={({ activeStartDate, view }) => {
-              if (view === 'month') {
-                onClickMonth(activeStartDate);
-              }
-            }}
-          />
-        </CalendarBox>
-        <CalendarDetailBox>
-          <TodayDateBox>
-            <div>
-              <TodayDate>{getDate(selectedDate)}</TodayDate>
-              <TodayDw>{getDayOfWeek(selectedDate)}</TodayDw>
-            </div>
-            {groupId === userInfo?.user?.groupId && (
-              <AddBtn onClick={onClickToggleModal}>
-                <img src="/images/groups/details/addBtn.png" alt="" />
-              </AddBtn>
-            )}
-          </TodayDateBox>
-          <MemberProfilies>
-            {memberNames.map((member, index) => (
-              <CalendarProfile key={index} member={member.members} />
-            ))}
-          </MemberProfilies>
-        </CalendarDetailBox>
-        {isOpen && (
-          <AddActiveModal onClickToggleModal={onClickToggleModal} selectedDate={selectedDate} />
-        )}
-      </CalendarWrap>
-      <AdditionalBox>
-        <ProgressContainer>
-          <ProgressTitle>
-            <IconContainer>🥤텀블러</IconContainer>
-            <ProgressBar>
-              <FilledProgressBar width={tumblerWidth} />
-            </ProgressBar>
-            <ProgressValue>{tumblerUsage}</ProgressValue>
-          </ProgressTitle>
-          <ProgressTitle>
-            <IconContainer>🫙다회용기</IconContainer>
-            <ProgressBar>
-              <FilledProgressBar width={containerWidth} />
-            </ProgressBar>
-            <ProgressValue>{containerUsage}</ProgressValue>
-          </ProgressTitle>
-        </ProgressContainer>
-        <EarthBox>
-          <LogoImage>
-            <img src="/images/commons/coinearth.png" alt="사랑해 지구야 로고" />
-          </LogoImage>
-          <StatusMessage>
-            <SpeechBubble>
-              <SpeechText>Good!</SpeechText>
-              <Desc>
-                &apos;{title}&apos; 그룹의 <br /> {monthDateTotal}월 텀블러 사용 횟수는{' '}
-                <span>{tumblerUsage}회</span>,
-              </Desc>
-              <Desc>
-                다회용기 사용 횟수는 <span>{containerUsage}회</span>야!
-              </Desc>
-              <SpeechHighlight>
-                우리는 {monthDateTotal}월에 ⭐️<span>{totalUsage}회</span>⭐️ 지구를 지켰어!
-              </SpeechHighlight>
-            </SpeechBubble>
-          </StatusMessage>
-        </EarthBox>
-      </AdditionalBox>
-    </>
+    <CalendarWrap>
+      <CalendarBox>
+        <Calendar
+          calendarType="US"
+          value={selectedDate}
+          onChange={handleDateChange}
+          tileClassName={[tileClassName, titleSat]}
+          tileContent={tileContent}
+          onActiveStartDateChange={({ activeStartDate, view }) => {
+            if (view === 'month') {
+              onClickMonth(activeStartDate);
+            }
+          }}
+        />
+      </CalendarBox>
+      <CalendarDetailBox>
+        <TodayDateBox>
+          <div>
+            <TodayDate>{getDate(selectedDate)}</TodayDate>
+            <TodayDw>{getDayOfWeek(selectedDate)}</TodayDw>
+          </div>
+          {groupId === userInfo?.user?.groupId && (
+            <AddBtn onClick={onClickToggleModal}>
+              <img src="/images/groups/details/addBtn.png" alt="" />
+            </AddBtn>
+          )}
+        </TodayDateBox>
+        <MemberProfilies>
+        {memberNames.map((member, index) => (
+            <CalendarProfile
+              key={index}
+              member={member.members}
+            />
+          ))}
+        </MemberProfilies>
+      </CalendarDetailBox>
+      {isOpen && (
+        <AddActiveModal onClickToggleModal={onClickToggleModal} selectedDate={selectedDate} />
+      )}
+    </CalendarWrap>
+    <AdditionalBox>
+    <ProgressContainer>
+      <ProgressTitle>
+        <IconContainer>🥤텀블러</IconContainer>
+        <ProgressBar>
+          <FilledProgressBar width={tumblerWidth} />
+        </ProgressBar>
+        <ProgressValue>{tumblerUsage}</ProgressValue>
+      </ProgressTitle>
+      <ProgressTitle>
+        <IconContainer>🫙다회용기</IconContainer>
+        <ProgressBar>
+          <FilledProgressBar width={containerWidth} />
+        </ProgressBar>
+        <ProgressValue>{containerUsage}</ProgressValue>
+      </ProgressTitle>
+    </ProgressContainer>
+    <EarthBox>
+      <LogoImage>
+        <img src="/images/commons/coinearth.png" alt="사랑해 지구야 로고" />
+      </LogoImage>
+      <StatusMessage>
+        <SpeechBubble>
+          <SpeechText>Good!</SpeechText>
+          <Desc>{title} 그룹의 {monthDateTotal}월 텀블러 사용 횟수는 {tumblerUsage}회,</Desc>
+          <Desc>다회용기 사용 횟수는 {containerUsage}회야!</Desc>
+          <SpeechHighlight>우리는 {monthDateTotal}월에 ⭐️{totalUsage}회⭐️ 지구를 지켰어!</SpeechHighlight>
+        </SpeechBubble>
+      </StatusMessage>
+    </EarthBox>
+  </AdditionalBox>
+  </>
   );
 }
 
@@ -385,6 +377,7 @@ const AdditionalBox = styled.div`
 const ProgressContainer = styled.div`
   display: flex;
   align-items: center;
+  gap: 4rem;
   flex-direction: column;
 `;
 
@@ -442,12 +435,6 @@ const SpeechBubble = styled.div`
   border-radius: 2rem;
   padding: 3rem;
   margin-left: 7rem;
-
-  span {
-    font-size: 1.7rem;
-    font-weight: 700;
-    color: #01881c;
-  }
 
   &::before {
     content: '';

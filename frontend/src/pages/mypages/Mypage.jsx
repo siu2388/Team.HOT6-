@@ -42,8 +42,6 @@ export default function Mypage() {
     getActivities();
   }, [actPage]);
 
-  console.log(activities);
-
   useEffect(() => {
     if (!sessionStorage.getItem('userToken')) {
       navigate('/');
@@ -75,14 +73,11 @@ export default function Mypage() {
       const result = await API.get(`/activities/${myGroup?.result?.[0]?.groupId?._id}/waiting`);
       setWaitingActivity(result.data);
     };
-    console.log(getWaitingActivity);
     if (myGroup?.result?.[0]?.groupId?._id) {
       getWaitingActivity();
     }
   }, [myGroup]);
 
-  console.log('waitingActivity!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', waitingActivity);
-  console.log('mygroup!!!!!!!!!!!!!', myGroup);
   const navigate = useNavigate();
 
   const openManageModal = () => {
@@ -674,8 +669,6 @@ const Modal = styled.div`
 
 const ModalContent = styled.div`
   position: relative;
-  margin-right:35rem;
-  width: 35rem;
   border-radius: 8px;
   display: flex;
   align-items: center;

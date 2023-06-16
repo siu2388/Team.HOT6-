@@ -21,8 +21,6 @@ export default function BoardList() {
     setPage(page);
   };
 
-  console.log(boardList);
-
   return (
     <S.Wrapper>
       <S.TitleBanner>

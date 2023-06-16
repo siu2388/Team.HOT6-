@@ -8,7 +8,6 @@ import { res } from '../../../styles/responsive';
 import * as API from '../../../api/index';
 
 export default function ListBox({ group }) {
-  console.log(group);
   return (
     <ListBoxWrap>
       <Link to={`${ROUTE.GROUP_DETAIL.link}/${group._id}`}>

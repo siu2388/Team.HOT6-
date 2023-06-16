@@ -39,8 +39,6 @@ export default function GroupWritePage({ isEdit, closeEditModal, myGroup }) {
     setSliderValue(value);
   };
 
-  console.log(myGroup);
-
   useEffect(() => {
     if(isEdit) {
       setGroupTitle(myGroup?.result?.[0]?.groupId?.title);
@@ -185,7 +183,7 @@ export default function GroupWritePage({ isEdit, closeEditModal, myGroup }) {
               <Link>{isEdit ? '수정' : '등록'}</Link>
             </Button>
             {isEdit ? (
-              <Button variant="outlined" color="success" onClick={closeEditModal} style={{ width: '150px', height: '63px' }}>
+              <Button variant="outlined" color="success" onClick={closeEditModal} style={{ width: '15.3rem', height: '6.3rem' }}>
                 취소
               </Button>
             ):(
