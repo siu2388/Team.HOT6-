@@ -16,15 +16,8 @@ const imgupload = upload.single('thumbnail');
 groupRouter.post('/groups', loginRequired, imgupload, async (req, res, next) => {
   try {
     const groupOwnerId = req.currentUserId;
-    const { title, totalNumOfMembers, createdAt, description } = req.body;
+    const { title, totalNumOfMembers, description } = req.body;
     const thumbnail = req.file ? req.file.filename : undefined;
-
-    //그룹 중복 생성 방지
-    const isGroupexisted = await groupService.getGroupByOwnerId(groupOwnerId);
-    if (isGroupexisted) {
-      res.status(401).json({ message: '생성한 그룹이 존재합니다.' });
-      return;
-    }
 
     const newGroup = await groupService.addGroup({
       groupOwnerId,
