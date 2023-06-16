@@ -60,10 +60,12 @@ export default function BoardList() {
           ))}
         </S.ReviewListContainer>
         <S.BtnBox>
-        <S.BoardT>환경을 지키자 🍀</S.BoardT>
-          <S.BoardBtn>
-            <Link to={ROUTE.BOARDWRITE.link}>글쓰기</Link>
-          </S.BoardBtn>
+          <S.BoardT>환경을 지키자 🍀</S.BoardT>
+          {sessionStorage.getItem('userToken') && (
+            <S.BoardBtn>
+              <Link to={ROUTE.BOARDWRITE.link}>글쓰기</Link>
+            </S.BoardBtn>
+          )}
         </S.BtnBox>
         <S.PaginationBox>
           <Pagination

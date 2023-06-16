@@ -210,13 +210,19 @@ export default function GroupCalendar({ title, userInfo }) {
           </LogoImage>
           <StatusMessage>
             <SpeechBubble>
-              <SpeechText>Good!</SpeechText>
+              <SpeechText>
+                {totalUsage === 0 && 'CHEER UP!!'}
+                {totalUsage > 0 && totalUsage < 10 && 'GOOD!!'}
+                {totalUsage > 10 && 'EXCELLENT!!'}
+              </SpeechText>
               <Desc>
-                {title} 그룹의 {monthDateTotal}월 텀블러 사용 횟수는 {tumblerUsage}회,
+                {title} 그룹의 {monthDateTotal}월 텀블러 사용 횟수는 <span>{tumblerUsage}회</span>,
               </Desc>
-              <Desc>다회용기 사용 횟수는 {containerUsage}회야!</Desc>
+              <Desc>
+                다회용기 사용 횟수는 <span>{containerUsage}회</span>야!
+              </Desc>
               <SpeechHighlight>
-                우리는 {monthDateTotal}월에 ⭐️{totalUsage}회⭐️ 지구를 지켰어!
+                우리는 {monthDateTotal}월에 ⭐️<span>{totalUsage}회</span>⭐️ 지구를 지켰어!
               </SpeechHighlight>
             </SpeechBubble>
           </StatusMessage>
@@ -433,6 +439,11 @@ const SpeechBubble = styled.div`
   border-radius: 2rem;
   padding: 3rem;
   margin-left: 2rem;
+  span {
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #01881c;
+  }
 
   &::before {
     content: '';
