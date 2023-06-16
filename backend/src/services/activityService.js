@@ -5,9 +5,7 @@ import { DateTime } from 'luxon';
 class activityService {
   // 활동 등록
   static async addActivity({ userId, groupId, state, name, usedDate, category, proofImg }) {
-    console.log(usedDate);
     usedDate = DateTime.fromJSDate(new Date(usedDate)).setZone('Asia/Seoul').toISODate();
-    console.log(usedDate, '2');
     const newActivity = {
       userId,
       groupId,
@@ -63,8 +61,6 @@ class activityService {
         nickname: activity.userId.nickname,
         profileImg: activity.userId.profileImg,
       };
-
-      console.log(member);
 
       const existingMember = activityDataByDate[dateKey].members.find(
         existing => existing.userId === member.userId,

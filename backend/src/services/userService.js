@@ -52,6 +52,7 @@ class userAuthService {
 
     return User.create({ newUser });
   }
+  
   //로그인
   static async getUser({ userId, password }) {
     const user = await User.findByUserId({ userId });
@@ -89,11 +90,13 @@ class userAuthService {
     };
     return loginUser;
   }
+
   // 유저 목록
   static async getUsers() {
     const users = await User.findAll();
     return users;
   }
+
   // 정보 수정
   static async setUser({ loginedId, toUpdate }) {
     let user = await User.findById({ loginedId });
@@ -175,13 +178,8 @@ class userAuthService {
     const deleteGroupId = await User.deleteGroupId({ groupId, userId });
     return deleteGroupId;
   }
-  // // 그룹 삭제 시 멤버의 groupId값 삭제
-  // static async deleteMembersGroupId({ groupId }) {
-  //   const deleteGroupId = await User.deleteMembersGroupId({ groupId });
-  //   console.log('서비스쪽멤버user-groupId',deleteGroupId);
-  //   return deleteGroupId;
-  // }
 
+  //유저 인증샷 관리자 승인
   static async getUserActivityCount(userId, category) {
     const count = await ActivityModel.countDocuments({
       userId: userId,
@@ -191,6 +189,7 @@ class userAuthService {
 
     return count;
   }
+
   // 유저 정보 조회
   static async getUserInfo({ loginedId }) {
     try {
