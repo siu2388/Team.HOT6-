@@ -157,9 +157,9 @@ const RankingBox = styled.div`
 `;
 
 const RankTitle = styled.h2`
-  font-size: 3.6rem;
+  font-size: 4rem;
   font-weight: 500;
-  color: #fff;
+  color: #f9fae4;
   text-align: center;
   margin-bottom: 2.5rem;
 `;

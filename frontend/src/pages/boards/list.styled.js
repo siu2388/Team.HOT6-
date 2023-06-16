@@ -27,7 +27,7 @@ export const ReviewListContainer = styled.section`
 export const TitleUl = styled.ul`
   width: 100%;
   display: flex;
-  padding: 3.6rem 0;
+  padding: 3.2rem 0;
   border-top: 1px solid #111;
   border-bottom: 2px solid #d9d9d9;
   margin-bottom: 0;
@@ -36,7 +36,7 @@ export const TitleUl = styled.ul`
 
 export const ListLiNum = styled.li`
   width: 11.66%;
-  font-size: 1.6rem;
+  font-size: 2.8rem;
   font-weight: 400;
   color: #666;
   text-align: center;
@@ -46,7 +46,7 @@ export const ListLiNum = styled.li`
 `;
 export const ListLiMountain = styled.li`
   width: 7.91%;
-  font-size: 1.6rem;
+  font-size: 2rem;
   font-weight: 400;
   color: #111;
   text-align: center;
@@ -56,7 +56,7 @@ export const ListLiMountain = styled.li`
 `;
 export const ListLiTitle = styled.li`
   width: 58.33%;
-  font-size: 1.6rem;
+  font-size: 2.8rem;
   font-weight: 500;
   color: #111;
   padding-left: 5.5rem;
@@ -67,13 +67,13 @@ export const ListLiTitle = styled.li`
     color: #111;
   }
   @media ${res.mobile} {
-    width: 45%;
-    padding-left: 4rem;
+    width: 60%;
+    padding-left: 6rem;
   }
 `;
 export const ListLiWrite = styled.li`
   width: 10.41%;
-  font-size: 1.6rem;
+  font-size: 2.8rem;
   font-weight: 500;
   color: #111;
   text-align: center;
@@ -84,7 +84,7 @@ export const ListLiWrite = styled.li`
 `;
 export const ListLiCreatedAt = styled.li`
   width: 16%;
-  font-size: 1.6rem;
+  font-size: 2.8rem;
   font-weight: 500;
   text-align: center;
   @media ${res.mobile} {
@@ -103,7 +103,7 @@ export const ContentUl = styled.ul`
 export const Write = styled.span`
   width: 80px;
   padding: 0.8rem 0;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: 400;
   text-align: center;
   margin: 0 auto;
@@ -114,7 +114,7 @@ export const Title = styled.div`
     display: block;
     width: 100%;
     height: 100%;
-    font-size: 1.5rem;
+    font-size: 2rem;
   }
   :hover {
   }
@@ -125,12 +125,12 @@ export const Title = styled.div`
 `;
 
 export const CreatedAt = styled.span`
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: 400;
   color: #111;
   padding-left: 1rem;
   @media (max-width: 920px) {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 `;
 
@@ -206,11 +206,15 @@ export const TitleBanner = styled.div`
   gap: 1rem;
   width: 100%;
   padding: 8rem 0;
+  margin-top:-3rem;
+  padding-right:5rem;
   background-color: #111;
 `;
 
 export const BannerImgBox = styled.div`
-  width: 8rem;
+  width: 12rem;
+  margin-top:-2rem;
+  margin-bottom: 3rem;
   img {
     width: 100%;
   }
@@ -219,26 +223,29 @@ export const BannerImgBox = styled.div`
 export const BoardTitleBox = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
+  margin: 0 5rem;
   gap: 1rem;
 `;
 
 export const BTitle = styled.h2`
-  font-size: 5rem;
+  font-size: 6rem;
   font-weight: 600;
   color: #fff;
   text-align: center;
 `;
 
 export const BoardT = styled.h4`
-  font-size: 2.4rem;
+  font-size: 3rem;
   font-weight: 400;
   color: #111;
+  margin-left: 2rem;
 `;
 
 export const BtnBox = styled.div`
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   margin-top: 3rem;
 `;
@@ -247,12 +254,17 @@ export const BoardBtn = styled.button`
   a {
     display: block;
     padding: 1rem 2rem;
-    font-size: 1.4rem;
+    font-size: 2rem;
     font-weight: 500;
     color: #fff;
   }
   background-color: #01881c;
   border-radius: 4px;
+  margin-right: 2rem;
+  width:12rem;
+  &:hover {
+    background-color: #00cc66;
+  }
 `;
 
 export const PaginationBox = styled.div`

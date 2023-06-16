@@ -216,7 +216,7 @@ export default function GroupCalendar({ title, userInfo }) {
       </LogoImage>
       <StatusMessage>
         <SpeechBubble>
-          <SpeechText>Good!</SpeechText>
+          <SpeechText>Good!🌻</SpeechText>
           <Desc>{title} 그룹의 {monthDateTotal}월 텀블러 사용 횟수는 {tumblerUsage}회,</Desc>
           <Desc>다회용기 사용 횟수는 {containerUsage}회야!</Desc>
           <SpeechHighlight>우리는 {monthDateTotal}월에 ⭐️{totalUsage}회⭐️ 지구를 지켰어!</SpeechHighlight>
@@ -253,6 +253,7 @@ const CalendarBox = styled.div`
     width: 100%;
     border-radius: 1rem;
     border: 1px solid #999;
+    padding-top: 2rem;
   }
 
   .react-calendar__tile {
@@ -265,16 +266,16 @@ const CalendarBox = styled.div`
       top: 1rem;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 1.5rem;
+      font-size: 1.9rem;
     }
   }
 
   .react-calendar__navigation__label__labelText {
-    font-size: 1.8rem;
+    font-size: 3rem;
   }
 
   .react-calendar__navigation button {
-    font-size: 1.8rem;
+    font-size: 2rem;
     border-radius: 1rem;
   }
 
@@ -325,7 +326,7 @@ const TodayDateBox = styled.div`
 `;
 
 const TodayDate = styled.h3`
-  font-size: 2rem;
+  font-size: 2.8rem;
   font-weight: 600;
   color: #111;
   margin-bottom: 1rem;
@@ -344,7 +345,7 @@ const MemberProfilies = styled.div`
 `;
 
 const CalendarContent = styled.span`
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 400;
   color: #111;
 `;
@@ -389,9 +390,9 @@ const ProgressTitle = styled.div`
 
 const IconContainer = styled.div`
   margin-top: 3rem;
-  width: 10rem;
+  width: 15rem;
   height: 5rem;
-  font-size: 2rem;
+  font-size: 2.5rem;
 `;
 
 const ProgressBar = styled.div`
@@ -409,7 +410,7 @@ const FilledProgressBar = styled.div`
 `;
 
 const ProgressValue = styled.span`
-  font-size: 2.2rem;
+  font-size: 3rem;
   font-weight: 500;
   color: #111;
 `;
@@ -448,11 +449,10 @@ const SpeechBubble = styled.div`
   }
 `;
 const SpeechText = styled.p`
-  font-size: 4rem;
+  font-size: 3.5rem;
   font-weight: bold;
   margin-bottom: 1rem;
-  color: #98af47;
-  font-family: 'Comic Sans MS', cursive;
+  color: #718231;
 `;
 
 const Desc = styled.p`

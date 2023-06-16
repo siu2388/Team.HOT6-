@@ -70,36 +70,42 @@ export default function GroupWritePage({ isEdit, closeEditModal, myGroup }) {
   const onClickAddGroup = async () => {
     try {
       const formData = new FormData();
-
+  
       formData.append('title', groupTitle);
       formData.append('description', description);
       formData.append('totalNumOfMembers', sliderValue);
       formData.append('thumbnail', thumbnail);
-
-      if(isEdit){
-        await axios.put(`${API.serverUrl}/groups/${myGroup?.result?.[0]?.groupId?._id}`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${sessionStorage.getItem('userToken')}`,
-          },
-        });
+  
+      if (isEdit) {
+        if (sliderValue < myGroup?.members?.length) {
+          return;
+        }
+  
+        await axios.put(
+          `${API.serverUrl}/groups/${myGroup?.result?.[0]?.groupId?._id}`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${sessionStorage.getItem('userToken')}`,
+            },
+          }
+        );
         setIsScucessModal({
           state: true,
           message: '그룹을 수정하였습니다.',
         });
-        setUpdate(prev => prev + 1);
+        setUpdate((prev) => prev + 1);
         navigate(`/groups/${myGroup?.result?.[0]?.groupId?._id}`);
-      }else{
+      } else {
         const result = await API.formPost('/groups', formData);
         setIsScucessModal({
           state: true,
           message: '그룹을 등록하였습니다.',
         });
-        setUpdate(prev => prev + 1);
+        setUpdate((prev) => prev + 1);
         navigate(`/groups/${result.data.newGroup._id}`);
       }
-
-     
     } catch (err) {
       setIsErrorModal({
         state: true,
@@ -107,6 +113,7 @@ export default function GroupWritePage({ isEdit, closeEditModal, myGroup }) {
       });
     }
   };
+  
 
   return (
     <WriteWrap>
@@ -168,20 +175,21 @@ export default function GroupWritePage({ isEdit, closeEditModal, myGroup }) {
             />
           </InputBox>
           <BtnBox>
-            <Button
-              variant="contained"
-              color="success"
-              disabled={
-                titleError === true ||
-                groupTitle === '' ||
-                descriptionError === true ||
-                description === '' ||
-                sliderValue === 0
-              }
-              onClick={onClickAddGroup}
-            >
-              <Link>{isEdit ? '수정' : '등록'}</Link>
-            </Button>
+          <Button
+            variant="contained"
+            color={sliderValue < myGroup?.members?.length ? 'error' : 'success'}
+            disabled={
+              titleError === true ||
+              groupTitle === '' ||
+              descriptionError === true ||
+              description === '' ||
+              sliderValue === 0 ||
+              (isEdit && sliderValue < myGroup?.members?.length)
+            }
+            onClick={sliderValue < myGroup?.members?.length ? null : onClickAddGroup}
+          >
+            <Link>{isEdit ? '수정' : '등록'}</Link>
+          </Button>
             {isEdit ? (
               <Button variant="outlined" color="success" onClick={closeEditModal} style={{ width: '15.3rem', height: '6.3rem' }}>
                 취소
