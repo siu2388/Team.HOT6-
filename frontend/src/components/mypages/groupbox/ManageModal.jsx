@@ -34,7 +34,6 @@ export default function ManageModal({
       setSelectedActivity(null);
     } else {
       setSelectedActivity(activity);
-      console.log(`backend/uploads/${activity.proofImg}`);
     }
   };
   
