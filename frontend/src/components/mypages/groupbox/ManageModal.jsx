@@ -65,7 +65,7 @@ export default function ManageModal({
                     <MemberNameBox>
                       <Avatar alt="멤버 이미지" src={`${API.imgUrl}${el.userId.profileImg}`} />
                       <MemberText>
-                        {el.userId.name}({el.createdAt})
+                        {el.userId.name}({el.userId.nickname})
                       </MemberText>
                     </MemberNameBox>
                     <ManageButton>
