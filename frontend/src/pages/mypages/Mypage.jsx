@@ -224,6 +224,9 @@ export default function Mypage() {
         {activeMenuItem === '나의그룹' &&
           (userInfo?.user?.groupId ? (
             <LargeBox>
+              {myGroup?.result?.[0]?.groupId?.groupOwnerId?._id === userInfo?.user?._id && (
+                      <EditIcon onClick={openEditModal}><img src="/images/commons/pencil.png" /></EditIcon> 
+                    )}
               <GroupInfo>
                 <GroupImage
                   alt="그룹 사진"
@@ -262,9 +265,6 @@ export default function Mypage() {
                     </GroupCreationDate>
                   </GroupCreation>
                   <GroupButton>
-                  {myGroup?.result?.[0]?.groupId?.groupOwnerId?._id === userInfo?.user?._id && (
-                      <EditIcon onClick={openEditModal}><img src="/images/commons/pencil.png" /></EditIcon> 
-                    )}
                     {myGroup?.result?.[0]?.groupId?.groupOwnerId?._id === userInfo?.user?._id ? (
                       <GroupLeaveButton onClick={onClickDelGroup}>그룹삭제</GroupLeaveButton>
                     ) : (
@@ -648,10 +648,18 @@ const ErrorText = styled.p`
 `;
 
 const EditIcon = styled.button`
+position:absolute;
+right:2rem;
+top:2rem;
   img{
     width: 3rem;
     height: 3rem;
+    transform: rotate(25deg);
+    @media (max-width: 768px) { 
+      width: 5rem;
+      height: 5rem;
     }
+  }
 `;
 
 const Modal = styled.div`
