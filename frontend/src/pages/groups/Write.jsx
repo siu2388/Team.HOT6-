@@ -8,7 +8,6 @@ import { useRecoilState } from 'recoil';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-
 const marks = [
   {
     value: 0,
@@ -19,7 +18,6 @@ const marks = [
     label: '100명',
   },
 ];
-
 
 export default function GroupWritePage({ isEdit, closeEditModal, myGroup }) {
   const [sliderValue, setSliderValue] = useState(0);
@@ -32,19 +30,18 @@ export default function GroupWritePage({ isEdit, closeEditModal, myGroup }) {
   const [, setIsErrorModal] = useRecoilState(isErrorModalState);
   const [, setUpdate] = useRecoilState(updateState);
 
-
   const navigate = useNavigate();
 
-  const onChangeSliderValue = (value) => {
+  const onChangeSliderValue = value => {
     setSliderValue(value);
   };
 
   useEffect(() => {
-    if(isEdit) {
+    if (isEdit) {
       setGroupTitle(myGroup?.result?.[0]?.groupId?.title);
       setDescription(myGroup?.result?.[0]?.groupId?.description);
     }
-  },[isEdit]);
+  }, [isEdit]);
 
   const onChangeInput = e => {
     const { name, value } = e.target;
@@ -107,9 +104,10 @@ export default function GroupWritePage({ isEdit, closeEditModal, myGroup }) {
         navigate(`/groups/${result.data.newGroup._id}`);
       }
     } catch (err) {
+      console.log(err);
       setIsErrorModal({
         state: true,
-        message: err.response.data.message,
+        message: err.response.data,
       });
     }
   };
@@ -136,30 +134,31 @@ export default function GroupWritePage({ isEdit, closeEditModal, myGroup }) {
             />
           </InputBox>
           <SliderBox>
-            {isEdit?(
+            {isEdit ? (
               <>
-            <Slider
-              aria-label="Custom marks"
-              defaultValue={Number(myGroup?.result?.[0]?.groupId?.totalNumOfMembers)}
-              step={1}
-              valueLabelDisplay="auto"
-              marks={marks}
-              getAriaValueText={onChangeSliderValue}
-            />
-            <p>{sliderValue}명</p>
-            </>)
-            :(
-            <>
-            <Slider
-              aria-label="Custom marks"
-              defaultValue={sliderValue}
-              step={1}
-              valueLabelDisplay="auto"
-              marks={marks}
-              getAriaValueText={onChangeSliderValue}
-            />
-            <p>{sliderValue}명</p>
-            </>)}
+                <Slider
+                  aria-label="Custom marks"
+                  defaultValue={Number(myGroup?.result?.[0]?.groupId?.totalNumOfMembers)}
+                  step={1}
+                  valueLabelDisplay="auto"
+                  marks={marks}
+                  getAriaValueText={onChangeSliderValue}
+                />
+                <p>{sliderValue}명</p>
+              </>
+            ) : (
+              <>
+                <Slider
+                  aria-label="Custom marks"
+                  defaultValue={sliderValue}
+                  step={1}
+                  valueLabelDisplay="auto"
+                  marks={marks}
+                  getAriaValueText={onChangeSliderValue}
+                />
+                <p>{sliderValue}명</p>
+              </>
+            )}
           </SliderBox>
           <InputBox>
             <TextField
@@ -191,11 +190,16 @@ export default function GroupWritePage({ isEdit, closeEditModal, myGroup }) {
             <Link>{isEdit ? '수정' : '등록'}</Link>
           </Button>
             {isEdit ? (
-              <Button variant="outlined" color="success" onClick={closeEditModal} style={{ width: '15.3rem', height: '6.3rem' }}>
+              <Button
+                variant="outlined"
+                color="success"
+                onClick={closeEditModal}
+                style={{ width: '15.3rem', height: '6.3rem' }}
+              >
                 취소
               </Button>
-            ):(
-            <Button variant="outlined" color="success">
+            ) : (
+              <Button variant="outlined" color="success">
                 <Link to={'/groups'}>취소</Link>
               </Button>
             )}

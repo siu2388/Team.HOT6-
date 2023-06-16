@@ -109,9 +109,11 @@ export default function GroupList() {
           <Button variant="contained" onClick={onClickGroupReload}>
             <Link>검색 초기화</Link>
           </Button>
-          <Button variant="contained">
-            <Link to={ROUTE.GROUP_WRITE.link}>그룹등록</Link>
-          </Button>
+          {sessionStorage.getItem('userToken') && (
+            <Button variant="contained">
+              <Link to={ROUTE.GROUP_WRITE.link}>그룹등록</Link>
+            </Button>
+          )}
         </SearchContainer>
         <GroupLists>
           {searchGroupList?.groups?.length > 0

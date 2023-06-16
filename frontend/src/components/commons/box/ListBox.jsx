@@ -9,7 +9,7 @@ import * as API from '../../../api/index';
 
 export default function ListBox({ group }) {
   return (
-    <ListBoxWrap>
+    <ListBoxWrap data-aos="flip-left">
       <Link to={`${ROUTE.GROUP_DETAIL.link}/${group._id}`}>
         <ListBackImg img={`${API.imgUrl}${group?.thumbnail}`} />
         <ListContent>
