@@ -100,7 +100,6 @@ export default function GroupWritePage({ isEdit, closeEditModal, myGroup }) {
         navigate(`/groups/${result.data.newGroup._id}`);
       }
     } catch (err) {
-      console.log(err);
       setIsErrorModal({
         state: true,
         message: err.response.data,

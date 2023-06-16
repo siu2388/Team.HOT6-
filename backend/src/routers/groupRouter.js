@@ -50,7 +50,6 @@ groupRouter.get('/groups', async (req, res, next) => {
     const page = parseInt(req.query.page || 1);
     const limit = 9;
     const skip = (page - 1) * limit;
-    console.log('page : ', page, 'skip : ', skip);
 
     const { groups, totalPages, currentPage } = await groupService.getGroups(page, limit);
 
@@ -86,7 +85,6 @@ groupRouter.get('/searchgroups', async (req, res, next) => {
     const limit = 9;
 
     const { title } = req.query;
-    //
     const { groups: filteredSearch, count } = await groupService.searchGroup({
       title,
     });

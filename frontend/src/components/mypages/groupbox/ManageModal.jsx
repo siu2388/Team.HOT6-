@@ -84,7 +84,6 @@ export default function ManageModal({
                 waitingActivity.result.map((activity, index) => (
                   <MemberItem key={activity._id}>
                     <MemberNameBox>
-                      {console.log(activity)}
                       <Avatar
                         alt="멤버 이미지"
                         src={`${API.imgUrl}${activity.userId.profileImg}`}
@@ -309,22 +308,20 @@ const MemberText = styled.span`
     margin-left: 1rem;
   }
   @media (max-width: 768px) {
-   display: flex;
-   flex-direction: column;
-   margin-left: 5px;
-   width: 12rem;
-   span {
-    margin-left: 0rem;
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+    width: 12rem;
+    span {
+      margin-left: 0rem;
+    }
   }
-  }
-  
 `;
 
 const MemberNameBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-
 `;
 
 const TumblerText = styled.button`

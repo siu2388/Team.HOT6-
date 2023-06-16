@@ -33,7 +33,6 @@ export default function GroupDetailPage() {
         message: '그룹신청에 성공하였습니다. 그룹장 수락 후 그룹 활동이 활성화 됩니다.',
       });
     } catch (err) {
-      console.log(err);
       setIsErrorModal({ state: true, message: err.response.data });
     }
   };
