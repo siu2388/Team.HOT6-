@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import FileUpload from '../../components/commons/FileUpload';
 import { Button, TextField } from '@mui/material';
-
 import SearchIcon from '@mui/icons-material/Search';
 import { Link, useNavigate } from 'react-router-dom';
 import Postcode from '../../components/commons/DaumPostCode';
@@ -92,9 +91,9 @@ export default function JoinPage({ page }) {
 
   useEffect(() => {
     return () => {
-      setPostcodeAddress(''); // Modified line
+      setPostcodeAddress(''); 
     };
-  }, [setPostcodeAddress]); // Modified line
+  }, [setPostcodeAddress]); 
 
   const handleInputChange = e => {
     const { name, value } = e.target;

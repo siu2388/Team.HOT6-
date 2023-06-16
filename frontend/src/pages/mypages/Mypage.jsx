@@ -16,9 +16,11 @@ import { ROUTE } from '../../constants/routes/routeData';
 import { res } from '../../styles/responsive';
 import * as API from '../../api/index';
 import { Avatar, AvatarGroup } from '@mui/material';
+import GroupWritePage from '../groups/Write';
 
 export default function Mypage() {
   const [userInfo] = useRecoilState(userInfoState);
+  const [isEditModalOpen, setIsEditModalOpen]= useState(false);
   const [isManageModalOpen, setIsManageModalOpen] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState('나의그룹');
   const [myGroup, setMyGroup] = useState([]);
@@ -39,8 +41,6 @@ export default function Mypage() {
 
     getActivities();
   }, [actPage]);
-
-  console.log(activities);
 
   useEffect(() => {
     if (!sessionStorage.getItem('userToken')) {
@@ -73,20 +73,23 @@ export default function Mypage() {
       const result = await API.get(`/activities/${myGroup?.result?.[0]?.groupId?._id}/waiting`);
       setWaitingActivity(result.data);
     };
-    console.log(getWaitingActivity);
     if (myGroup?.result?.[0]?.groupId?._id) {
       getWaitingActivity();
     }
   }, [myGroup]);
 
-  console.log('waitingActivity!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', waitingActivity);
-  console.log('mygroup!!!!!!!!!!!!!', myGroup);
   const navigate = useNavigate();
 
   const openManageModal = () => {
     setIsManageModalOpen(true);
   };
 
+  const openEditModal = () => {
+    setIsEditModalOpen(true);
+  };
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+  };
   const handleMenuItemClick = menuItem => {
     setActiveMenuItem(menuItem);
   };
@@ -259,6 +262,9 @@ export default function Mypage() {
                     </GroupCreationDate>
                   </GroupCreation>
                   <GroupButton>
+                  {myGroup?.result?.[0]?.groupId?.groupOwnerId?._id === userInfo?.user?._id && (
+                      <EditIcon onClick={openEditModal}><img src="/images/commons/pencil.png" /></EditIcon> 
+                    )}
                     {myGroup?.result?.[0]?.groupId?.groupOwnerId?._id === userInfo?.user?._id ? (
                       <GroupLeaveButton onClick={onClickDelGroup}>그룹삭제</GroupLeaveButton>
                     ) : (
@@ -300,6 +306,13 @@ export default function Mypage() {
             onClickRefuseActivity={onClickRefuseActivity}
           />
         )}
+        {isEditModalOpen&& (
+          <Modal>
+            <ModalContent>
+            <GroupWritePage isEdit={true} closeEditModal={closeEditModal} myGroup={myGroup}/>
+            </ModalContent>
+          </Modal>
+          )}
       </MenuContainer>
     </Container>
   );
@@ -509,6 +522,10 @@ const GroupMembersCount = styled.div`
 
 const GroupMembersImgBox = styled.div`
   margin-left: 2rem;
+  .MuiAvatar-root {
+    width: 3rem !important;
+    height: 3rem !important;
+  }
 `;
 
 // const GroupMembersImage = styled.img`
@@ -628,4 +645,33 @@ const ErrorText = styled.p`
   font-weight: 400;
   color: #111;
   margin: 3rem 0;
+`;
+
+const EditIcon = styled.button`
+  img{
+    width: 3rem;
+    height: 3rem;
+    }
+`;
+
+const Modal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+`;
+
+const ModalContent = styled.div`
+  position: relative;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 `;

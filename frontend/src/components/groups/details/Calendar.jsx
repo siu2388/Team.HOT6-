@@ -23,9 +23,8 @@ export default function GroupCalendar({ title, userInfo }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
   const [calendarData, setCalendarData] = useState([]);
-  const [memberNames, setMemberNames] = useState([]); 
+  const [memberNames, setMemberNames] = useState([]);
   const groupId = useParams().id;
-  console.log(selectedDate,'!!!!!!!');
 
   const fetchCalendarData = async date => {
     try {
@@ -34,7 +33,6 @@ export default function GroupCalendar({ title, userInfo }) {
         .slice(0, 10);
       const res = await api.get(`/activities/${groupId}/${formattedDate}`);
       const data = res.data.activityInfo;
-      console.log(data);
       
       setCalendarData(data || []);
       const tumbler = data?.tumbler || 0;
@@ -97,17 +95,14 @@ export default function GroupCalendar({ title, userInfo }) {
       const year = date.getFullYear();
       const monthDate = `${year}-${formattedNextMonth}`;
       const month = Number(monthDate.split('-')[1]).toString();
-      console.log(monthDate,'monthdDate');
       const res = await api.get(`/activities/${groupId}/${monthDate}`);
       const data = res.data.activityInfo;
 
       const response = await api.get(`/activities/${groupId}/${monthDate}/totalCount`);
       const totaldata = response.data;
-      console.log('total!!!!!!!',totaldata);
       setCalendarData(data || []);
       const tumbler = totaldata?.tumbler || 0;
       const multipleContainers = totaldata?.multipleContainers || 0;
-      console.log(tumbler,multipleContainers);
       setTumblerUsage(tumbler);
       setContainerUsage(multipleContainers);
       setMonthDateTotal(month);
@@ -133,7 +128,6 @@ export default function GroupCalendar({ title, userInfo }) {
         const selectedDateData = data.filter(
           (member) => member.date === selectedDateCopy.toISOString().slice(0, 10)
         );
-          console.log('data!!!!1',selectedDateData);
         const filteredMembers = selectedDateData.reduce((acc, member) => {
           const existingMember = acc.find(
             (item) => item.nickname === member.nickname
@@ -143,7 +137,6 @@ export default function GroupCalendar({ title, userInfo }) {
           }
           return acc;
         }, []);
-        console.log('data!!!!2',filteredMembers);
         setMemberNames(filteredMembers);
       } else {
         setMemberNames([]);

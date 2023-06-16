@@ -13,6 +13,7 @@ export const MainWrap01 = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-top: 0;
   }
 `;
 
@@ -46,7 +47,7 @@ export const MentBox = styled.div`
   display: flex;
   align-items: center;
   gap: 5rem;
-  margin-right:3rem;
+  margin-right: 3rem;
   & > img {
     width: 30rem;
     animation: ${rotate} 3s linear infinite alternate;
@@ -130,33 +131,37 @@ export const MainWrap02 = styled.div`
   width: 100%;
   height: 100vh;
   background: #ede0f1;
-  padding-top: 12rem;
   overflow: hidden;
   position: relative;
+  padding-top: 11rem;
 
   @media ${res.mobile} {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-top: 0;
   }
 `;
 
 export const MainMent02 = styled.h3`
   width: 90%;
-  font-size: 7rem;
+  font-size: 5rem;
   font-weight: 600;
   color: #078a04;
   line-height: 1.3;
   position: absolute;
   top: 0;
   left: 0;
+  .br {
+    display: none;
+  }
 
   @media (max-width: 1100px) {
     font-size: 5rem;
     left: 50%;
     transform: translateX(-50%);
     .br {
-      display: none;
+      display: block;
     }
   }
 
@@ -169,12 +174,12 @@ export const MainWrap03 = styled.div`
   width: 100%;
   height: 100vh;
   background: #f1f5f0;
-  padding-top: 12rem;
   overflow: hidden;
   position: relative;
+  padding-top: 12rem;
 
   @media ${res.mobile} {
-    padding-top: 15vh;
+    padding-top: 20vh;
   }
 `;
 
@@ -245,14 +250,13 @@ export const SlickContainer = styled.div`
       @media ${res.tablet} {
         flex-direction: column-reverse;
         align-items: center;
-        margin-top: 20rem;
+        margin-top: 15rem;
         flex-direction: row-reverse;
       }
 
       @media (max-width: 1100px) {
         flex-direction: column-reverse;
         align-items: flex-start;
-        margin-top: 20rem;
       }
     }
   }
