@@ -7,6 +7,11 @@ export const BoardDetailContainer = styled.div`
   @media ${res.tablet} {
     width: 90%;
   }
+  img{
+     display:block;
+     margin: 0 auto;
+     max-width:80%
+  }
 `;
 
 export const BoardDetailTitleContainer = styled.div`

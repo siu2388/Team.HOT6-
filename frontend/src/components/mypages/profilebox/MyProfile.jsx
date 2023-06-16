@@ -9,13 +9,13 @@ export default function MyProfile({ userInfo }) {
       <Avatar
         alt="내 프로필"
         src={`${API.imgUrl}${userInfo?.user?.profileImg}`}
-        sx={{ width: 60, height: 60 }}
+        sx={{ width: 80, height: 80 }}
       />
       <UserName>{userInfo?.user?.name}</UserName>
       <Email>{userInfo?.user?.nickname}</Email>
       <InfoRow>
         <InfoItem>
-          <InfoLabel>Phone</InfoLabel>
+          <InfoLabel>☎️</InfoLabel>
           <InfoValue>{userInfo?.user?.phone}</InfoValue>
         </InfoItem>
       </InfoRow>
@@ -46,9 +46,9 @@ const ProfileBox = styled.div`
   padding: 1px;
 `;
 const UserName = styled.p`
-  font-size: 2.3rem;
+  font-size: 3rem;
   font-weight: 400;
-  color: #777;
+  color: #393939;
   margin-top: 2rem;
   @media (max-width: 767px) {
     font-size: 3.2rem;
@@ -56,7 +56,7 @@ const UserName = styled.p`
 `;
 
 const Email = styled.p`
-  font-size: 1.3rem;
+  font-size: 1.8rem;
   font-weight: 400;
   color: #777;
   margin-top: 1.3rem;
@@ -69,7 +69,6 @@ const InfoRow = styled.div`
   display: flex;
   flex-direction: row;
   margin-top: 2.5rem;
-  margin-bottom: 2rem;
 `;
 
 const InfoItem = styled.div`
@@ -79,9 +78,10 @@ const InfoItem = styled.div`
 `;
 
 const InfoLabel = styled.p`
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: 400;
-  color: #777;
+  color: #3c3c3c;
+  margin-top: -0.2rem;
   @media (max-width: 767px) {
     font-size: 2rem;
   }
@@ -117,14 +117,14 @@ const EmojiItem = styled.div`
 `;
 
 const Emoji = styled.span`
-  font-size: 1.8rem;
+  font-size: 2rem;
   @media (max-width: 767px) {
     font-size: 3rem;
   }
 `;
 
 const EmojiCount = styled.span`
-  font-size: 1.8rem;
+  font-size: 2rem;
   margin-left: 0.2rem;
   color: #777777;
   @media (max-width: 767px) {
@@ -134,10 +134,10 @@ const EmojiCount = styled.span`
 
 const Credit = styled.div`
   margin-right: 2rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 `;
 const CreditNum = styled.p`
-  font-size: 2.5rem;
+  font-size: 3rem;
   color: #e7c448;
   font-weight: bold;
 `;

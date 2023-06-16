@@ -14,7 +14,7 @@ export default function ListBox({ group }) {
         <ListBackImg img={`${API.imgUrl}${group?.thumbnail}`} />
         <ListContent>
           <TitleBox>
-            <ListTitle>{group.title}</ListTitle>
+            <ListTitle>🌟 {group.title} 🌟</ListTitle>
             <ListDate>{group.createdAt}</ListDate>
           </TitleBox>
           <DescriptionBox>{group.description}</DescriptionBox>
@@ -59,7 +59,7 @@ const ListBackImg = styled.div`
 
 const ListContent = styled.div`
   width: 100%;
-  padding: 1rem;
+  padding: 2rem;
 `;
 
 const TitleBox = styled.div`
@@ -70,12 +70,14 @@ const TitleBox = styled.div`
 `;
 
 const ListTitle = styled.h4`
-  font-size: 1.8rem;
+  margin-top: 1.8rem;
+  font-size: 2.2rem;
   font-weight: 400;
-  color: #111;
+  color: #2d2d2d;
 `;
 
 const ListDate = styled.p`
+  margin-top: 1.3rem;
   font-size: 1.3rem;
   font-weight: 400;
   color: #999;
@@ -84,7 +86,7 @@ const ListDate = styled.p`
 const ListMemberBox = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 1rem;
+  margin-top: 2rem;
   gap: 0.5rem;
   .css-1ytufz-MuiAvatarGroup-root .MuiAvatar-root {
     width: 3.5rem;
@@ -109,7 +111,8 @@ const DescriptionBox = styled.p`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  font-size: 1.3rem;
+  font-size: 1.7rem;
   font-weight: 400;
-  color: #999;
+  color: #818181;
+  padding-left: 1rem;
 `;

@@ -13,7 +13,7 @@ export default function RankProfile({ group }) {
           sx={{ width: '6.8rem', height: '6.8rem' }}
         />
         <ProfileInfoBox>
-          <GroupTitle>{group?.title}</GroupTitle>
+          <GroupTitle>{group?.title} 👑</GroupTitle>
         </ProfileInfoBox>
       </ProfileContainer>
       <RankBox>
@@ -41,12 +41,16 @@ const ProfileContainer = styled.div`
   align-items: center;
 `;
 
-const ProfileInfoBox = styled.div``;
+const ProfileInfoBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const GroupTitle = styled.p`
-  font-size: 1.8rem;
+  font-size: 2.3rem;
   font-weight: 400;
-  color: #111;
+  color: #323232;
   margin-bottom: 1.2rem;
 `;
 
@@ -64,7 +68,7 @@ const RankBox = styled.div`
 `;
 
 const RankInfo = styled.span`
-  font-size: 1.6rem;
+  font-size: 1.9rem;
   font-weight: 400;
   color: #fff;
   margin-top: -2px;

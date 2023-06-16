@@ -217,9 +217,12 @@ const MenuList = styled.li`
     color: #f1b24a;
   }
   a {
-    font-size: 1.8rem;
+    font-size: 2.3rem;
     font-weight: 500;
     color: #111;
+    &:hover {
+    color: #f1b24a;
+  }
   }
 `;
 
@@ -232,7 +235,7 @@ const InfoMenu = styled.div`
 
 const UserName = styled.div`
   margin-right: 0.8rem;
-  font-size: 1.6rem;
+  font-size: 2rem;
   font-weight: bold;
   color: #252525;
 `;
@@ -245,7 +248,7 @@ const CountBox = styled.div`
   font-weight: bold;
   color: #252525;
   span {
-    font-size: 1.6rem;
+    font-size: 2rem;
   }
 `;
 
@@ -262,9 +265,9 @@ const SubMenuList = styled.ul`
 `;
 
 const SubMenuBtn = styled.button`
-  width: 120px;
-  height: 48px;
-  margin-left: 2rem;
+  width: 10rem;
+  height: 4rem;
+  margin-left: 1.2rem;
   border: ${({ btn }) => (btn === 'stroke' ? '1px solid #01881c' : 'none')};
   border-radius: 5px;
   background-color: ${({ btn }) => (btn === 'stroke' ? 'none' : '#01881c')};
@@ -274,9 +277,15 @@ const SubMenuBtn = styled.button`
     align-items: center;
     width: 100%;
     height: 100%;
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     font-weight: 600;
     color: ${({ btn }) => (btn === 'stroke' ? '#01881c' : '#fff')};
+  }
+  &:hover {
+    background-color: ${({ btn }) => (btn === 'stroke' ? '#01881c' : '#78c186')};
+    a {
+      color: ${({ btn }) => (btn === 'stroke' ? '#fff' : '#f3f5f4')};
+    }
   }
 `;
 

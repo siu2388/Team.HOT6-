@@ -154,7 +154,7 @@ const ImageWrapper = styled.div`
   align-items: center;
   justify-content: center;
   margin-bottom: 10px;
-
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   img {
     width: 80px;
     height: 80px;
@@ -186,6 +186,9 @@ const ModalContent = styled.div`
   justify-content: center;
   flex-direction: column;
   position: relative;
+  @media (max-width: 768px) {
+    width: 80%;
+  }
 `;
 
 const ModalHeader = styled.div`
@@ -305,17 +308,28 @@ const MemberText = styled.span`
     font-size: 1.2rem;
     margin-left: 1rem;
   }
+  @media (max-width: 768px) {
+   display: flex;
+   flex-direction: column;
+   margin-left: 5px;
+   width: 12rem;
+   span {
+    margin-left: 0rem;
+  }
+  }
+  
 `;
 
 const MemberNameBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+
 `;
 
 const TumblerText = styled.button`
-  font-size: 10px;
-  margin-left: 10px;
+  font-size: 1rem;
+  margin-left: 1rem;
   color: #999999;
 `;
 

@@ -41,7 +41,9 @@ export default function GroupDetailPage() {
   return (
     <GroupDetailWrap>
       <GroupDetailContainer>
+        <GroupName>
         <GroupTitle>{groupData?.myGroup?.title}</GroupTitle>
+        </GroupName>
         <DetailContent01>
           <DetailInfoBox>
             <DetailThumbnail img={`${API.imgUrl}${groupData?.myGroup?.thumbnail}`} />
@@ -68,7 +70,7 @@ export default function GroupDetailPage() {
               {sessionStorage.getItem('userToken') && (
                 <div>
                   <Button
-                    style={{ width: '180px', height: '40px', fontSize: '2.2rem' }}
+                    style={{ width: '180px', height: '40px', fontSize: '2.3rem',fontFamily: 'Do Hyeon' }}
                     variant="contained"
                     color="success"
                     onClick={handleGroupJoin}
@@ -105,7 +107,7 @@ export default function GroupDetailPage() {
 }
 const GroupDetailWrap = styled.div`
   width: 100%;
-  padding-top: 16rem;
+  padding-top: 14rem;
   margin-bottom: 15rem;
 `;
 
@@ -119,9 +121,9 @@ const GroupDetailContainer = styled.div`
 `;
 
 const GroupTitle = styled.h2`
-  font-size: 3rem;
+  font-size: 5rem;
   font-weight: 500;
-  color: #000;
+  color: #27641b;
   margin-bottom: 7.5rem;
 `;
 
@@ -171,9 +173,9 @@ const UserProfile = styled.div`
 `;
 
 const UserName = styled.p`
-  font-size: 2rem;
+  font-size: 3rem;
   font-weight: 400;
-  color: #111;
+  color: #2f2f2f;
 `;
 
 const UserBox = styled.div`
@@ -183,7 +185,7 @@ const UserBox = styled.div`
   margin-bottom: 1rem;
 
   span {
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: 400;
   }
   span:nth-child(1) {
@@ -191,7 +193,7 @@ const UserBox = styled.div`
   }
 
   span:nth-child(2) {
-    color: #111;
+    color: #373737;
   }
 
   &:last-of-type {
@@ -213,9 +215,10 @@ const GroupMemberTitleBox = styled.div`
   margin-bottom: 2rem;
 `;
 const GroupMemberTitle = styled.h4`
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 400;
   color: #111;
+  margin-left:1rem;
 `;
 
 const MemberNumBox = styled.div`
@@ -225,9 +228,10 @@ const MemberNumBox = styled.div`
 `;
 
 const MemberNum = styled.span`
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 400;
   color: #111;
+  margin-right:1.5rem;
 `;
 
 const GroupMembers = styled.div`
@@ -242,10 +246,14 @@ const GroupMembers = styled.div`
 
 const GroupDescription = styled.p`
   max-width: 40rem;
-  font-size: 1.6rem;
+  font-size: 2rem;
   font-weight: 400;
-  color: #999;
+  color: #595858;
   line-height: 1.2;
 `;
 
+const GroupName = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 

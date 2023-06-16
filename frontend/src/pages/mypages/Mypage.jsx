@@ -403,7 +403,7 @@ const Menubox = styled.button`
 `;
 
 const MenuItem = styled.li`
-  font-size: 1.6rem;
+  font-size: 2rem;
   font-weight: 500;
   color: #333;
   @media (max-width: 767px) {
@@ -497,7 +497,7 @@ const GroupRoleText = styled.p`
 `;
 
 const GroupRoleName = styled.p`
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: 400;
   color: #777;
   @media ${res.mobile} {
@@ -564,7 +564,7 @@ const GroupCreationText = styled.p`
 `;
 
 const GroupCreationDate = styled.p`
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 400;
   color: #777;
   @media ${res.mobile} {
@@ -586,11 +586,12 @@ const GroupLeaveButton = styled.button`
   border: none;
   border-radius: 4px;
   color: #fff;
-  font-size: 1.2rem;
+  font-size: 1.6rem;
   font-weight: 500;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   @media ${res.mobile} {
+    font-size:2.5rem;
     width: 15rem;
     height: 7rem;
   }
@@ -603,11 +604,12 @@ const GroupManageButton = styled.button`
   border: none;
   border-radius: 4px;
   color: #fff;
-  font-size: 1.2rem;
+  font-size: 1.6rem;
   font-weight: 500;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   @media ${res.mobile} {
+    font-size:2.5rem;
     width: 15rem;
     height: 7rem;
   }
@@ -620,11 +622,12 @@ const GroupMoveButton = styled.button`
   border: none;
   border-radius: 4px;
   color: #fff;
-  font-size: 1.2rem;
+  font-size: 1.7rem;
   font-weight: 500;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   @media ${res.mobile} {
+    font-size:2.5rem;
     width: 15rem;
     height: 7rem;
   }
