@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import FileUpload from '../../components/commons/FileUpload';
 import { Button, Slider, TextField } from '@mui/material';
@@ -6,6 +6,8 @@ import * as API from '../../api/index';
 import { imgFileState, isErrorModalState, isSuccessModalState, updateState } from '../../stores';
 import { useRecoilState } from 'recoil';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 
 const marks = [
   {
@@ -18,7 +20,8 @@ const marks = [
   },
 ];
 
-export default function GroupWritePage() {
+
+export default function GroupWritePage({ isEdit, closeEditModal, myGroup }) {
   const [sliderValue, setSliderValue] = useState(0);
   const [groupTitle, setGroupTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -29,11 +32,21 @@ export default function GroupWritePage() {
   const [, setIsErrorModal] = useRecoilState(isErrorModalState);
   const [, setUpdate] = useRecoilState(updateState);
 
-  const navigete = useNavigate();
 
-  const onChangeSliderValue = value => {
+  const navigate = useNavigate();
+
+  const onChangeSliderValue = (value) => {
     setSliderValue(value);
   };
+
+  console.log(myGroup);
+
+  useEffect(() => {
+    if(isEdit) {
+      setGroupTitle(myGroup?.result?.[0]?.groupId?.title);
+      setDescription(myGroup?.result?.[0]?.groupId?.description);
+    }
+  },[isEdit]);
 
   const onChangeInput = e => {
     const { name, value } = e.target;
@@ -65,14 +78,30 @@ export default function GroupWritePage() {
       formData.append('totalNumOfMembers', sliderValue);
       formData.append('thumbnail', thumbnail);
 
-      const result = await API.formPost('/groups', formData);
-      setIsScucessModal({
-        state: true,
-        message: '그룹을 등록하였습니다.',
-      });
+      if(isEdit){
+        await axios.put(`${API.serverUrl}/groups/${myGroup?.result?.[0]?.groupId?._id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${sessionStorage.getItem('userToken')}`,
+          },
+        });
+        setIsScucessModal({
+          state: true,
+          message: '그룹을 수정하였습니다.',
+        });
+        setUpdate(prev => prev + 1);
+        navigate(`/groups/${myGroup?.result?.[0]?.groupId?._id}`);
+      }else{
+        const result = await API.formPost('/groups', formData);
+        setIsScucessModal({
+          state: true,
+          message: '그룹을 등록하였습니다.',
+        });
+        setUpdate(prev => prev + 1);
+        navigate(`/groups/${result.data.newGroup._id}`);
+      }
 
-      setUpdate(prev => prev + 1);
-      navigete(`/groups/${result.data.newGroup._id}`);
+     
     } catch (err) {
       setIsErrorModal({
         state: true,
@@ -84,10 +113,10 @@ export default function GroupWritePage() {
   return (
     <WriteWrap>
       <WriteContainer>
-        <Title>그룹 등록</Title>
+        <Title>{isEdit ? '그룹 수정' : '그룹 등록'}</Title>
         <Form>
           <FileContainer>
-            <FileUpload />
+            <FileUpload GroupImg={myGroup?.result?.[0]?.groupId?.thumbnail} />
           </FileContainer>
           <InputBox>
             <TextField
@@ -95,21 +124,37 @@ export default function GroupWritePage() {
               label="그룹 명"
               variant="outlined"
               name="groupTitle"
+              value={groupTitle}
               onChange={onChangeInput}
               error={titleError}
               helperText={titleError && '그룹명을 입력해주세요.'}
             />
           </InputBox>
           <SliderBox>
+            {isEdit?(
+              <>
             <Slider
               aria-label="Custom marks"
-              defaultValue={0}
+              defaultValue={Number(myGroup?.result?.[0]?.groupId?.totalNumOfMembers)}
               step={1}
               valueLabelDisplay="auto"
               marks={marks}
               getAriaValueText={onChangeSliderValue}
             />
             <p>{sliderValue}명</p>
+            </>)
+            :(
+            <>
+            <Slider
+              aria-label="Custom marks"
+              defaultValue={sliderValue}
+              step={1}
+              valueLabelDisplay="auto"
+              marks={marks}
+              getAriaValueText={onChangeSliderValue}
+            />
+            <p>{sliderValue}명</p>
+            </>)}
           </SliderBox>
           <InputBox>
             <TextField
@@ -117,6 +162,7 @@ export default function GroupWritePage() {
               label="그룹 상세내용"
               placeholder="상세내용을 입력해주세요."
               name="description"
+              value={description}
               onChange={onChangeInput}
               multiline
               error={descriptionError}
@@ -136,18 +182,23 @@ export default function GroupWritePage() {
               }
               onClick={onClickAddGroup}
             >
-              <Link>등록</Link>
+              <Link>{isEdit ? '수정' : '등록'}</Link>
             </Button>
+            {isEdit ? (
+              <Button variant="outlined" color="success" onClick={closeEditModal} style={{ width: '150px', height: '63px' }}>
+                취소
+              </Button>
+            ):(
             <Button variant="outlined" color="success">
-              <Link to={'/groups'}>취소</Link>
-            </Button>
+                <Link to={'/groups'}>취소</Link>
+              </Button>
+            )}
           </BtnBox>
         </Form>
       </WriteContainer>
     </WriteWrap>
   );
 }
-
 const WriteWrap = styled.div`
   width: 100%;
   padding: 9.6rem;
