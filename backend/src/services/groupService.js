@@ -34,7 +34,9 @@ class groupService {
   static async getGroups(page, limit) {
     const skip = (page - 1) * limit;
     const { groups, count } = await Group.findAndCountAll(skip, limit);
-    return { groups, count };
+    const totalPages = Math.ceil(count / limit);
+    const currentPage = Math.min(page, totalPages);
+    return { groups, totalPages, currentPage };
   }
 
   // 그룹의 상세페이지 조회
@@ -42,6 +44,7 @@ class groupService {
     const myGroup = await Group.findBygroupId(groupId);
     return myGroup;
   }
+
   //그룹명 검색
   static async searchGroup({ title }) {
     const { groups: filteredSearch, count } = await Group.findByTitle({ title });
@@ -52,11 +55,11 @@ class groupService {
     }
     return { groups: filteredSearch, count };
   }
+
   //그룹 정보 수정
   static async setGroup({ groupId, toUpdate }) {
     let updatedGroup = await Group.findGroupId(groupId);
-    console.log('group', updatedGroup);
-    
+
     if (!updatedGroup) {
       const errorMessage = 'Group 조회: 생성한 그룹이 없습니다.';
       throw new Error(errorMessage);
@@ -86,7 +89,6 @@ class groupService {
       updatedGroup = await Group.updateGroup({ _id: groupId, fieldToUpdate, newValue });
     }
 
-    console.log('new', updatedGroup);
     return updatedGroup;
   }
 

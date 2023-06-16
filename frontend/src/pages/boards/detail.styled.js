@@ -22,10 +22,13 @@ export const DetailWriterAndDateBox = styled.div`
   align-items: center;
 `;
 export const DetailProfileImg = styled.div`
-  width: 47px;
-  height: 47px;
+  width: 5rem;
+  height: 5rem;
   border-radius: 50%;
-  background: #bdbdbd;
+  background: ${({ img }) => `url(${img})`};
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #fff;
 `;
 export const DetailTitleAndDate = styled.div`
   display: flex;
@@ -190,11 +193,11 @@ export const BoardBtnContainer = styled.div`
 export const BoardDefaultBtn = styled.button`
   width: 185px;
   height: 45px;
-  border: 1px solid #bdbdbd;
   font-size: 1.6rem;
   font-weight: 500;
-  color: #000;
-  background: none;
+  color: #fff;
+  background: #01881c;
+  border-radius: 0.4rem;
   cursor: pointer;
 `;
 
@@ -294,7 +297,7 @@ export const CommentSubmit = styled.button`
   width: 91px;
   height: 52px;
   border: none;
-  background: #000;
+  background: #01881c;
   font-size: 1.6rem;
   font-weight: 500;
   color: #fff;
@@ -454,5 +457,8 @@ export const BoardContent = styled.div`
     font-size: 1.7rem;
     font-weight: 400;
     color: #111;
+    overflow: auto;
+    white-space: pre-wrap;
+    line-height: 1.6;
   }
 `;

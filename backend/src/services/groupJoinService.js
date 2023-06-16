@@ -16,14 +16,6 @@ class groupJoinService {
     //그룹조인 테이블에서 해당 그룹Id를 가진 데이터수
     const groupJoinData = await GroupJoin.findGroupMembers({ groupId });
     const groupJoinDataCount = groupJoinData.length;
-    console.log(
-      '총인원:',
-      totalNums,
-      '현재인원:',
-      membersCount,
-      'groupJoin 총 인원:',
-      groupJoinDataCount,
-    );
 
     //같으면 err  -> 그룹원 모집 마감
     if (totalNums == membersCount || totalNums == groupJoinDataCount + 1) {
@@ -45,6 +37,7 @@ class groupJoinService {
     const groupJoin = await GroupJoin.create(newGroupJoin);
     return groupJoin;
   }
+
   // 그룹 가입 시 중복가입 방지 조회용
   static async getJoinedGroup({ userId }) {
     const group = await GroupJoin.findByUserId({ userId });
@@ -85,17 +78,10 @@ class groupJoinService {
     }
     return { status: 'ok' };
   }
+
   // 그룹 삭제로 모든 가입 멤버 데이터삭제
   static async deleteData(groupId) {
-    console.log('groupId', groupId);
     const isDataDeleted = await GroupJoin.deleteData(groupId);
-    console.log('isGroupDataDeleted', isDataDeleted);
-
-    // if (!isDataDeleted) {
-    //   const errorMessage =
-    //     '그룹조인데이터삭제: 해당 id를 가진 그룹이 없습니다. 다시 한 번 확인해 주세요.';
-    //   throw new Error(errorMessage);
-    // }
     return { status: 'ok' };
   }
 }

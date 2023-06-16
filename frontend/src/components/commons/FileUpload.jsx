@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { imgFileState, userInfoState } from '../../stores';
 import * as API from '../../api/index';
 
-export default function FileUpload({ profileImg, GroupImg }) {
+export default function FileUpload({ profileImg, GroupImg, boardImg }) {
   const [imageSrc, setImageSrc] = useState(null);
   const [, setImgFile] = useRecoilState(imgFileState);
   const [userInfo] = useRecoilState(userInfoState);
@@ -14,6 +14,12 @@ export default function FileUpload({ profileImg, GroupImg }) {
       setImageSrc(`${API.imgUrl}${profileImg}`);
     }
   }, [userInfo]);
+
+  useEffect(() => {
+    if (boardImg) {
+      setImageSrc(`${API.imgUrl}${boardImg}`);
+    }
+  }, [boardImg]);
 
   useEffect(() => {
     return () => {

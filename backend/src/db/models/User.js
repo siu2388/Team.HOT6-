@@ -18,11 +18,13 @@ class User {
     const user = await UserModel.findOne({ userId });
     return user;
   }
+  
   // 정보 수정, 유저 정보 조회
   static async findById({ loginedId }) {
     const user = await UserModel.findById(loginedId);
     return user;
   }
+
   // 유저 목록
   static async findAll() {
     const users = await UserModel.find({});
@@ -43,6 +45,7 @@ class User {
     const user = await UserModel.findOne({ _id: userId });
     return user;
   }
+
   // groupId 같은 멤버 조회용
   static async findGroupMembers({ groupId }) {
     const foundMembers = await UserModel.find(
@@ -51,6 +54,7 @@ class User {
     );
     return foundMembers;
   }
+
   // 정보 수정
   static async update({ loginedId, fieldToUpdate, newValue }) {
     const filter = { _id: loginedId };
@@ -83,6 +87,7 @@ class User {
     }
     return true;
   }
+
   //그룹 삭제 시 멤버의 groupId 삭제
   static async deleteMembersGroupId({ groupId }) {
     const filter = { groupId };
@@ -90,7 +95,6 @@ class User {
     const option = { returnOriginal: false };
 
     const updatedGroup = await UserModel.updateMany(filter, update, option);
-    console.log('updatedGroup', updatedGroup);
     if (!updatedGroup) {
       return false;
     }

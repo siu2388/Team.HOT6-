@@ -57,13 +57,10 @@ groupRouter.get('/groups', async (req, res, next) => {
     const page = parseInt(req.query.page || 1);
     const limit = 9;
     const skip = (page - 1) * limit;
-    console.log('page : ', page);
-    console.log('skip : ', skip);
+    console.log('page : ', page, 'skip : ', skip);
 
-    const { groups, count } = await groupService.getGroups(page, limit);
+    const { groups, totalPages, currentPage } = await groupService.getGroups(page, limit);
 
-    const totalPages = Math.ceil(count / limit);
-    const currentPage = Math.min(page, totalPages);
     res.status(200).json({
       currentPage: currentPage,
       totalPages: totalPages,

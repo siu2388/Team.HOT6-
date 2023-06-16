@@ -1,9 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import * as S from './list.styled';
 import { ROUTE } from '../../constants/routes/routeData';
 import { Link } from 'react-router-dom';
+import * as API from '../../api/index';
+import { Pagination } from '@mui/material';
 
 export default function BoardList() {
+  const [boardList, setBoardList] = useState([]);
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    const getBoard = async () => {
+      const result = await API.get(`/boards?page=${page}`);
+      setBoardList(result.data);
+    };
+    getBoard();
+  }, [page]);
+
+  const onChangePage = (_, page) => {
+    setPage(page);
+  };
+
+  console.log(boardList);
+
   return (
     <S.Wrapper>
       <S.TitleBanner>
@@ -26,26 +45,38 @@ export default function BoardList() {
             <S.ListLiWrite>작성자</S.ListLiWrite>
             <S.ListLiCreatedAt>작성일</S.ListLiCreatedAt>
           </S.TitleUl>
-          <S.ContentUl>
-            <S.ListLiNum>3</S.ListLiNum>
-            <S.ListLiTitle>
-              <S.Title>
-                <Link to={`${ROUTE.BOARDDETAIL.link}/${'id'}`}>제목</Link>
-              </S.Title>
-            </S.ListLiTitle>
-            <S.ListLiWrite>
-              <S.Write>닉네임</S.Write>
-            </S.ListLiWrite>
-            <S.ListLiCreatedAt>
-              <S.CreatedAt>2022-01-01</S.CreatedAt>
-            </S.ListLiCreatedAt>
-          </S.ContentUl>
+          {boardList?.boards?.map((board, index) => (
+            <S.ContentUl key={board?._id}>
+              <S.ListLiNum>{index + 1}</S.ListLiNum>
+              <S.ListLiTitle>
+                <S.Title>
+                  <Link to={`${ROUTE.BOARDDETAIL.link}/${board?._id}`}>{board?.title}</Link>
+                </S.Title>
+              </S.ListLiTitle>
+              <S.ListLiWrite>
+                <S.Write>{board?.user?.nickname}</S.Write>
+              </S.ListLiWrite>
+              <S.ListLiCreatedAt>
+                <S.CreatedAt>{board?.createdAt}</S.CreatedAt>
+              </S.ListLiCreatedAt>
+            </S.ContentUl>
+          ))}
         </S.ReviewListContainer>
         <S.BtnBox>
           <S.BoardBtn>
             <Link to={ROUTE.BOARDWRITE.link}>글쓰기</Link>
           </S.BoardBtn>
         </S.BtnBox>
+        <S.PaginationBox>
+          <Pagination
+            count={boardList?.totalPages}
+            page={page}
+            size="large"
+            variant="outlined"
+            color="primary"
+            onChange={onChangePage}
+          />
+        </S.PaginationBox>
       </S.Container>
     </S.Wrapper>
   );
