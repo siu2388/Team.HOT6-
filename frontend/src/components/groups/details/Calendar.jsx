@@ -197,7 +197,7 @@ export default function GroupCalendar({ title, userInfo }) {
             <ProgressValue>{tumblerUsage}</ProgressValue>
           </ProgressTitle>
           <ProgressTitle>
-            <IconContainer>🫙다회용기</IconContainer>
+            <IconContainer>♻️다회용기</IconContainer>
             <ProgressBar>
               <FilledProgressBar width={containerWidth} />
             </ProgressBar>
@@ -216,7 +216,8 @@ export default function GroupCalendar({ title, userInfo }) {
                 {totalUsage > 10 && 'EXCELLENT!!'}
               </SpeechText>
               <Desc>
-                {title} 그룹의 {monthDateTotal}월 텀블러 사용 횟수는 <span>{tumblerUsage}회</span>,
+                {title} 그룹의
+                <br /> {monthDateTotal}월 텀블러 사용 횟수는 <span>{tumblerUsage}회</span>,
               </Desc>
               <Desc>
                 다회용기 사용 횟수는 <span>{containerUsage}회</span>야!
@@ -440,7 +441,7 @@ const SpeechBubble = styled.div`
   padding: 3rem;
   margin-left: 2rem;
   span {
-    font-size: 1.7rem;
+    font-size: 2rem;
     font-weight: 700;
     color: #01881c;
   }
@@ -464,7 +465,7 @@ const SpeechText = styled.p`
 `;
 
 const Desc = styled.p`
-  font-size: 1.7rem;
+  font-size: 2rem;
 `;
 
 const SpeechHighlight = styled.h1`
