@@ -1,13 +1,5 @@
-import fs from 'fs';
 import multer from 'multer';
 import path from 'path';
-
-try {
-  fs.readdirSync('uploads');
-} catch (e) {
-  console.error('upload 폴더가 없어서 uploads폴더를 생성합니다.');
-  fs.mkdirSync('uploads');
-}
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {

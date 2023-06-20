@@ -2,18 +2,33 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import FileUpload from '../../components/commons/FileUpload';
 import { Button, TextField } from '@mui/material';
-
 import SearchIcon from '@mui/icons-material/Search';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Postcode from '../../components/commons/DaumPostCode';
 import { useRecoilState } from 'recoil';
-import { imgFileState, isPostcodeModalState, postcodeAddressState } from '../../stores';
+import {
+  imgFileState,
+  isErrorModalState,
+  isPostcodeModalState,
+  isSuccessModalState,
+  postcodeAddressState,
+  updateState,
+  userInfoState,
+} from '../../stores';
 import axios from 'axios';
+import * as API from '../../api/index';
+import { ROUTE } from '../../constants/routes/routeData';
 
-export default function JoinPage() {
+export default function JoinPage({ page }) {
   const [isPostcodeModal, setIsPostcodeModal] = useRecoilState(isPostcodeModalState);
   const [postcodeAddress, setPostcodeAddress] = useRecoilState(postcodeAddressState);
   const [imgFile] = useRecoilState(imgFileState);
+  const [userInfo] = useRecoilState(userInfoState);
+  const [, setUpdate] = useRecoilState(updateState);
+  const [, setIsScucessModal] = useRecoilState(isSuccessModalState);
+  const [, setIsErrorModal] = useRecoilState(isErrorModalState);
+
+  const navigate = useNavigate();
 
   const [formDatas, setFormData] = useState({
     userId: '',
@@ -24,6 +39,32 @@ export default function JoinPage() {
     phone: '',
     addressDetail: '',
   });
+
+  useEffect(() => {
+    if (userInfo) {
+      setFormData({
+        userId: userInfo?.user?.userId,
+        password: '',
+        passwordConfirm: '',
+        name: userInfo?.user?.name,
+        nickname: userInfo?.user?.nickname,
+        phone: userInfo?.user?.phone,
+        addressDetail: userInfo?.user?.addressDetail,
+      });
+    }
+  }, [userInfo]);
+
+  useEffect(() => {
+    if (page === 'join' && userInfo) {
+      navigate('/');
+    }
+  }, [userInfo]);
+
+  useEffect(() => {
+    if (page === 'changeInfo' && !sessionStorage.getItem('userToken')) {
+      navigate('/');
+    }
+  }, [userInfo]);
 
   const [formError, setFormError] = useState({
     userId: false,
@@ -50,9 +91,9 @@ export default function JoinPage() {
 
   useEffect(() => {
     return () => {
-      setPostcodeAddress(''); // Modified line
+      setPostcodeAddress('');
     };
-  }, [setPostcodeAddress]); // Modified line
+  }, [setPostcodeAddress]);
 
   const handleInputChange = e => {
     const { name, value } = e.target;
@@ -66,7 +107,6 @@ export default function JoinPage() {
     const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$&*])[a-zA-Z\d!@#$%^&*]{8,}$/;
 
     if (name === 'password') {
-      console.log(passwordRegex.test(value));
       if (!passwordRegex.test(value)) {
         setFormError(prev => ({ ...prev, password: true }));
       } else {
@@ -105,35 +145,58 @@ export default function JoinPage() {
     formData.append('phone', formDatas.phone);
     formData.append('address', postcodeAddress);
     formData.append('addressDetail', formDatas.addressDetail);
-    formData.append('profileImg', imgFile);
+    if (imgFile !== null) {
+      formData.append('profileImg', imgFile);
+    }
 
     try {
-      const response = await axios.post('http://localhost:5001/users', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      if (page === 'join') {
+        await axios.post(`${API.serverUrl}/users`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
 
-      if (!response.ok) {
-        throw new Error('User registration failed.');
+        setIsScucessModal({
+          state: true,
+          message: '회원가입에 성공하였습니다.',
+        });
+
+        navigate(ROUTE.HOME.link);
+      } else {
+        await axios.put(`${API.serverUrl}/users/${userInfo?.user?._id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${sessionStorage.getItem('userToken')}`,
+          },
+        });
+
+        setUpdate(prev => prev + 1);
+        setIsScucessModal({
+          state: true,
+          message: '내 정보 수정이 완료 되었습니다.',
+        });
+        navigate(ROUTE.PAGE_GROUP.link);
       }
     } catch (error) {
-      console.log(error);
+      setIsErrorModal({
+        state: true,
+        message: error.message,
+      });
     }
   };
-
   return (
     <JoinWrap>
       <JoinContainer>
         <TitleBox>
           <JoinImgBox>
-            <img src="http://localhost:5001/uploads/1686151270838.jpeg" alt="" />
+            <img src="/images/commons/mainearth.png" alt="사랑해 지구야 로고" />
           </JoinImgBox>
-          <JoinTitle>회원가입</JoinTitle>
+          <JoinTitle>{page === 'join' ? '회원가입' : '내 정보 수정'}</JoinTitle>
         </TitleBox>
         <Form onSubmit={handleSubmit}>
           <ProfileImgBox>
-            <FileUpload />
+            <FileUpload profileImg={userInfo?.user?.profileImg} />
           </ProfileImgBox>
           <InputBox>
             <TextField
@@ -144,6 +207,7 @@ export default function JoinPage() {
               onChange={handleInputChange}
               error={formError.userId === true}
               helperText={formError.userId === true && '아이디를 입력해주세요.'}
+              disabled={page === 'changeInfo'}
             />
           </InputBox>
           <InputBox>
@@ -182,6 +246,7 @@ export default function JoinPage() {
               onChange={handleInputChange}
               error={formError.name === true}
               helperText={formError.name === true && '이름을 입력해주세요.'}
+              disabled={page === 'changeInfo'}
             />
           </InputBox>
           <InputBox>
@@ -212,7 +277,7 @@ export default function JoinPage() {
               label={postcodeAddress ? '' : '주소'}
               id="outlined-start-adornment"
               disabled
-              value={postcodeAddress}
+              value={userInfo?.user?.address || postcodeAddress}
             />
             <SearchIconBox onClick={onClicktoggleAddressModal}>
               <SearchIcon />
@@ -228,11 +293,13 @@ export default function JoinPage() {
             />
           </InputBox>
           <Button type="submit" variant="contained" color="success" disabled={disabled}>
-            회원가입
+            {page === 'join' ? '회원가입' : '수정하기'}
           </Button>
-          <LoginLink>
-            <Link>이미 가입하셨다면? 로그인 하러가기</Link>
-          </LoginLink>
+          {page === 'join' && (
+            <LoginLink>
+              <Link to="/login">이미 가입하셨다면? 로그인 하러가기</Link>
+            </LoginLink>
+          )}
         </Form>
       </JoinContainer>
       {isPostcodeModal && <Postcode />}
@@ -242,10 +309,11 @@ export default function JoinPage() {
 
 const JoinWrap = styled.div`
   width: 100%;
-  padding-top: 9.6rem;
+  padding-top: 12rem;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 15rem;
 `;
 
 const JoinContainer = styled.div`
@@ -261,6 +329,7 @@ const TitleBox = styled.div`
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  padding-right: 5rem;
 `;
 
 const JoinTitle = styled.h3`
@@ -271,30 +340,14 @@ const JoinTitle = styled.h3`
 
 const JoinImgBox = styled.div`
   width: 6rem;
+  margin-right: 1rem;
   img {
-    width: 100%;
+    width: 120%;
   }
 `;
 
 const Form = styled.form`
   width: 100%;
-
-  .css-1u3bzj6-MuiFormControl-root-MuiTextField-root {
-    width: 100%;
-  }
-  .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
-    width: 100%;
-  }
-  .css-r47a1p-MuiFormControl-root {
-    width: 100%;
-    margin: 0;
-  }
-
-  .css-1jy569b-MuiFormLabel-root-MuiInputLabel-root,
-  .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input,
-  .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
-    font-size: 1.5rem;
-  }
 
   button {
     width: 100%;

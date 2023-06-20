@@ -2,8 +2,9 @@ import { Schema, model } from 'mongoose';
 
 const GroupSchema = new Schema(
   {
-    groupOwner: {
-      type: String,
+    groupOwnerId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
       required: true,
     },
     title: {
@@ -18,12 +19,16 @@ const GroupSchema = new Schema(
       type: Number,
       required: true,
     },
-    thumbnail: { type: String },
-    groupJoin: {
-      type: Schema.Types.ObjectId,
-      ref: 'groupJoin',
+    createdAt: {
+      type: String,
+      default: Date.now,
+    },
+    thumbnail: {
+      type: String,
+      default: '1686823001485.png',
     },
   },
+  { strictPopulate: false },
   {
     timestamps: true,
   },

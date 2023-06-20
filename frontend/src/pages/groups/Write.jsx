@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import FileUpload from '../../components/commons/FileUpload';
 import { Button, Slider, TextField } from '@mui/material';
 import * as API from '../../api/index';
-import { imgFileState } from '../../stores';
+import { imgFileState, isErrorModalState, isSuccessModalState, updateState } from '../../stores';
 import { useRecoilState } from 'recoil';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const marks = [
   {
@@ -18,19 +19,29 @@ const marks = [
   },
 ];
 
-export default function GroupWritePage() {
+export default function GroupWritePage({ isEdit, closeEditModal, myGroup }) {
   const [sliderValue, setSliderValue] = useState(0);
   const [groupTitle, setGroupTitle] = useState('');
   const [description, setDescription] = useState('');
   const [titleError, setTitleError] = useState(false);
   const [descriptionError, setDescriptionError] = useState(false);
   const [thumbnail] = useRecoilState(imgFileState);
+  const [, setIsScucessModal] = useRecoilState(isSuccessModalState);
+  const [, setIsErrorModal] = useRecoilState(isErrorModalState);
+  const [, setUpdate] = useRecoilState(updateState);
 
-  console.log(groupTitle, description);
+  const navigate = useNavigate();
 
   const onChangeSliderValue = value => {
     setSliderValue(value);
   };
+
+  useEffect(() => {
+    if (isEdit) {
+      setGroupTitle(myGroup?.result?.[0]?.groupId?.title);
+      setDescription(myGroup?.result?.[0]?.groupId?.description);
+    }
+  }, [isEdit]);
 
   const onChangeInput = e => {
     const { name, value } = e.target;
@@ -62,20 +73,47 @@ export default function GroupWritePage() {
       formData.append('totalNumOfMembers', sliderValue);
       formData.append('thumbnail', thumbnail);
 
-      await API.formPost('/groups', formData);
-      alert('성공');
+      if (isEdit) {
+        if (sliderValue < myGroup?.members?.length) {
+          return;
+        }
+
+        await axios.put(`${API.serverUrl}/groups/${myGroup?.result?.[0]?.groupId?._id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${sessionStorage.getItem('userToken')}`,
+          },
+        });
+        setIsScucessModal({
+          state: true,
+          message: '그룹을 수정하였습니다.',
+        });
+        setUpdate(prev => prev + 1);
+        navigate(`/groups/${myGroup?.result?.[0]?.groupId?._id}`);
+      } else {
+        const result = await API.formPost('/groups', formData);
+        setIsScucessModal({
+          state: true,
+          message: '그룹을 등록하였습니다.',
+        });
+        setUpdate(prev => prev + 1);
+        navigate(`/groups/${result.data.newGroup._id}`);
+      }
     } catch (err) {
-      console.log(err);
+      setIsErrorModal({
+        state: true,
+        message: err.response.data,
+      });
     }
   };
 
   return (
     <WriteWrap>
       <WriteContainer>
-        <Title>그룹 등록</Title>
+        <Title>{isEdit ? '그룹 수정' : '그룹 등록'}</Title>
         <Form>
           <FileContainer>
-            <FileUpload />
+            <FileUpload GroupImg={myGroup?.result?.[0]?.groupId?.thumbnail} />
           </FileContainer>
           <InputBox>
             <TextField
@@ -83,21 +121,38 @@ export default function GroupWritePage() {
               label="그룹 명"
               variant="outlined"
               name="groupTitle"
+              value={groupTitle}
               onChange={onChangeInput}
               error={titleError}
               helperText={titleError && '그룹명을 입력해주세요.'}
             />
           </InputBox>
           <SliderBox>
-            <Slider
-              aria-label="Custom marks"
-              defaultValue={0}
-              step={1}
-              valueLabelDisplay="auto"
-              marks={marks}
-              getAriaValueText={onChangeSliderValue}
-            />
-            <p>{sliderValue}명</p>
+            {isEdit ? (
+              <>
+                <Slider
+                  aria-label="Custom marks"
+                  defaultValue={Number(myGroup?.result?.[0]?.groupId?.totalNumOfMembers)}
+                  step={1}
+                  valueLabelDisplay="auto"
+                  marks={marks}
+                  getAriaValueText={onChangeSliderValue}
+                />
+                <p>{sliderValue}명</p>
+              </>
+            ) : (
+              <>
+                <Slider
+                  aria-label="Custom marks"
+                  defaultValue={sliderValue}
+                  step={1}
+                  valueLabelDisplay="auto"
+                  marks={marks}
+                  getAriaValueText={onChangeSliderValue}
+                />
+                <p>{sliderValue}명</p>
+              </>
+            )}
           </SliderBox>
           <InputBox>
             <TextField
@@ -105,6 +160,7 @@ export default function GroupWritePage() {
               label="그룹 상세내용"
               placeholder="상세내용을 입력해주세요."
               name="description"
+              value={description}
               onChange={onChangeInput}
               multiline
               error={descriptionError}
@@ -114,22 +170,39 @@ export default function GroupWritePage() {
           <BtnBox>
             <Button
               variant="contained"
-              color="success"
-              disabled={titleError === true || descriptionError === true || sliderValue === 0}
-              onClick={onClickAddGroup}
+              color={sliderValue < myGroup?.members?.length ? 'error' : 'success'}
+              disabled={
+                titleError === true ||
+                groupTitle === '' ||
+                descriptionError === true ||
+                description === '' ||
+                sliderValue === 0 ||
+                (isEdit && sliderValue < myGroup?.members?.length)
+              }
+              onClick={sliderValue < myGroup?.members?.length ? null : onClickAddGroup}
             >
-              등록
+              <Link>{isEdit ? '수정' : '등록'}</Link>
             </Button>
-            <Button variant="outlined" color="success">
-              <Link to={'/groups'}>취소</Link>
-            </Button>
+            {isEdit ? (
+              <Button
+                variant="outlined"
+                color="success"
+                onClick={closeEditModal}
+                style={{ width: '15.3rem', height: '6.3rem' }}
+              >
+                취소
+              </Button>
+            ) : (
+              <Button variant="outlined" color="success">
+                <Link to={'/groups'}>취소</Link>
+              </Button>
+            )}
           </BtnBox>
         </Form>
       </WriteContainer>
     </WriteWrap>
   );
 }
-
 const WriteWrap = styled.div`
   width: 100%;
   padding: 9.6rem;
@@ -141,33 +214,13 @@ const WriteContainer = styled.div`
   padding: 3rem;
   background-color: #fff;
   border-radius: 1rem;
+  @media (max-width: 767px) {
+    width: 100%;
+  }
 `;
 
 const Form = styled.form`
   width: 100%;
-  .css-1u3bzj6-MuiFormControl-root-MuiTextField-root {
-    width: 100%;
-    label {
-      font-size: 1.4rem;
-    }
-    .css-dpjnhs-MuiInputBase-root-MuiOutlinedInput-root {
-      width: 100%;
-      min-height: 6rem;
-      textarea {
-        font-size: 1.4rem;
-        line-height: 1.3;
-        overflow-y: auto;
-      }
-    }
-    .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
-      font-size: 1.4rem;
-    }
-  }
-
-  .css-1aznpnh-MuiSlider-root {
-    width: 80%;
-    margin-left: 10px;
-  }
 
   p {
     font-size: 1.5rem;
@@ -187,6 +240,9 @@ const Title = styled.h2`
 const FileContainer = styled.div`
   width: 35rem;
   margin: 0 auto 3rem;
+  @media (max-width: 767px) {
+    width: 90%;
+  }
 `;
 
 const InputBox = styled.div`
@@ -211,9 +267,11 @@ const BtnBox = styled.div`
   margin-top: 3rem;
   button {
     font-size: 1.7rem;
-    padding: 1rem 5rem;
     a {
+      width: 100%;
+      height: 100%;
       font-size: 1.7rem;
+      padding: 1rem 5rem;
     }
   }
 `;

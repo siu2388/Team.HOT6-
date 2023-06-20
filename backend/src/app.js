@@ -6,9 +6,9 @@ import { groupRouter } from './routers/groupRouter.js';
 import { groupJoinRouter } from './routers/groupJoinRouter.js';
 
 import { activityRouter } from './routers/activityRouter.js';
-import { actCategoryRouter } from './routers/actCategoryRouter.js';
 import path from 'path';
 import { dataRouter } from './routers/dataRouter.js';
+import { boardRouter } from './routers/boardRouter.js';
 
 const app = express();
 
@@ -42,8 +42,8 @@ app.use(userAuthRouter);
 app.use(groupRouter);
 app.use(groupJoinRouter);
 app.use(activityRouter);
-app.use(actCategoryRouter);
 app.use(dataRouter);
+app.use('/boards', boardRouter);
 
 app.use(errorMiddleware);
 

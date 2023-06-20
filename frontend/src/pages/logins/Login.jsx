@@ -7,23 +7,31 @@ import {
   OutlinedInput,
   TextField,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Link, useNavigate } from 'react-router-dom';
 import * as API from '../../api/index';
 import { useRecoilState } from 'recoil';
-import { userTokenState } from '../../stores';
+import { isErrorModalState, userInfoState, userTokenState } from '../../stores';
+import { ROUTE } from '../../constants/routes/routeData';
 
 export default function LoginPage() {
   const [, setUserToken] = useRecoilState(userTokenState);
-
+  const [, setIsErrorModal] = useRecoilState(isErrorModalState);
   const [showPassword, setShowPassword] = useState(false);
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
+  const [userInfo] = useRecoilState(userInfoState);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate('/');
+    }
+  }, [userInfo]);
 
   const onChangeInput = e => {
     const { name, value } = e.target;
@@ -35,8 +43,6 @@ export default function LoginPage() {
     if (name === 'password') {
       setPassword(value);
     }
-
-    console.log(userId, password);
   };
 
   const handleClickShowPassword = () => setShowPassword(show => !show);
@@ -59,19 +65,26 @@ export default function LoginPage() {
       const userToken = result.data.token;
       sessionStorage.setItem('userToken', userToken);
       setUserToken(userToken);
-      alert('로그인 성공');
-      navigate('/');
+      navigate(ROUTE.HOME.link);
     } catch (err) {
-      console.log(err);
+      setIsErrorModal({
+        state: true,
+        message: err.response.data,
+      });
     }
   };
 
   return (
     <LoginWrap>
       <LoginContainer>
-        <LoginLogoBox>
-          <img src="/images/login/login-img.png" alt="" />
-        </LoginLogoBox>
+        <LoginLogoboxes>
+          <LoginLogoimgBox>
+            <img src="/images/commons/textlogo.png" alt="사랑해 지구야 로고" />
+          </LoginLogoimgBox>
+          <LoginLogoBox>
+            <img src="/images/commons/mainearth.png" alt="사랑해 지구야 로고" />
+          </LoginLogoBox>
+        </LoginLogoboxes>
         <LoginForm>
           <InputBox>
             <TextField
@@ -112,21 +125,20 @@ export default function LoginPage() {
             로그인
           </Button>
           <JoinLink>
-            <Link>앗! 아직 아이디가 없으신가요? 가입하러가기</Link>
+            <Link to="/register">앗! 아직 아이디가 없으신가요? 가입하러가기</Link>
           </JoinLink>
         </LoginForm>
       </LoginContainer>
     </LoginWrap>
   );
 }
-
 const LoginWrap = styled.div`
   width: 100%;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 9.6rem;
+  padding-top: 8.8rem;
   background-color: #b6ce8a;
 `;
 
@@ -135,11 +147,40 @@ const LoginContainer = styled.div`
   margin: 0 auto;
 `;
 
+const LoginLogoboxes = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  @media (max-width: 767px) {
+    flex-direction: column;
+  }
+`;
 const LoginLogoBox = styled.div`
-  width: 100%;
+  width: 23rem;
+  height: auto;
   margin-bottom: 3rem;
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-direction: row;
   img {
     width: 100%;
+  }
+`;
+
+const LoginLogoimgBox = styled.div`
+  width: 23rem;
+  height: 13rem;
+  display: flex;
+  gap: 2rem;
+  margin-right: 2rem;
+  justify-content: center;
+  flex-direction: row;
+  img {
+    width: 100%;
+  }
+  @media (max-width: 767px) {
+    height: 16rem;
   }
 `;
 
@@ -153,20 +194,20 @@ const LoginForm = styled.form`
   background-color: #fff;
   padding: 3rem;
 
-  .css-1u3bzj6-MuiFormControl-root-MuiTextField-root {
+  .MuiTextField-root {
     width: 100%;
   }
-  .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
-    width: 100%;
-  }
-  .css-r47a1p-MuiFormControl-root {
+
+  .MuiFormControl-root {
     width: 100%;
     margin: 0;
   }
 
-  .css-1jy569b-MuiFormLabel-root-MuiInputLabel-root,
-  .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input,
-  .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
+  .MuiOutlinedInput-input {
+    font-size: 1.5rem;
+  }
+
+  .MuiInputLabel-root {
     font-size: 1.5rem;
   }
 

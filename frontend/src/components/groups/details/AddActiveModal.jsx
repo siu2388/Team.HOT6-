@@ -7,12 +7,69 @@ import {
   RadioGroup,
   TextField,
 } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { getDates } from '../../../commons/utils/getDate';
 import FileUpload from '../../commons/FileUpload';
+import { res } from '../../../styles/responsive';
+import {
+  imgFileState,
+  isErrorModalState,
+  isSuccessModalState,
+  userInfoState,
+} from '../../../stores';
+import { useRecoilState } from 'recoil';
+import { useParams } from 'react-router-dom';
+import * as API from '../../../api/index';
 
 export default function AddActiveModal({ onClickToggleModal, selectedDate }) {
+  const [activity, setActivity] = useState('');
+  const [userInfo] = useRecoilState(userInfoState);
+  const [imgFile] = useRecoilState(imgFileState);
+  const [, setIsScucessModal] = useRecoilState(isSuccessModalState);
+  const [, setIsErrorModal] = useRecoilState(isErrorModalState);
+
+  const groupId = useParams().id;
+
+  const onChangeActivity = e => {
+    setActivity(e.target.value);
+  };
+
+  const handleAddActivity = async () => {
+    try {
+      if (!activity) {
+        setIsErrorModal({
+          state: true,
+          message: '카테고리를 선택해주세요.',
+        });
+      } else if (!imgFile) {
+        setIsErrorModal({
+          state: true,
+          message: '활동 이미지를 등록해주세요.',
+        });
+      } else {
+        const formData = new FormData();
+        formData.append('name', userInfo?.user?.name);
+        formData.append('groupId', groupId);
+        formData.append('usedDate', selectedDate);
+        formData.append('category', activity);
+        formData.append('proofImg', imgFile);
+
+        await API.formPost('/activities', formData);
+        setIsScucessModal({
+          state: true,
+          message: '인증요청에 성공하였습니다. 인증 완료 후 포인트가 적립됩니다.',
+        });
+        onClickToggleModal();
+      }
+    } catch (err) {
+      setIsErrorModal({
+        state: true,
+        message: err.response.data,
+      });
+    }
+  };
+
   return (
     <BackDrop>
       <Modal>
@@ -23,7 +80,7 @@ export default function AddActiveModal({ onClickToggleModal, selectedDate }) {
               id="filled-required"
               label="이름"
               variant="standard"
-              value="깜장이"
+              value={userInfo?.user?.name}
               disabled
             />
           </InputBox>
@@ -43,8 +100,18 @@ export default function AddActiveModal({ onClickToggleModal, selectedDate }) {
               aria-labelledby="demo-row-radio-buttons-group-label"
               name="row-radio-buttons-group"
             >
-              <FormControlLabel value="텀블러" control={<Radio />} label="텀블러" />
-              <FormControlLabel value="다회용기" control={<Radio />} label="다회용기" />
+              <FormControlLabel
+                value="tumbler"
+                control={<Radio />}
+                label="텀블러"
+                onChange={onChangeActivity}
+              />
+              <FormControlLabel
+                value="multipleContainers"
+                control={<Radio />}
+                label="다회용기"
+                onChange={onChangeActivity}
+              />
             </RadioGroup>
           </FormControl>
           <FileBox>
@@ -52,7 +119,7 @@ export default function AddActiveModal({ onClickToggleModal, selectedDate }) {
             <FileUpload />
           </FileBox>
           <BtnBox>
-            <Button variant="contained" color="success">
+            <Button variant="contained" color="success" onClick={handleAddActivity}>
               등록
             </Button>
             <Button variant="outlined" color="success" onClick={onClickToggleModal}>
@@ -86,6 +153,10 @@ const Modal = styled.div`
   transform: translate(-50%, -50%);
   background-color: #fff;
   border-radius: 1rem;
+
+  @media ${res.mobile} {
+    width: 90%;
+  }
 `;
 
 const ModalTitle = styled.h3`
@@ -101,36 +172,6 @@ const InputBox = styled.div`
 
 const ActiveForm = styled.form`
   width: 100%;
-  .css-1u3bzj6-MuiFormControl-root-MuiTextField-root {
-    width: 100%;
-  }
-  .css-1x51dt5-MuiInputBase-input-MuiInput-input {
-    font-size: 1.6rem;
-    font-weight: 400;
-    color: #111;
-  }
-
-  .css-1c2i806-MuiFormLabel-root-MuiInputLabel-root {
-    font-size: 1.7rem;
-    font-weight: 400;
-    color: #111;
-  }
-
-  .css-1x51dt5-MuiInputBase-input-MuiInput-input.Mui-disabled {
-    -webkit-text-fill-color: #111;
-  }
-
-  #demo-row-radio-buttons-group-label {
-    font-size: 1.5rem;
-  }
-
-  .css-j204z7-MuiFormControlLabel-root .MuiFormControlLabel-label {
-    font-size: 1.4rem;
-  }
-
-  .css-vqmohf-MuiButtonBase-root-MuiRadio-root.Mui-checked {
-    color: rgb(1, 136, 28);
-  }
 `;
 
 const FileBox = styled.div`

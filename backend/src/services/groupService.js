@@ -1,24 +1,131 @@
 import { Group } from '../db/models/Group.js';
 import { User } from '../db/models/User.js';
+import { GroupJoin } from '../db/models/GroupJoin.js';
 
 class groupService {
-  // create/ post
-  static async addGroup({ groupOwner, title, totalNumOfMembers, description, thumbnail }) {
+  // 그룹의 생성
+  static async addGroup({
+    groupOwnerId,
+    title,
+    totalNumOfMembers,
+    description,
+    createdAt,
+    thumbnail,
+  }) {
+    // 그룹장이 그룹 중복 생성 못하게 방지
+    const group = await Group.findByGroupOwnerId(groupOwnerId);
+    if (group) {
+      const errorMessage = '그룹은 하나만 생성할 수 있어요!';
+      throw new Error(errorMessage);
+    }
+    // 다른 그룹에 가입한 유저인지도 확인 groupJoin에서 데이터 있는지 확인
+    const groupJoin = await GroupJoin.findByGroupUserId( groupOwnerId );
+    if (groupJoin) {
+      const errorMessage = '그룹은 하나만 가입할 수 있어요!';
+      throw new Error(errorMessage);
+    }
+
     const newGroup = {
-      groupOwner,
+      groupOwnerId,
       title,
       totalNumOfMembers,
       description,
+      createdAt,
       thumbnail,
     };
     const createdGroup = await Group.create({ newGroup });
     return createdGroup;
   }
 
-  static async getGroups() {
-    const Groups = await Group.findAll();
-    return Groups;
+  // 그룹의 목록 조회
+  static async getGroups(page, limit) {
+    const skip = (page - 1) * limit;
+    const { groups, count } = await Group.findAndCountAll(skip, limit);
+    const totalPages = Math.ceil(count / limit);
+    const currentPage = Math.min(page, totalPages);
+    return { groups, totalPages, currentPage };
+  }
+
+  // 그룹의 상세페이지 조회
+  static async getMyGroup(groupId) {
+    const myGroup = await Group.findBygroupId(groupId);
+    return myGroup;
+  }
+
+  //그룹명 검색
+  static async searchGroup({ title }) {
+    const { groups: filteredSearch, count } = await Group.findByTitle({ title });
+    if (!filteredSearch) {
+      const errorMessage =
+        '그룹명 조회: 해당 이름을 가진 그룹이 없습니다. 다시 한 번 확인해 주세요.';
+      throw new Error(errorMessage);
+    }
+    return { groups: filteredSearch, count };
+  }
+
+  //그룹 정보 수정
+  static async setGroup({ groupId, toUpdate }) {
+    let updatedGroup = await Group.findGroupId(groupId);
+
+    if (!updatedGroup) {
+      const errorMessage = 'Group 조회: 생성한 그룹이 없습니다.';
+      throw new Error(errorMessage);
+    }
+
+    if (toUpdate.title) {
+      const fieldToUpdate = 'title';
+      const newValue = toUpdate.title;
+      updatedGroup = await Group.updateGroup({ _id: groupId, fieldToUpdate, newValue });
+    }
+
+    if (toUpdate.description) {
+      const fieldToUpdate = 'description';
+      const newValue = toUpdate.description;
+      updatedGroup = await Group.updateGroup({ _id: groupId, fieldToUpdate, newValue });
+    }
+
+    if (toUpdate.totalNumOfMembers) {
+      const fieldToUpdate = 'totalNumOfMembers';
+      const newValue = toUpdate.totalNumOfMembers;
+      updatedGroup = await Group.updateGroup({ _id: groupId, fieldToUpdate, newValue });
+    }
+
+    if (toUpdate.thumbnail) {
+      const fieldToUpdate = 'thumbnail';
+      const newValue = toUpdate.thumbnail;
+      updatedGroup = await Group.updateGroup({ _id: groupId, fieldToUpdate, newValue });
+    }
+
+    return updatedGroup;
+  }
+
+  //그룹 삭제
+  static async deleteGroup({ groupId, userId }) {
+    const isGroupDataDeleted = await Group.deleteById({ groupId });
+    //그룹장의 groupId 삭제
+    const deleteGroupOwnerGroupId = await User.deleteGroupId({ groupId, userId });
+    //그룹멤버의 groupId 삭제
+    const deleteGroupId = await User.deleteMembersGroupId({ groupId });
+    // groupJoin 데이터 삭제
+    const isGroupJoinDataDeleted = await GroupJoin.deleteData({ groupId });
+
+    if (!deleteGroupOwnerGroupId) {
+      const errorMessage = '그룹오너삭제: 해당 id를 가진 그룹장이 없습니다.';
+      throw new Error(errorMessage);
+    }
+    if (!deleteGroupId) {
+      const errorMessage = '멤버들 그룹아이디삭제: 해당 id를 가진 멤버가 없습니다.';
+      throw new Error(errorMessage);
+    }
+    if (!isGroupJoinDataDeleted) {
+      const errorMessage = '그룹조인데이터삭제: 해당 id를 가진 데이터가 없습니다.';
+      throw new Error(errorMessage);
+    }
+    if (!isGroupDataDeleted) {
+      const errorMessage = 'Group 삭제: 해당 id를 가진 그룹이 없습니다.';
+      throw new Error(errorMessage);
+    }
+    return { status: 'ok' };
   }
 }
-
 export { groupService };

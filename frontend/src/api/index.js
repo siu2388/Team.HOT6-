@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const backendPort = '5001';
 const serverUrl = 'http://' + window.location.hostname + ':' + backendPort;
+const imgUrl = 'http://' + window.location.hostname + ':' + backendPort + '/uploads/';
 
 async function get(endpoint, params = '') {
   return axios.get(serverUrl + endpoint + '/' + params, {
@@ -50,4 +51,4 @@ async function del(endpoint, params = '') {
   });
 }
 
-export { get, post, formPost, put, del as delete };
+export { serverUrl, imgUrl, get, post, formPost, put, del as delete };

@@ -4,52 +4,29 @@ import styled from 'styled-components';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import { ROUTE } from '../../../constants/routes/routeData';
+import { res } from '../../../styles/responsive';
+import * as API from '../../../api/index';
 
 export default function ListBox({ group }) {
-  console.log(group);
   return (
-    <ListBoxWrap>
+    <ListBoxWrap data-aos="flip-left">
       <Link to={`${ROUTE.GROUP_DETAIL.link}/${group._id}`}>
-        <ListBackImg img={`http://localhost:5001/uploads/${group.thumbnail}`} />
+        <ListBackImg img={`${API.imgUrl}${group?.thumbnail}`} />
         <ListContent>
           <TitleBox>
-            <ListTitle>{group.title}</ListTitle>
-            <ListDate>{group.createdAt.slice(0, 10)}</ListDate>
+            <ListTitle>🌟 {group.title} 🌟</ListTitle>
+            <ListDate>{group.createdAt}</ListDate>
           </TitleBox>
+          <DescriptionBox>{group.description}</DescriptionBox>
           <ListMemberBox>
             <AvatarGroup max={4}>
               <Avatar
                 alt="Remy Sharp"
-                src="/images/commons/logo.png"
-                sx={{ width: 30, height: 30 }}
-              />
-              <Avatar
-                alt="Remy Sharp"
-                src="/images/commons/logo.png"
-                sx={{ width: 30, height: 30 }}
-              />
-              <Avatar
-                alt="Remy Sharp"
-                src="/images/commons/logo.png"
-                sx={{ width: 30, height: 30 }}
-              />
-              <Avatar
-                alt="Remy Sharp"
-                src="/images/commons/logo.png"
-                sx={{ width: 30, height: 30 }}
-              />
-              <Avatar
-                alt="Remy Sharp"
-                src="/images/commons/logo.png"
-                sx={{ width: 30, height: 30 }}
-              />
-              <Avatar
-                alt="Remy Sharp"
-                src="/images/commons/logo.png"
-                sx={{ width: 30, height: 30 }}
+                src={group.groupOwnerId ? `${API.imgUrl}${group.groupOwnerId.profileImg}` : ''}
+                sx={{ width: '3rem', height: '3rem' }}
               />
             </AvatarGroup>
-            <MemberNum>모집인원 13 / {group.totalNumOfMembers}</MemberNum>
+            <MemberNum>{group?.groupOwnerId?.nickname}</MemberNum>
           </ListMemberBox>
         </ListContent>
       </Link>
@@ -61,6 +38,13 @@ const ListBoxWrap = styled.div`
   width: 32%;
   border-radius: 8px;
   background-color: #fff;
+
+  @media ${res.tablet} {
+    width: 48%;
+  }
+  @media ${res.mobile} {
+    width: 100%;
+  }
 `;
 
 const ListBackImg = styled.div`
@@ -75,7 +59,7 @@ const ListBackImg = styled.div`
 
 const ListContent = styled.div`
   width: 100%;
-  padding: 1rem;
+  padding: 2rem;
 `;
 
 const TitleBox = styled.div`
@@ -86,12 +70,14 @@ const TitleBox = styled.div`
 `;
 
 const ListTitle = styled.h4`
-  font-size: 1.8rem;
+  margin-top: 1.8rem;
+  font-size: 2.2rem;
   font-weight: 400;
-  color: #111;
+  color: #2d2d2d;
 `;
 
 const ListDate = styled.p`
+  margin-top: 1.3rem;
   font-size: 1.3rem;
   font-weight: 400;
   color: #999;
@@ -100,10 +86,16 @@ const ListDate = styled.p`
 const ListMemberBox = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  margin-top: 2rem;
+  gap: 0.5rem;
   .css-1ytufz-MuiAvatarGroup-root .MuiAvatar-root {
-    width: 35px;
-    height: 35px;
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  @media ${res.mobile} {
+    flex-direction: column;
+    align-items: flex-start;
   }
 `;
 
@@ -112,4 +104,15 @@ const MemberNum = styled.span`
   font-weight: 400;
   color: #333;
   margin-top: 5px;
+`;
+
+const DescriptionBox = styled.p`
+  width: 80%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 1.7rem;
+  font-weight: 400;
+  color: #818181;
+  padding-left: 1rem;
 `;

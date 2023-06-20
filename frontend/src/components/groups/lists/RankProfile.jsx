@@ -1,19 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
 import Avatar from '@mui/material/Avatar';
+import { res } from '../../../styles/responsive';
+import * as API from '../../../api/index';
 
-export default function RankProfile() {
+export default function RankProfile({ group }) {
   return (
     <ProfileBox>
       <ProfileContainer>
-        <Avatar src="/images/commons/logo.png" sx={{ width: 68, height: 68 }} />
+        <Avatar
+          src={`${API.imgUrl}${group?.thumbnail}`}
+          sx={{ width: '6.8rem', height: '6.8rem' }}
+        />
         <ProfileInfoBox>
-          <ProfileName>깜장이</ProfileName>
-          <ProfileId>cjt3591</ProfileId>
+          <GroupTitle>{group?.title} 👑</GroupTitle>
         </ProfileInfoBox>
       </ProfileContainer>
       <RankBox>
-        <RankInfo>TOP1</RankInfo>
+        <RankInfo>TOP{group?.rank}</RankInfo>
       </RankBox>
     </ProfileBox>
   );
@@ -25,6 +29,10 @@ const ProfileBox = styled.div`
   background-color: #fff;
   border-radius: 1rem;
   position: relative;
+
+  @media ${res.mobile} {
+    width: 100%;
+  }
 `;
 
 const ProfileContainer = styled.div`
@@ -33,19 +41,17 @@ const ProfileContainer = styled.div`
   align-items: center;
 `;
 
-const ProfileInfoBox = styled.div``;
-
-const ProfileName = styled.p`
-  font-size: 1.8rem;
-  font-weight: 400;
-  color: #111;
-  margin-bottom: 1.2rem;
+const ProfileInfoBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
-const ProfileId = styled.p`
-  font-size: 1.3rem;
+const GroupTitle = styled.p`
+  font-size: 2.3rem;
   font-weight: 400;
-  color: #d6d6d6;
+  color: #323232;
+  margin-bottom: 1.2rem;
 `;
 
 const RankBox = styled.div`
@@ -62,7 +68,7 @@ const RankBox = styled.div`
 `;
 
 const RankInfo = styled.span`
-  font-size: 1.6rem;
+  font-size: 1.9rem;
   font-weight: 400;
   color: #fff;
   margin-top: -2px;

@@ -19,3 +19,29 @@ export const imgFileState = atom({
   key: 'imgFile',
   default: null,
 });
+
+export const userInfoState = atom({
+  key: 'userInfo',
+  default: null,
+});
+
+export const updateState = atom({
+  key: 'update',
+  default: 0,
+});
+
+export const isSuccessModalState = atom({
+  key: 'isSuccessModal',
+  default: {
+    state: false,
+    message: '',
+  },
+});
+
+export const isErrorModalState = atom({
+  key: 'isErrorModal',
+  default: {
+    state: false,
+    message: '',
+  },
+});

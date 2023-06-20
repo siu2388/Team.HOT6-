@@ -2,10 +2,6 @@ import { Schema, model } from 'mongoose';
 
 const userSchema = new Schema(
   {
-    id: {
-      type: String,
-      required: true,
-    },
     userId: {
       type: String,
       required: true,
@@ -36,12 +32,16 @@ const userSchema = new Schema(
       type: String,
     },
     groupId: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'Group',
+      default: null,
     },
     profileImg: {
       type: String,
+      default: '1686823001485.png',
     },
   },
+  { strictPopulate: false },
   {
     timestamps: true,
   },

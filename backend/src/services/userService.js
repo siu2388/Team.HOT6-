@@ -1,9 +1,10 @@
 import { User } from '../db/index.js';
 import bcrypt from 'bcrypt';
-import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
+import { ActivityModel } from '../db/schemas/activity.js';
 
 class userAuthService {
+  // 회원가입
   static async addUser({
     userId,
     password,
@@ -12,19 +13,32 @@ class userAuthService {
     phone,
     address,
     addressDetail,
+    groupId,
     profileImg,
   }) {
-    const user = await User.findByUserId({ userId });
-    if (user) {
-      const errorMessage = '이 아이디는 현재 사용중입니다. 다른 아이디를 입력해 주세요.';
-      return { errorMessage };
+    const duplicateFields = [];
+    const existingUser = await User.findByDuplicateFields([{ userId }, { nickname }, { phone }]);
+
+    if (existingUser) {
+      if (existingUser.userId === userId) {
+        duplicateFields.push('userId');
+      }
+
+      if (existingUser.nickname === nickname) {
+        duplicateFields.push('nickname');
+      }
+
+      if (existingUser.phone === phone) {
+        duplicateFields.push('phone');
+      }
+
+      const errorMessage = `이미 사용 중인 ${duplicateFields.join(', ')} 입니다`;
+      throw new Error(errorMessage);
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const id = uuidv4();
     const newUser = {
-      id,
       userId,
       password: hashedPassword,
       name,
@@ -32,18 +46,20 @@ class userAuthService {
       phone,
       address,
       addressDetail,
+      groupId,
       profileImg,
     };
 
     return User.create({ newUser });
   }
-
+  
+  //로그인
   static async getUser({ userId, password }) {
     const user = await User.findByUserId({ userId });
     if (!user) {
       const errorMessage =
         'User 조회: 해당 아이디는 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
-      return { errorMessage };
+      throw new Error(errorMessage);
     }
 
     const correctPasswordHash = user.password;
@@ -51,13 +67,13 @@ class userAuthService {
 
     if (!isPasswordCorrect) {
       const errorMessage = 'User 조회: 비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.';
-      return { errorMessage };
+      throw new Error(errorMessage);
     }
 
     const secretKey = process.env.JWT_SECRET_KEY || 'jwt-secret-key';
-    const token = jwt.sign({ loginedId: user.id }, secretKey);
+    const token = jwt.sign({ id: user._id }, secretKey);
 
-    const { id, name, nickname, phone, address, addressDetail, profileImage } = user;
+    const { id, name, nickname, phone, address, addressDetail, groupId, profileImg } = user;
 
     const loginUser = {
       token,
@@ -68,33 +84,36 @@ class userAuthService {
       phone,
       address,
       addressDetail,
-      profileImage,
+      groupId,
       errorMessage: null,
+      profileImg,
     };
     return loginUser;
   }
 
+  // 유저 목록
   static async getUsers() {
     const users = await User.findAll();
     return users;
   }
 
+  // 정보 수정
   static async setUser({ loginedId, toUpdate }) {
     let user = await User.findById({ loginedId });
 
     if (!user) {
       const errorMessage = 'User 조회: 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
-      return { errorMessage };
+      throw new Error(errorMessage);
     }
 
     if (toUpdate.userId) {
       const errorMessage = 'userId는 변경할 수 없습니다.';
-      return { errorMessage };
+      throw new Error(errorMessage);
     }
 
     if (toUpdate.name) {
       const errorMessage = '이름은 변경할 수 없습니다.';
-      return { errorMessage };
+      throw new Error(errorMessage);
     }
 
     if (toUpdate.password) {
@@ -127,26 +146,73 @@ class userAuthService {
       await User.update({ loginedId, fieldToUpdate, newValue });
     }
 
-    if (toUpdate.profileImage) {
-      const fieldToUpdate = 'profileImage';
-      const newValue = toUpdate.profileImage;
+    if (toUpdate.profileImg) {
+      const fieldToUpdate = 'profileImg';
+      const newValue = toUpdate.profileImg;
       await User.update({ loginedId, fieldToUpdate, newValue });
     }
 
     return user;
   }
 
+  // 나의 그룹 조회용
+  static async getMyGroup({ userId }) {
+    const group = await User.findMyGroup({ userId });
+    return group;
+  }
+
+  // groupId 같은 멤버 조회
+  static async getMembers({ groupId }) {
+    const members = await User.findGroupMembers({ groupId });
+    return members;
+  }
+
+  // 유저가 그룹에 가입신청 시 groupId값 업데이트
+  static async setUserGroup({ userId, groupId }) {
+    const updated = await User.updateGroupId({ userId, groupId });
+    return updated;
+  }
+
+  // 유저의 groupId값 삭제
+  static async deleteGroupId({ groupId, userId }) {
+    const deleteGroupId = await User.deleteGroupId({ groupId, userId });
+    return deleteGroupId;
+  }
+
+  //유저 인증샷 관리자 승인
+  static async getUserActivityCount(userId, category) {
+    const count = await ActivityModel.countDocuments({
+      userId: userId,
+      state: '승인',
+      category: category,
+    });
+
+    return count;
+  }
+
+  // 유저 정보 조회
   static async getUserInfo({ loginedId }) {
-    const user = await User.findById({ loginedId });
+    try {
+      const user = await User.findById({ loginedId });
 
-    if (!user) {
-      const errorMessage =
-        'User 조회: 해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
-      return { errorMessage };
+      if (!user) {
+        const errorMessage =
+          'User 조회: 해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.';
+        throw new Error(errorMessage);
+      }
+
+      const tumblerCount = await userAuthService.getUserActivityCount(loginedId, 'tumbler');
+      const multipleContainersCount = await userAuthService.getUserActivityCount(
+        loginedId,
+        'multipleContainers',
+      );
+
+      const totalCount = tumblerCount + multipleContainersCount;
+
+      return { user, tumblerCount, multipleContainersCount, totalCount };
+    } catch (error) {
+      throw new Error('Failed to get user info.');
     }
-
-    return user;
   }
 }
-
 export { userAuthService };

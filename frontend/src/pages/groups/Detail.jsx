@@ -1,44 +1,89 @@
 import { Avatar, Button } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import MemberProfileBox from '../../components/commons/box/MemberProfileBox';
 import GroupCalendar from '../../components/groups/details/Calendar';
+import { useParams } from 'react-router-dom';
+import * as API from '../../api/index';
+import { res } from '../../styles/responsive';
+import { useRecoilState } from 'recoil';
+import { isErrorModalState, isSuccessModalState, userInfoState } from '../../stores';
 
 export default function GroupDetailPage() {
+  const [groupData, setGroupData] = useState([]);
+  const [, setIsScucessModal] = useRecoilState(isSuccessModalState);
+  const [, setIsErrorModal] = useRecoilState(isErrorModalState);
+  const [userInfo] = useRecoilState(userInfoState);
+
+  const groupId = useParams().id;
+
+  useEffect(() => {
+    const getGroupData = async () => {
+      const result = await API.get(`/groups/${groupId}`);
+      setGroupData(result.data);
+    };
+    getGroupData();
+  }, []);
+
+  const handleGroupJoin = async () => {
+    try {
+      await API.post(`/mygroups/${groupId}`);
+      setIsScucessModal({
+        state: true,
+        message: '그룹신청에 성공하였습니다. 그룹장 수락 후 그룹 활동이 활성화 됩니다.',
+      });
+    } catch (err) {
+      setIsErrorModal({ state: true, message: err.response.data });
+    }
+  };
+
   return (
     <GroupDetailWrap>
       <GroupDetailContainer>
-        <GroupTitle>3학년 1반 그룹</GroupTitle>
+        <GroupName>
+          <GroupTitle>{groupData?.myGroup?.title}</GroupTitle>
+        </GroupName>
         <DetailContent01>
           <DetailInfoBox>
-            <DetailThumbnail />
+            <DetailThumbnail img={`${API.imgUrl}${groupData?.myGroup?.thumbnail}`} />
             <DetailInfo>
               <div>
                 <UserProfile>
                   <Avatar
                     alt="내 프로필"
-                    src="/images/commons/kkam.png"
+                    src={`${API.imgUrl}${groupData?.myGroup?.groupOwnerId?.profileImg}`}
                     sx={{ width: 40, height: 40 }}
                   />
-                  <UserName>깜장이</UserName>
+                  <UserName>{groupData?.myGroup?.groupOwnerId?.name}</UserName>
                 </UserProfile>
                 <UserBox>
                   <span>생성일</span>
-                  <span>2023.01.01</span>
+                  <span>{groupData?.myGroup?.createdAt}</span>
                 </UserBox>
                 <UserBox>
                   <span>모집인원</span>
-                  <span>15명</span>
+                  <span>{groupData?.myGroup?.totalNumOfMembers}명</span>
                 </UserBox>
-                <GroupDescription>내용이 들어갑니다... 내용이 들어갑니다......</GroupDescription>
+                <GroupDescription>{groupData?.myGroup?.description}</GroupDescription>
               </div>
-              <Button
-                style={{ width: '180px', height: '40px', fontSize: '2.2rem' }}
-                variant="contained"
-                color="success"
-              >
-                그룹신청
-              </Button>
+              {sessionStorage.getItem('userToken') && (
+                <div>
+                  <Button
+                    style={{
+                      width: '180px',
+                      height: '40px',
+                      fontSize: '2.3rem',
+                      fontFamily: 'Do Hyeon',
+                    }}
+                    variant="contained"
+                    color="success"
+                    onClick={handleGroupJoin}
+                    disabled={groupData?.myGroup?.groupOwnerId?._id === userInfo?.user?._id}
+                  >
+                    그룹신청
+                  </Button>
+                </div>
+              )}
             </DetailInfo>
           </DetailInfoBox>
           <GroupMemberBox>
@@ -46,40 +91,42 @@ export default function GroupDetailPage() {
               <GroupMemberTitle>그룹 명단</GroupMemberTitle>
               <MemberNumBox>
                 <img src="/images/commons/user.png" alt="" />
-                <MemberNum>14 / 15</MemberNum>
+                <MemberNum>
+                  {groupData?.members?.length} / {groupData?.myGroup?.totalNumOfMembers}
+                </MemberNum>
               </MemberNumBox>
             </GroupMemberTitleBox>
             <GroupMembers>
-              <MemberProfileBox />
-              <MemberProfileBox />
-              <MemberProfileBox />
-              <MemberProfileBox />
-              <MemberProfileBox />
-              <MemberProfileBox />
-              <MemberProfileBox />
+              {groupData?.members?.map(member => (
+                <MemberProfileBox member={member} key={member?._id} />
+              ))}
             </GroupMembers>
           </GroupMemberBox>
         </DetailContent01>
-        <GroupCalendar />
+        <GroupCalendar title={groupData?.myGroup?.title} userInfo={userInfo} />
       </GroupDetailContainer>
     </GroupDetailWrap>
   );
 }
-
 const GroupDetailWrap = styled.div`
   width: 100%;
-  padding-top: 16rem;
+  padding-top: 14rem;
+  margin-bottom: 15rem;
 `;
 
 const GroupDetailContainer = styled.div`
   width: 1300px;
   margin: 0 auto;
+
+  @media ${res.tablet} {
+    width: 90%;
+  }
 `;
 
 const GroupTitle = styled.h2`
-  font-size: 3rem;
+  font-size: 5rem;
   font-weight: 500;
-  color: #000;
+  color: #27641b;
   margin-bottom: 7.5rem;
 `;
 
@@ -94,14 +141,25 @@ const DetailContent01 = styled.div`
 const DetailInfoBox = styled.div`
   display: flex;
   gap: 4rem;
+
+  @media (max-width: 1080px) {
+    width: 100%;
+    justify-content: center;
+  }
 `;
 
 const DetailThumbnail = styled.div`
   width: 30rem;
   height: 30rem;
-  background-image: url('/images/main/main01.png');
+  background-image: ${({ img }) => `url(${img})`};
   background-size: cover;
+  background-position: center;
   border-radius: 0.8rem;
+
+  @media (max-width: 1080px) {
+    width: 40rem;
+    justify-content: center;
+  }
 `;
 
 const DetailInfo = styled.div`
@@ -118,9 +176,9 @@ const UserProfile = styled.div`
 `;
 
 const UserName = styled.p`
-  font-size: 2rem;
+  font-size: 3rem;
   font-weight: 400;
-  color: #111;
+  color: #2f2f2f;
 `;
 
 const UserBox = styled.div`
@@ -130,7 +188,7 @@ const UserBox = styled.div`
   margin-bottom: 1rem;
 
   span {
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: 400;
   }
   span:nth-child(1) {
@@ -138,7 +196,7 @@ const UserBox = styled.div`
   }
 
   span:nth-child(2) {
-    color: #111;
+    color: #373737;
   }
 
   &:last-of-type {
@@ -146,7 +204,11 @@ const UserBox = styled.div`
   }
 `;
 
-const GroupMemberBox = styled.div``;
+const GroupMemberBox = styled.div`
+  @media (max-width: 1080px) {
+    display: none;
+  }
+`;
 
 const GroupMemberTitleBox = styled.div`
   width: 35rem;
@@ -156,9 +218,10 @@ const GroupMemberTitleBox = styled.div`
   margin-bottom: 2rem;
 `;
 const GroupMemberTitle = styled.h4`
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 400;
   color: #111;
+  margin-left: 1rem;
 `;
 
 const MemberNumBox = styled.div`
@@ -168,9 +231,10 @@ const MemberNumBox = styled.div`
 `;
 
 const MemberNum = styled.span`
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 400;
   color: #111;
+  margin-right: 1.5rem;
 `;
 
 const GroupMembers = styled.div`
@@ -185,8 +249,13 @@ const GroupMembers = styled.div`
 
 const GroupDescription = styled.p`
   max-width: 40rem;
-  font-size: 1.6rem;
+  font-size: 2rem;
   font-weight: 400;
-  color: #999;
+  color: #595858;
   line-height: 1.2;
+`;
+
+const GroupName = styled.div`
+  display: flex;
+  justify-content: center;
 `;

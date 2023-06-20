@@ -3,7 +3,7 @@ import { Schema, model } from 'mongoose';
 const GroupJoinSchema = new Schema(
   {
     groupId: {
-      type: Schema.Types.ObjectId, 
+      type: Schema.Types.ObjectId,
       ref: 'Group',
       required: true,
     },
@@ -17,6 +17,7 @@ const GroupJoinSchema = new Schema(
       required: true,
     },
   },
+  { strictPopulate: false },
   {
     timestamps: true,
   },
