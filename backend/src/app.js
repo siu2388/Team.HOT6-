@@ -9,6 +9,7 @@ import { activityRouter } from './routers/activityRouter.js';
 import path from 'path';
 import { dataRouter } from './routers/dataRouter.js';
 import { boardRouter } from './routers/boardRouter.js';
+import { commentRouter } from './routers/commentRouter.js';
 
 const app = express();
 
@@ -44,6 +45,7 @@ app.use(groupJoinRouter);
 app.use(activityRouter);
 app.use(dataRouter);
 app.use('/boards', boardRouter);
+app.use('/comments', commentRouter);
 
 app.use(errorMiddleware);
 
