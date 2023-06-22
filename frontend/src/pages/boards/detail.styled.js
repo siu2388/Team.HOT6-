@@ -7,10 +7,10 @@ export const BoardDetailContainer = styled.div`
   @media ${res.tablet} {
     width: 90%;
   }
-  img{
-     display:block;
-     margin: 0 auto;
-     max-width:80%
+  img {
+    display: block;
+    margin: 0 auto;
+    max-width: 80%;
   }
 `;
 
@@ -277,7 +277,7 @@ export const CommentTextarea = styled.textarea`
   padding: 2rem;
   font-size: 1.4rem;
   font-weight: 500;
-  color: #bdbdbd;
+  color: #111;
   outline: none;
   resize: none;
   border: none;

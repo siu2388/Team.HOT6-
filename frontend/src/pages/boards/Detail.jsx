@@ -8,6 +8,9 @@ import { ROUTE } from '../../constants/routes/routeData';
 
 export default function BoardDetail() {
   const [boardData, setBoardData] = useState([]);
+  const [comment, setComment] = useState('');
+  console.log(comment);
+
   const [, setIsScucessModal] = useRecoilState(isSuccessModalState);
   const [, setIsErrorModal] = useRecoilState(isErrorModalState);
   const [userInfo] = useRecoilState(userInfoState);
@@ -35,6 +38,35 @@ export default function BoardDetail() {
       setIsErrorModal({
         state: true,
         message: '커뮤니티 삭제 실패 관리자에게 문의해주세요.',
+      });
+    }
+  };
+
+  const onChangeComment = e => {
+    setComment(e.target.value);
+  };
+
+  const onClickAddComment = async () => {
+    if (comment) {
+      try {
+        const data = {
+          content: comment,
+        };
+        await API.post(`/comments/${boardId}`, data);
+        setIsScucessModal({
+          state: true,
+          message: '댓글이 등록되었습니다.',
+        });
+      } catch (err) {
+        setIsErrorModal({
+          state: true,
+          message: err.response.data,
+        });
+      }
+    } else {
+      setIsErrorModal({
+        state: true,
+        message: '댓글을 입력해주세요.',
       });
     }
   };
@@ -109,10 +141,11 @@ export default function BoardDetail() {
             <S.CommentTextarea
               placeholder="개인정보를 공유 및 요청하거나, 명예 훼손, 무단 광고, 불법 정보 유포시 모니터링 후 삭제될 수 있으며, 이에 대한 민형사상 책임은 게시자에게 있습니다. 입력해주세요."
               name="comment"
+              onChange={onChangeComment}
             />
             <S.CommentSubmitBox>
-              <S.CommentLengthBox>0/100</S.CommentLengthBox>
-              <S.CommentSubmit>등록하기</S.CommentSubmit>
+              <S.CommentLengthBox>{comment.length}/100</S.CommentLengthBox>
+              <S.CommentSubmit onClick={onClickAddComment}>등록하기</S.CommentSubmit>
             </S.CommentSubmitBox>
           </S.CommentTextareaBox>
         </S.CommentContainer>
