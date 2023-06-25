@@ -61,6 +61,28 @@ class boardService {
 
     return { status: 'ok' };
   }
+  // 좋아요
+  static async likeBoard({ boardId }) {
+    const board = await Board.findByBoard({ boardId });
+    if (!board) {
+      throw new Error('해당하는 커뮤니티가 없습니다.');
+    }
+
+    board.like += 1;
+    await board.save();
+    return board;
+  }
+  // 싫어요
+  static async unlikeBoard({ boardId }) {
+    const board = await Board.findByBoard({ boardId });
+    if (!board) {
+      throw new Error('해당하는 커뮤니티가 없습니다.');
+    }
+
+    board.unLike += 1;
+    await board.save();
+    return board;
+  }
 }
 
 export { boardService };
