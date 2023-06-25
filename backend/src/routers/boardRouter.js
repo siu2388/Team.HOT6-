@@ -92,18 +92,20 @@ boardRouter.delete('/:boardId', loginRequired, async (req, res, next) => {
 // 좋아요
 boardRouter.post('/:boardId/like', loginRequired, async (req, res, next) => {
   try {
+    const userId = req.currentUserId;
     const { boardId } = req.params;
-    const updatedBoard = await boardService.likeBoard({ boardId });
+    const updatedBoard = await boardService.likeBoard({ boardId, userId });
     res.status(200).json(updatedBoard);
   } catch (error) {
     next(error);
   }
 });
 // 싫어요
-boardRouter.post('/:boardId/unlike', loginRequired, async (req, res, next) => {
+boardRouter.post('/:boardId/unLike', loginRequired, async (req, res, next) => {
   try {
+    const userId = req.currentUserId;
     const { boardId } = req.params;
-    const updatedBoard = await boardService.unlikeBoard({ boardId });
+    const updatedBoard = await boardService.unLikeBoard({ boardId, userId });
     res.status(200).json(updatedBoard);
   } catch (error) {
     next(error);

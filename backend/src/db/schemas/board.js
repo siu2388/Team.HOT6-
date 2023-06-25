@@ -31,6 +31,14 @@ const BoardSchema = new Schema(
       type: String,
       default: '',
     },
+    likedBy: {
+      type: [Schema.Types.ObjectId],
+      default: [],
+    },
+    unLikedBy: {
+      type: [Schema.Types.ObjectId],
+      default: [],
+    },
   },
   {
     timestamps: true,

@@ -61,25 +61,60 @@ class boardService {
 
     return { status: 'ok' };
   }
-  // 좋아요
-  static async likeBoard({ boardId }) {
+
+  //좋아요
+  static async likeBoard({ boardId, userId }) {
     const board = await Board.findByBoard({ boardId });
     if (!board) {
       throw new Error('해당하는 커뮤니티가 없습니다.');
     }
 
+    // 중복 체크
+    const alreadyLiked = board.likedBy.includes(userId);
+    const alreadyUnliked = board.unLikedBy.includes(userId);
+
+    if (alreadyLiked) {
+      throw new Error('이미 좋아요를 눌렀습니다.');
+    }
+
     board.like += 1;
+    board.likedBy.push(userId);
+
+    if (alreadyUnliked) {
+      board.unLike -= 1;
+      board.unLikedBy = board.unLikedBy.filter(
+        unLikedUserId => unLikedUserId.toString() !== userId.toString(),
+      );
+    }
+
     await board.save();
     return board;
   }
   // 싫어요
-  static async unlikeBoard({ boardId }) {
+  static async unLikeBoard({ boardId, userId }) {
     const board = await Board.findByBoard({ boardId });
     if (!board) {
       throw new Error('해당하는 커뮤니티가 없습니다.');
     }
 
+    // 중복 체크
+    const alreadyLiked = board.likedBy.includes(userId);
+    const alreadyUnliked = board.unLikedBy.includes(userId);
+
+    if (alreadyUnliked) {
+      throw new Error('이미 싫어요를 눌렀습니다.');
+    }
+
     board.unLike += 1;
+    board.unLikedBy.push(userId);
+
+    if (alreadyLiked) {
+      board.like -= 1;
+      board.likedBy = board.likedBy.filter(
+        likedUserId => likedUserId.toString() !== userId.toString(),
+      );
+    }
+
     await board.save();
     return board;
   }
