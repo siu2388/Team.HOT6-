@@ -71,6 +71,32 @@ export default function BoardDetail() {
     }
   };
 
+  const onClickLike = async () => {
+    try {
+      await API.post(`/boards/${boardId}/like`);
+      const updatedBoard = await API.get(`/boards/${boardId}`);
+      setBoardData(updatedBoard.data);
+    } catch (err) {
+      setIsErrorModal({
+        state: true,
+        message: '이 버튼은 한 번만 누를 수 있습니다.',
+      });
+    }
+  };
+
+  const onClickUnlike = async () => {
+    try {
+      await API.post(`/boards/${boardId}/unlike`);
+      const updatedBoard = await API.get(`/boards/${boardId}`);
+      setBoardData(updatedBoard.data);
+    } catch (err) {
+      setIsErrorModal({
+        state: true,
+        message: '이 버튼은 한 번만 누를 수 있습니다.',
+      });
+    }
+  };
+
   return (
     <>
       <S.BoardDetailContainer>
@@ -97,13 +123,13 @@ export default function BoardDetail() {
           </S.BoardContent>
           <S.LikeAndUnLikeBox>
             <S.LikeAndUnLIkeContainer>
-              <S.DefaultBtn>
+              <S.DefaultBtn onClick={onClickLike}>
                 <img src="/images/board/likeBtn.png" />
               </S.DefaultBtn>
               <S.LikeText style={{ color: '#FFD600' }}>{boardData?.like}</S.LikeText>
             </S.LikeAndUnLIkeContainer>
             <S.LikeAndUnLIkeContainer>
-              <S.DefaultBtn>
+              <S.DefaultBtn onClick={onClickUnlike}>
                 <img src="/images/board/unLikeBtn.png" />
               </S.DefaultBtn>
               <S.LikeText style={{ color: '#828282' }}>{boardData?.unLike}</S.LikeText>
